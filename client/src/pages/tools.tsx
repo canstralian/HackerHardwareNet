@@ -15,7 +15,7 @@ const Tools = () => {
       <Sidebar />
       <main className="flex-1 overflow-y-auto pb-12">
         <div className="container mx-auto px-4 py-8">
-          <div className="bg-[#1A1A1A] rounded-lg p-6 lg:p-10 mb-10 border border-[#00FF00]/20 relative">
+          <div className="bg-[#1A1A1A] bg-matrix-gradient rounded-lg p-6 lg:p-10 mb-10 border border-[#00FF00]/20 relative shadow-neon hover:shadow-neon-hover transition-shadow duration-300">
             <div className="absolute top-0 right-0 left-0 h-1 bg-[#00FF00]"></div>
             <h1 className="text-3xl font-mono font-bold mb-4">Security Tools</h1>
             <p className="text-gray-300 mb-6">

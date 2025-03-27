@@ -94,4 +94,14 @@ export default {
     },
   },
   plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  extend: {
+    backgroundImage: {
+      'matrix-gradient': 'linear-gradient(to bottom right, rgba(0, 255, 0, 0.1), rgba(0, 0, 0, 0.9))',
+      'glow-card': 'radial-gradient(circle at center, rgba(0, 255, 0, 0.15), transparent 70%)',
+    },
+    boxShadow: {
+      'neon': '0 0 5px rgba(0, 255, 0, 0.5), 0 0 20px rgba(0, 255, 0, 0.2)',
+      'neon-hover': '0 0 10px rgba(0, 255, 0, 0.7), 0 0 30px rgba(0, 255, 0, 0.3)',
+    },
+  },
 } satisfies Config;

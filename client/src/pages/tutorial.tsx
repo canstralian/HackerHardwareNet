@@ -16,7 +16,7 @@ const Tutorial = () => {
     // Simulate API fetch
     const loadTutorial = () => {
       setIsLoading(true);
-      
+
       // In a real app, this would be an API call
       setTimeout(() => {
         if (params && params.id === FEATURED_TUTORIAL.id) {
@@ -65,7 +65,7 @@ const Tutorial = () => {
             <Link href="/" className="text-[#00FF00] hover:underline mb-4 flex items-center">
               <i className="fas fa-arrow-left mr-2"></i> Back to Home
             </Link>
-            
+
             <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
               <h1 className="text-3xl font-mono font-bold">{tutorial.title}</h1>
               <div className="flex items-center mt-2 md:mt-0">
@@ -78,7 +78,7 @@ const Tutorial = () => {
                 <span className="text-xs text-gray-400">Updated {tutorial.updatedDate}</span>
               </div>
             </div>
-            
+
             <div className="flex flex-wrap items-center text-sm text-gray-400 mb-4">
               <div className="flex items-center mr-4">
                 <i className="fas fa-clock mr-1"></i>
@@ -94,7 +94,7 @@ const Tutorial = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="mb-8">
             <img 
               src={tutorial.image} 
@@ -102,12 +102,12 @@ const Tutorial = () => {
               className="w-full rounded-lg mb-6"
               loading="lazy"
             />
-            
+
             <p className="text-gray-300 mb-6 text-lg leading-relaxed">
               {tutorial.description}
             </p>
-            
-            <div className="bg-[#1A1A1A] rounded-lg p-6 border border-[#00FF00]/20 mb-6">
+
+            <div className="bg-[#1A1A1A] bg-glow-card rounded-lg p-6 border border-[#00FF00]/20 mb-6 shadow-neon hover:shadow-neon-hover transition-all duration-300 transform hover:scale-[1.02]">
               <h3 className="font-mono text-[#00FF00] text-lg mb-4">What you'll learn:</h3>
               <ul className="space-y-2">
                 {tutorial.learningPoints.map((point, index) => (
@@ -118,7 +118,7 @@ const Tutorial = () => {
                 ))}
               </ul>
             </div>
-            
+
             <div className="mb-6">
               <h2 className="text-2xl font-mono font-bold mb-4"><span className="text-[#00FF00]">#</span> Introduction</h2>
               <p className="text-gray-300 mb-4">
@@ -128,7 +128,7 @@ const Tutorial = () => {
                 <strong className="text-[#FF3E3E]">IMPORTANT:</strong> This tutorial is for educational purposes only. Always obtain proper authorization before testing on any networks. Unauthorized access to computer networks is illegal and unethical.
               </p>
             </div>
-            
+
             <div className="mb-6">
               <h2 className="text-2xl font-mono font-bold mb-4"><span className="text-[#00FF00]">#</span> Prerequisites</h2>
               <ul className="space-y-2 text-gray-300">
@@ -150,13 +150,13 @@ const Tutorial = () => {
                 </li>
               </ul>
             </div>
-            
+
             <div className="mb-6">
               <h2 className="text-2xl font-mono font-bold mb-4"><span className="text-[#00FF00]">#</span> Step 1: Configure Wireless Interfaces</h2>
               <p className="text-gray-300 mb-4">
                 First, we need to configure our wireless interfaces. One interface will be used to create the access point, and the other will maintain an internet connection.
               </p>
-              
+
               <div className="mb-4">
                 <div className="terminal-header flex items-center">
                   <div className="flex space-x-1.5">
@@ -173,9 +173,9 @@ const Tutorial = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* The tutorial continues - Sample content shown */}
-            <div className="bg-[#1A1A1A] rounded-lg p-6 border border-[#00FF00]/20 mb-6">
+            <div className="bg-[#1A1A1A] bg-glow-card rounded-lg p-6 border border-[#00FF00]/20 mb-6 shadow-neon hover:shadow-neon-hover transition-all duration-300 transform hover:scale-[1.02]">
               <h3 className="font-mono text-[#00FF00] text-lg mb-4">Next Steps:</h3>
               <p className="text-gray-300">
                 This is just the beginning of the tutorial. In a complete implementation, we would continue with the following sections:
@@ -199,7 +199,7 @@ const Tutorial = () => {
                 </li>
               </ul>
             </div>
-            
+
             <div className="bg-[#1A1A1A]/50 rounded-lg p-6 border border-[#00FF00]/10">
               <div className="flex items-center mb-4">
                 <i className="fas fa-lightbulb text-[#00FF00] mr-3 text-xl"></i>
