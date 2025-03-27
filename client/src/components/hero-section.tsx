@@ -58,8 +58,12 @@ const HeroSection = () => {
         </div>
         <div className="lg:w-1/3 mt-6 lg:mt-0 flex justify-center">
           <img 
+            srcSet="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80 400w,
+                    https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80 600w"
+            sizes="(max-width: 768px) 100vw, 33vw"
             src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&h=400&q=80" 
-            alt="Circuit board with Raspberry Pi" 
+            alt="Circuit board with Raspberry Pi"
+            className="w-full h-auto rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300" 
             className="rounded-lg border border-[#00FF00]/30 shadow-lg shadow-[#00FF00]/10"
           />
         </div>
