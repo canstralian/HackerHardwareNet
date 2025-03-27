@@ -14,7 +14,7 @@ interface HardwareCompatibilityProps {
 const HardwareCompatibility = ({ compatibilityData }: HardwareCompatibilityProps) => {
   return (
     <div className="bg-[#1A1A1A] rounded-lg overflow-hidden border border-[#00FF00]/20">
-      <div className="overflow-x-auto -mx-4 sm:mx-0">
+      <div className="overflow-x-auto -mx-4 sm:mx-0 scrollbar-thin scrollbar-thumb-[#00FF00]/20 scrollbar-track-transparent">
         <table className="w-full text-left text-sm md:text-base">
           <thead>
             <tr className="border-b border-[#00FF00]/20 bg-[#0D0D0D]/50">
