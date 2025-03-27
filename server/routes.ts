@@ -6,7 +6,10 @@ import {
   insertHardwareSchema, 
   insertTutorialSchema, 
   insertToolSchema, 
-  insertProjectSchema 
+  insertProjectSchema,
+  insertForumPostSchema,
+  insertCommentSchema,
+  insertUserProfileSchema
 } from "@shared/schema";
 import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
@@ -268,19 +271,104 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const { stars } = req.body;
-      
+
       if (typeof stars !== 'number' || stars < 0) {
         return res.status(400).json({ error: 'Invalid star count' });
       }
-      
+
       const project = await storage.updateProjectStars(id, stars);
       if (!project) {
         return res.status(404).json({ error: 'Project not found' });
       }
-      
+
       res.json(project);
     } catch (error) {
       res.status(500).json({ error: 'Failed to update project stars' });
+    }
+  });
+
+  // Forum routes
+  app.get('/api/forum', async (_req: Request, res: Response) => {
+    try {
+      const posts = await storage.getAllForumPosts();
+      res.json(posts);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch forum posts' });
+    }
+  });
+
+  app.post('/api/forum', async (req: Request, res: Response) => {
+    try {
+      const postData = insertForumPostSchema.parse(req.body);
+      const post = await storage.createForumPost(postData);
+      res.status(201).json(post);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: fromZodError(error).message });
+      } else {
+        res.status(500).json({ error: 'Failed to create forum post' });
+      }
+    }
+  });
+
+  // Comments routes
+  app.get('/api/tutorials/:id/comments', async (req: Request, res: Response) => {
+    try {
+      const tutorialId = parseInt(req.params.id);
+      const comments = await storage.getTutorialComments(tutorialId);
+      res.json(comments);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch comments' });
+    }
+  });
+
+  app.post('/api/tutorials/:id/comments', async (req: Request, res: Response) => {
+    try {
+      const tutorialId = parseInt(req.params.id);
+      const commentData = insertCommentSchema.parse({
+        ...req.body,
+        tutorialId
+      });
+      const comment = await storage.createComment(commentData);
+      res.status(201).json(comment);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: fromZodError(error).message });
+      } else {
+        res.status(500).json({ error: 'Failed to create comment' });
+      }
+    }
+  });
+
+  // User Profile routes
+  app.get('/api/users/:id/profile', async (req: Request, res: Response) => {
+    try {
+      const userId = parseInt(req.params.id);
+      const profile = await storage.getUserProfile(userId);
+      if (!profile) {
+        return res.status(404).json({ error: 'Profile not found' });
+      }
+      res.json(profile);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch profile' });
+    }
+  });
+
+  app.post('/api/users/:id/profile', async (req: Request, res: Response) => {
+    try {
+      const userId = parseInt(req.params.id);
+      const profileData = insertUserProfileSchema.parse({
+        ...req.body,
+        userId
+      });
+      const profile = await storage.createUserProfile(profileData);
+      res.status(201).json(profile);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: fromZodError(error).message });
+      } else {
+        res.status(500).json({ error: 'Failed to create profile' });
+      }
     }
   });
 
@@ -291,9 +379,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!query) {
         return res.status(400).json({ error: 'Query parameter is required' });
       }
-      
+
       const lowercaseQuery = query.toLowerCase();
-      
+
       // Search in hardware
       const hardware = await storage.getAllHardware();
       const matchedHardware = hardware.filter(
@@ -301,7 +389,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               hw.description.toLowerCase().includes(lowercaseQuery) ||
               hw.tags.some(tag => tag.toLowerCase().includes(lowercaseQuery))
       );
-      
+
       // Search in tutorials
       const tutorials = await storage.getAllTutorials();
       const matchedTutorials = tutorials.filter(
@@ -309,7 +397,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                    tutorial.description.toLowerCase().includes(lowercaseQuery) ||
                    tutorial.content.toLowerCase().includes(lowercaseQuery)
       );
-      
+
       // Search in tools
       const tools = await storage.getAllTools();
       const matchedTools = tools.filter(
@@ -317,7 +405,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 tool.description.toLowerCase().includes(lowercaseQuery) ||
                 tool.tags.some(tag => tag.toLowerCase().includes(lowercaseQuery))
       );
-      
+
       // Search in projects
       const projects = await storage.getAllProjects();
       const matchedProjects = projects.filter(
@@ -325,7 +413,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   project.description.toLowerCase().includes(lowercaseQuery) ||
                   project.tag.toLowerCase().includes(lowercaseQuery)
       );
-      
+
       res.json({
         hardware: matchedHardware,
         tutorials: matchedTutorials,

@@ -121,3 +121,65 @@ export type Tool = typeof tools.$inferSelect;
 
 export type InsertProject = z.infer<typeof insertProjectSchema>;
 export type Project = typeof projects.$inferSelect;
+
+// Forum model
+export const forumPosts = pgTable("forum_posts", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  authorId: integer("author_id").references(() => users.id),
+  createdAt: text("created_at").notNull(),
+  tags: jsonb("tags").$type<string[]>().notNull(),
+  replies: integer("replies").default(0),
+  views: integer("views").default(0),
+});
+
+// Comments model
+export const comments = pgTable("comments", {
+  id: serial("id").primaryKey(),
+  content: text("content").notNull(),
+  authorId: integer("author_id").references(() => users.id),
+  tutorialId: integer("tutorial_id").references(() => tutorials.id),
+  createdAt: text("created_at").notNull(),
+  rating: integer("rating").default(0),
+});
+
+// User Profile model
+export const userProfiles = pgTable("user_profiles", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id),
+  expertise: text("expertise").notNull(),
+  bio: text("bio"),
+  skills: jsonb("skills").$type<string[]>().notNull(),
+  completedTutorials: jsonb("completed_tutorials").$type<number[]>().notNull(),
+  reputation: integer("reputation").default(0),
+});
+
+export const insertForumPostSchema = createInsertSchema(forumPosts).pick({
+  title: true,
+  content: true,
+  authorId: true,
+  tags: true,
+});
+
+export const insertCommentSchema = createInsertSchema(comments).pick({
+  content: true,
+  authorId: true,
+  tutorialId: true,
+});
+
+export const insertUserProfileSchema = createInsertSchema(userProfiles).pick({
+  userId: true,
+  expertise: true,
+  bio: true,
+  skills: true,
+});
+
+export type InsertForumPost = z.infer<typeof insertForumPostSchema>;
+export type ForumPost = typeof forumPosts.$inferSelect;
+
+export type InsertComment = z.infer<typeof insertCommentSchema>;
+export type Comment = typeof comments.$inferSelect;
+
+export type InsertUserProfile = z.infer<typeof insertUserProfileSchema>;
+export type UserProfile = typeof userProfiles.$inferSelect;

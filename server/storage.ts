@@ -233,7 +233,71 @@ export class MemStorage implements IStorage {
   }
   
   // Helper method to initialize demo data
-  private initializeDemoData() {
+  // Forum methods
+async getForumPost(id: number): Promise<ForumPost | undefined> {
+  return Array.from(this.forumPosts.values()).find(post => post.id === id);
+}
+
+async getAllForumPosts(): Promise<ForumPost[]> {
+  return Array.from(this.forumPosts.values());
+}
+
+async createForumPost(insertForumPost: InsertForumPost): Promise<ForumPost> {
+  const id = this.currentForumPostId++;
+  const post: ForumPost = {
+    ...insertForumPost,
+    id,
+    createdAt: new Date().toISOString(),
+    replies: 0,
+    views: 0
+  };
+  this.forumPosts.set(id, post);
+  return post;
+}
+
+// Comments methods
+async getComment(id: number): Promise<Comment | undefined> {
+  return Array.from(this.comments.values()).find(comment => comment.id === id);
+}
+
+async getTutorialComments(tutorialId: number): Promise<Comment[]> {
+  return Array.from(this.comments.values()).filter(
+    comment => comment.tutorialId === tutorialId
+  );
+}
+
+async createComment(insertComment: InsertComment): Promise<Comment> {
+  const id = this.currentCommentId++;
+  const comment: Comment = {
+    ...insertComment,
+    id,
+    createdAt: new Date().toISOString(),
+    rating: 0
+  };
+  this.comments.set(id, comment);
+  return comment;
+}
+
+// User Profile methods
+async getUserProfile(userId: number): Promise<UserProfile | undefined> {
+  return Array.from(this.userProfiles.values()).find(
+    profile => profile.userId === userId
+  );
+}
+
+async createUserProfile(insertProfile: InsertUserProfile): Promise<UserProfile> {
+  const id = this.currentProfileId++;
+  const profile: UserProfile = {
+    ...insertProfile,
+    id,
+    completedTutorials: [],
+    reputation: 0
+  };
+  this.userProfiles.set(id, profile);
+  return profile;
+}
+
+private initializeDemoData() {
     // Add demo user
     const adminUser: InsertUser = {
       username: 'admin',
