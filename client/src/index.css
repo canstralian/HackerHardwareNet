@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 14% 5%;
+    --foreground: 0 0% 100%;
+    --card: 240 14% 10%;
+    --card-foreground: 0 0% 100%;
+    --popover: 240 14% 10%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 120 100% 50%;
+    --primary-foreground: 240 14% 5%;
+    --secondary: 240 10% 10%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 240 10% 15%;
+    --muted-foreground: 240 5% 65%;
+    --accent: 240 10% 20%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 100% 62%;
+    --destructive-foreground: 240 14% 5%;
+    --border: 120 100% 20% / 30%;
+    --input: 240 10% 20%;
+    --ring: 120 100% 50%;
+    --chart-1: 120 100% 50%;
+    --chart-2: 197 100% 50%;
+    --chart-3: 0 100% 62%;
+    --chart-4: 320 100% 50%;
+    --chart-5: 60 100% 50%;
+    --sidebar-background: 240 14% 10%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 120 100% 50%;
+    --sidebar-primary-foreground: 240 14% 5%;
+    --sidebar-accent: 240 10% 20%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 120 100% 20% / 30%;
+    --sidebar-ring: 120 100% 50%;
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+  }
+
+  code, pre {
+    font-family: 'Fira Code', monospace;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(240 14% 5%);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(120 100% 50%);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(120 100% 40%);
+  }
+
+  @keyframes cursor-blink {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  .cursor::after {
+    content: '|';
+    animation: cursor-blink 1.2s infinite;
+    color: hsl(120 100% 50%);
+  }
+
+  .code-block {
+    background-color: hsl(240 14% 10%);
+    border-left: 3px solid hsl(120 100% 50%);
+    padding: 1rem;
+    border-radius: 0.25rem;
+    overflow-x: auto;
+  }
+  
+  .terminal-header {
+    background-color: hsl(240 14% 10%);
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #333;
+  }
+  
+  .terminal-body {
+    background-color: hsl(240 14% 5%);
+    border: 1px solid #333;
+    border-top: none;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    padding: 1rem;
+    font-family: 'Fira Code', monospace;
+  }
+  
+  .nav-link {
+    transition: all 0.2s ease;
+  }
+  
+  .nav-link:hover {
+    background-color: rgba(0, 255, 0, 0.1);
+    border-left-color: hsl(120 100% 50%) !important;
+  }
+  
+  .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 255, 0, 0.1);
+  }
+}
