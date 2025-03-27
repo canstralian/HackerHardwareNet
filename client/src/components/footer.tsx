@@ -35,7 +35,7 @@ const Footer = () => {
                 <i className="fas fa-microchip"></i>
               </div>
               <h2 className="text-xl font-mono font-bold">
-                <span className="text-[#00FF00]">Hacker</span>Board<span className="text-[#00FF00]">_</span>
+                <span className="text-[#00FF00]">hacker</span>hardware<span className="text-[#00FF00]">.net</span>
               </h2>
             </div>
             <p className="text-gray-400 mb-4">Educational platform for cybersecurity and ethical hacking with hardware.</p>
@@ -101,7 +101,7 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-[#00FF00]/20 mt-8 pt-8 text-center text-gray-400 text-sm">
-          <p>&copy; {new Date().getFullYear()} HackerBoard Academy. All content for educational purposes only.</p>
+          <p>&copy; {new Date().getFullYear()} hackerhardware.net. All content for educational purposes only.</p>
           <p className="mt-2">
             <Link href="#" className="hover:text-[#00FF00] transition-colors">Terms</Link> &bull;
             <Link href="#" className="hover:text-[#00FF00] transition-colors ml-2">Privacy</Link> &bull;
