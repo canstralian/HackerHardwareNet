@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import SearchBar from '@/components/search-bar';
+import React, { useEffect } from 'react'; // Added useEffect import
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -38,7 +39,7 @@ const Header = () => {
             <span className="text-[#00FF00]">hacker</span>hardware<span className="text-[#00FF00]">.net</span>
           </h1>
         </div>
-        
+
         <div className="hidden md:flex items-center space-x-8">
           <Link href="/" className={`${location === '/' ? 'text-[#00FF00]' : 'text-white'} hover:text-[#00FF00] transition-colors font-medium`}>
             Home
@@ -56,7 +57,7 @@ const Header = () => {
             About
           </Link>
         </div>
-        
+
         <div className="flex items-center space-x-4">
           <div className="relative hidden md:block">
             <SearchBar />
@@ -74,7 +75,7 @@ const Header = () => {
           </Link>
         </div>
       </div>
-      
+
       {/* Mobile menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-[#1A1A1A] border-t border-[#00FF00]/20">
