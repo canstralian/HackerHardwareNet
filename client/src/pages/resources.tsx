@@ -80,6 +80,16 @@ const MOCK_ARTICLES: { [key: string]: ArticlePreview[] } = {
       date: 'February 28, 2023',
       readTime: '18 min read',
       tags: ['Keylogger', 'Arduino', 'USB Security']
+    },
+    {
+      id: 'security-analysis',
+      title: 'Security and Performance Analysis of HackerHardware.net',
+      category: 'project-ideas',
+      preview: 'A comprehensive assessment of the security posture and performance of the HackerHardware.net platform.',
+      author: 'Security Team',
+      date: 'April 2, 2025',
+      readTime: '10 min read',
+      tags: ['Security Analysis', 'Performance', 'Web Security']
     }
   ]
 };
@@ -878,7 +888,130 @@ const Resources = () => {
                 </div>
               )}
               
-              {selectedArticle !== 'article-1' && selectedArticle !== 'article-2' && selectedArticle !== 'specs-pi4' && selectedArticle !== 'project-wardrive' && (
+              {selectedArticle === 'security-analysis' && (
+                <div className="bg-[#1A1A1A] border border-[#00FF00]/20 rounded-lg p-8">
+                  <h1 className="text-3xl font-bold mb-4">Security and Performance Analysis of HackerHardware.net</h1>
+                  
+                  <div className="flex items-center mb-6">
+                    <div className="w-8 h-8 rounded-full bg-[#00FF00]/20 mr-3"></div>
+                    <div>
+                      <p className="font-medium">Security Team</p>
+                      <p className="text-sm text-gray-400">April 2, 2025 • 10 min read</p>
+                    </div>
+                  </div>
+                  
+                  <div className="prose prose-invert max-w-none">
+                    <p className="text-gray-300 mb-4">
+                      As of April 2, 2025, a comprehensive analysis of hackerhardware.net was conducted to assess its security posture and performance. 
+                      The findings are detailed below.
+                    </p>
+                    
+                    <h2 className="text-2xl font-bold mt-8 mb-4">1. Security Vulnerabilities</h2>
+                    
+                    <div className="mb-6">
+                      <h3 className="text-xl font-bold mt-6 mb-3">SSL/TLS Configuration</h3>
+                      <ul className="list-disc pl-6 text-gray-300 space-y-2">
+                        <li><strong>Cipher Suites and Protocol Versions:</strong> The SSL/TLS configuration was evaluated to ensure the use of strong cipher suites and up-to-date protocol versions.</li>
+                        <li><strong>Vulnerabilities:</strong> The site was tested for known SSL/TLS vulnerabilities such as Heartbleed and POODLE.</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="mb-6">
+                      <h3 className="text-xl font-bold mt-6 mb-3">HTTP Headers</h3>
+                      <ul className="list-disc pl-6 text-gray-300 space-y-2">
+                        <li><strong>Security Headers Assessment:</strong> The presence and configuration of critical security headers, including Content Security Policy (CSP), X-Frame-Options, and HTTP Strict Transport Security (HSTS), were examined.</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="mb-6">
+                      <h3 className="text-xl font-bold mt-6 mb-3">Common Web Vulnerabilities (OWASP Top 10)</h3>
+                      <ul className="list-disc pl-6 text-gray-300 space-y-2">
+                        <li><strong>SQL Injection:</strong> The site was tested for SQL injection vulnerabilities to ensure that user inputs are properly sanitized.</li>
+                        <li><strong>Cross-Site Scripting (XSS):</strong> Checks were performed to detect any XSS vulnerabilities that could allow attackers to inject malicious scripts.</li>
+                        <li><strong>Cross-Site Request Forgery (CSRF):</strong> The site's resistance to CSRF attacks was evaluated to ensure that unauthorized commands cannot be transmitted from a user.</li>
+                      </ul>
+                    </div>
+                    
+                    <h2 className="text-2xl font-bold mt-8 mb-4">2. Performance Analysis</h2>
+                    
+                    <div className="mb-6">
+                      <h3 className="text-xl font-bold mt-6 mb-3">Page Load Time</h3>
+                      <ul className="list-disc pl-6 text-gray-300 space-y-2">
+                        <li><strong>First Contentful Paint (FCP):</strong> Measured the time taken for the first piece of content to be rendered on the screen.</li>
+                        <li><strong>Largest Contentful Paint (LCP):</strong> Assessed the time taken for the largest visible content element to load.</li>
+                        <li><strong>Time to Interactive (TTI):</strong> Evaluated the time until the page becomes fully interactive.</li>
+                        <li><strong>Total Blocking Time (TBT):</strong> Calculated the total time during which the main thread was blocked, preventing user interaction.</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="mb-6">
+                      <h3 className="text-xl font-bold mt-6 mb-3">Resource Optimization</h3>
+                      <ul className="list-disc pl-6 text-gray-300 space-y-2">
+                        <li><strong>Image Optimization:</strong> Analyzed the efficiency of image formats and compression techniques used.</li>
+                        <li><strong>JavaScript and CSS Minification:</strong> Checked whether JavaScript and CSS files are minified to reduce load times.</li>
+                        <li><strong>Caching Strategies:</strong> Reviewed the implementation of caching mechanisms to enhance repeat visit performance.</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="mb-6">
+                      <h3 className="text-xl font-bold mt-6 mb-3">Server Response Time</h3>
+                      <ul className="list-disc pl-6 text-gray-300 space-y-2">
+                        <li><strong>Latency Assessment:</strong> Measured the server's response time to requests to identify potential bottlenecks.</li>
+                      </ul>
+                    </div>
+                    
+                    <h2 className="text-2xl font-bold mt-8 mb-4">3. Recommendations</h2>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                      <div className="bg-[#0D0D0D] p-6 rounded-lg">
+                        <h3 className="text-xl font-bold mb-3 text-[#00FF00]">Security Improvements</h3>
+                        <ul className="list-disc pl-6 text-gray-300 space-y-2">
+                          <li><strong>Implement Missing Security Headers:</strong> Ensure that all critical security headers are properly configured to protect against common vulnerabilities.</li>
+                          <li><strong>Remediate Identified Vulnerabilities:</strong> Address any detected vulnerabilities such as SQL injection or XSS by implementing appropriate input validation and sanitization techniques.</li>
+                        </ul>
+                      </div>
+                      
+                      <div className="bg-[#0D0D0D] p-6 rounded-lg">
+                        <h3 className="text-xl font-bold mb-3 text-[#00FF00]">Performance Optimizations</h3>
+                        <ul className="list-disc pl-6 text-gray-300 space-y-2">
+                          <li><strong>Optimize Images:</strong> Utilize modern image formats and apply appropriate compression to reduce file sizes without compromising quality.</li>
+                          <li><strong>Minify and Bundle Resources:</strong> Minify JavaScript and CSS files and consider bundling them to reduce the number of HTTP requests.</li>
+                          <li><strong>Enhance Caching Strategies:</strong> Implement effective caching policies to improve load times for repeat visitors.</li>
+                        </ul>
+                      </div>
+                    </div>
+                    
+                    <h2 className="text-2xl font-bold mt-8 mb-4">4. Tools Used</h2>
+                    
+                    <div className="bg-[#0D0D0D] p-6 rounded-lg mb-6">
+                      <ul className="list-disc pl-6 text-gray-300 space-y-2">
+                        <li><strong>SSL Labs:</strong> For assessing SSL/TLS configurations and identifying related vulnerabilities.</li>
+                        <li><strong>Lighthouse:</strong> To analyze web performance metrics and provide optimization suggestions.</li>
+                        <li><strong>OWASP ZAP:</strong> For detecting common web application vulnerabilities such as SQL injection and XSS.</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="bg-[#00FF00]/10 border border-[#00FF00]/30 p-4 rounded-lg mb-6">
+                      <h3 className="text-lg font-bold mb-2 text-[#00FF00]">Conclusion</h3>
+                      <p className="text-gray-300">
+                        This analysis provides a snapshot of the current security and performance status of hackerhardware.net as of the specified date. 
+                        Regular assessments are recommended to maintain and enhance the site's security and performance over time.
+                      </p>
+                    </div>
+                    
+                    <div className="border-t border-[#00FF00]/20 mt-8 pt-6">
+                      <h3 className="text-xl font-bold mb-4">Related Resources</h3>
+                      <ul className="list-disc pl-6 space-y-2 text-[#00FF00]">
+                        <li><a href="#" className="hover:underline">Web Application Security Best Practices</a></li>
+                        <li><a href="#" className="hover:underline">Performance Optimization Techniques for Modern Web Apps</a></li>
+                        <li><a href="#" className="hover:underline">Understanding OWASP Top 10 Vulnerabilities</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {selectedArticle !== 'article-1' && selectedArticle !== 'article-2' && selectedArticle !== 'specs-pi4' && selectedArticle !== 'project-wardrive' && selectedArticle !== 'security-analysis' && (
                 <div className="bg-[#1A1A1A] border border-[#00FF00]/20 rounded-lg p-8">
                   <h1 className="text-3xl font-bold mb-4">
                     {MOCK_ARTICLES[activeCategory]?.find(a => a.id === selectedArticle)?.title || 'Article Not Found'}
