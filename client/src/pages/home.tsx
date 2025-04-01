@@ -150,6 +150,41 @@ const Home = () => {
               ))}
             </div>
           </section>
+        {/* Articles Section */}
+          <section className="mb-12">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Latest Articles</h2>
+              <Link href="/resources" className="text-[#00FF00] text-sm hover:underline">View All <i className="fas fa-arrow-right ml-1"></i></Link>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-[#1A1A1A] border border-[#00FF00]/20 rounded-lg p-6">
+                <h3 className="text-xl font-bold mb-2">Getting Started with Raspberry Pi for Cybersecurity</h3>
+                <p className="text-gray-300 mb-4">A comprehensive guide to setting up your Raspberry Pi as a cybersecurity tool for beginners.</p>
+                <div className="flex justify-between items-center">
+                  <div className="text-sm text-gray-400">
+                    <span>Sarah Johnson</span>
+                    <span className="mx-2">•</span>
+                    <span>March 25, 2023</span>
+                  </div>
+                  <span className="text-sm bg-[#1A1A1A] border border-[#00FF00]/30 px-2 py-1 rounded text-[#00FF00]">12 min read</span>
+                </div>
+              </div>
+
+              <div className="bg-[#1A1A1A] border border-[#00FF00]/20 rounded-lg p-6">
+                <h3 className="text-xl font-bold mb-2">Advanced Network Traffic Analysis with Wireshark</h3>
+                <p className="text-gray-300 mb-4">Learn how to use Wireshark on single board computers to detect and analyze suspicious network traffic.</p>
+                <div className="flex justify-between items-center">
+                  <div className="text-sm text-gray-400">
+                    <span>Michael Chen</span>
+                    <span className="mx-2">•</span>
+                    <span>February 10, 2023</span>
+                  </div>
+                  <span className="text-sm bg-[#1A1A1A] border border-[#00FF00]/30 px-2 py-1 rounded text-[#00FF00]">15 min read</span>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </main>
     </div>
