@@ -9,6 +9,7 @@ import HardwareLibrary from "@/pages/hardware-library";
 import Tools from "@/pages/tools";
 import Tutorial from "@/pages/tutorial";
 import Resources from "@/pages/resources";
+import CompatibilityChecker from "@/pages/compatibility-checker";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 
@@ -23,6 +24,7 @@ function Router() {
           <Route path="/hardware-library" component={HardwareLibrary} />
           <Route path="/tools" component={Tools} />
           <Route path="/resources" component={Resources} />
+          <Route path="/compatibility-checker" component={CompatibilityChecker} />
           <Route path="/tutorial/:id" component={Tutorial} />
           <Route component={NotFound} />
         </Switch>

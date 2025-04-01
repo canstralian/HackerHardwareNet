@@ -44,6 +44,15 @@ const Sidebar = () => {
               {resource.name}
             </Link>
           ))}
+          
+          <h3 className="text-gray-400 text-xs uppercase tracking-wider mt-4 mb-2">Tools</h3>
+          <Link 
+            href="/compatibility-checker"
+            className={`nav-link block px-3 py-2 rounded-md text-white border-l-2 ${location.includes('compatibility-checker') ? 'border-[#00FF00] bg-[#00FF00]/10' : 'border-transparent'} hover:bg-[#00FF00]/10 hover:border-[#00FF00]`}
+          >
+            <i className="fas fa-check-circle mr-2 text-[#00FF00]/80"></i>
+            Compatibility Checker
+          </Link>
         </div>
       </div>
     </aside>
