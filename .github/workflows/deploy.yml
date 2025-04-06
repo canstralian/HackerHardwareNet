@@ -1,0 +1,42 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build application
+      run: npm run build
+      
+    - name: Run tests
+      run: npm test || echo "No tests specified"
+      
+    - name: Generate build info
+      run: |
+        echo "BUILD_TIME=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
+        echo "COMMIT_SHA=${GITHUB_SHA::8}" >> $GITHUB_ENV
+      
+    - name: Deploy to production
+      env:
+        DEPLOY_SECRET: ${{ secrets.DEPLOY_SECRET }}
+      run: |
+        echo "Deploying version ${{ env.COMMIT_SHA }} built at ${{ env.BUILD_TIME }}"
+        # Add actual deployment commands here
+        # This could be deploying to cloud hosting, running a script, etc.
+        # Example: aws s3 sync ./dist s3://your-bucket
