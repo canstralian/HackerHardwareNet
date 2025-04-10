@@ -4,16 +4,16 @@ import {
   CheckCircle, 
   ChevronRight, 
   CircuitBoard, 
-  ContactlessRound,
+  Smartphone,
   Crown, 
-  EmojiEvents,
+  Medal,
   Loader2, 
   MessageSquare, 
-  MilitaryTech,
+  Trophy,
   Router, 
   Shield, 
-  SignalCellularAlt,
-  Tool, 
+  Signal,
+  Wrench, 
   Wifi,
   X 
 } from "lucide-react";
@@ -30,7 +30,7 @@ export const Icons = {
   wifi: Wifi,
   router: Router,
   circuit: CircuitBoard,
-  tool: Tool,
+  tool: Wrench,
   award: Award,
   chevronRight: ChevronRight,
   x: X,
@@ -38,8 +38,8 @@ export const Icons = {
   crown: Crown,
 
   // Achievement Icons
-  signal_cellular_alt: SignalCellularAlt,
-  contactless: ContactlessRound,
-  military_tech: MilitaryTech,
-  emoji_events: EmojiEvents,
+  signal_cellular_alt: Signal,
+  contactless: Smartphone,
+  military_tech: Medal,
+  emoji_events: Trophy,
 } as const;

@@ -53,6 +53,9 @@ const Header = () => {
           <Link href="/tools" className={`${location === '/tools' ? 'text-[#00FF00]' : 'text-white'} hover:text-[#00FF00] transition-colors font-medium`}>
             Tools
           </Link>
+          <Link href="/achievements" className={`${location === '/achievements' ? 'text-[#00FF00]' : 'text-white'} hover:text-[#00FF00] transition-colors font-medium`}>
+            Achievements
+          </Link>
           <Link href="#" className="text-white hover:text-[#00FF00] transition-colors font-medium">
             About
           </Link>
@@ -94,6 +97,9 @@ const Header = () => {
             </Link>
             <Link href="/tools" className={`${location === '/tools' ? 'text-[#00FF00]' : 'text-white'} py-2 border-b border-[#1A1A1A]/50`}>
               Tools
+            </Link>
+            <Link href="/achievements" className={`${location === '/achievements' ? 'text-[#00FF00]' : 'text-white'} py-2 border-b border-[#1A1A1A]/50`}>
+              Achievements
             </Link>
             <Link href="#" className="text-white py-2 border-b border-[#1A1A1A]/50">
               About
