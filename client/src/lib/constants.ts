@@ -75,6 +75,11 @@ export const RESOURCES = [
     id: 'project-ideas',
     name: 'Project Ideas',
     icon: 'fa-project-diagram'
+  },
+  {
+    id: 'network-security',
+    name: 'Network Security',
+    icon: 'fa-shield-alt'
   }
 ];
 
