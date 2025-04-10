@@ -3,8 +3,14 @@ import {
   hardware, type Hardware, type InsertHardware,
   tutorials, type Tutorial, type InsertTutorial,
   tools, type Tool, type InsertTool,
-  projects, type Project, type InsertProject 
+  projects, type Project, type InsertProject,
+  forumPosts, type ForumPost, type InsertForumPost,
+  comments, type Comment, type InsertComment,
+  userProfiles, type UserProfile, type InsertUserProfile
 } from "@shared/schema";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { eq } from "drizzle-orm";
+import pg from "pg";
 
 export interface IStorage {
   // User CRUD
@@ -39,6 +45,20 @@ export interface IStorage {
   getProjectsByAuthor(authorId: number): Promise<Project[]>;
   createProject(project: InsertProject): Promise<Project>;
   updateProjectStars(id: number, stars: number): Promise<Project | undefined>;
+  
+  // Forum CRUD
+  getForumPost(id: number): Promise<ForumPost | undefined>;
+  getAllForumPosts(): Promise<ForumPost[]>;
+  createForumPost(post: InsertForumPost): Promise<ForumPost>;
+  
+  // Comment CRUD
+  getComment(id: number): Promise<Comment | undefined>;
+  getTutorialComments(tutorialId: number): Promise<Comment[]>;
+  createComment(comment: InsertComment): Promise<Comment>;
+  
+  // User Profile CRUD
+  getUserProfile(userId: number): Promise<UserProfile | undefined>;
+  createUserProfile(profile: InsertUserProfile): Promise<UserProfile>;
 }
 
 export class MemStorage implements IStorage {
@@ -47,12 +67,18 @@ export class MemStorage implements IStorage {
   private tutorials: Map<number, Tutorial>;
   private tools: Map<number, Tool>;
   private projects: Map<number, Project>;
+  private forumPosts: Map<number, ForumPost>;
+  private comments: Map<number, Comment>;
+  private userProfiles: Map<number, UserProfile>;
   
   private currentUserId: number;
   private currentHardwareId: number;
   private currentTutorialId: number;
   private currentToolId: number;
   private currentProjectId: number;
+  private currentForumPostId: number;
+  private currentCommentId: number;
+  private currentProfileId: number;
 
   constructor() {
     this.users = new Map();
@@ -60,12 +86,18 @@ export class MemStorage implements IStorage {
     this.tutorials = new Map();
     this.tools = new Map();
     this.projects = new Map();
+    this.forumPosts = new Map();
+    this.comments = new Map();
+    this.userProfiles = new Map();
     
     this.currentUserId = 1;
     this.currentHardwareId = 1;
     this.currentTutorialId = 1;
     this.currentToolId = 1;
     this.currentProjectId = 1;
+    this.currentForumPostId = 1;
+    this.currentCommentId = 1;
+    this.currentProfileId = 1;
     
     // Initialize with some demo data
     this.initializeDemoData();
@@ -311,4 +343,193 @@ private initializeDemoData() {
   }
 }
 
-export const storage = new MemStorage();
+export class PostgresStorage implements IStorage {
+  private db: ReturnType<typeof drizzle>;
+  
+  constructor() {
+    const client = new pg.Client(process.env.DATABASE_URL);
+    client.connect();
+    this.db = drizzle(client);
+  }
+  
+  // User methods
+  async getUser(id: number): Promise<User | undefined> {
+    const result = await this.db.select().from(users).where(eq(users.id, id)).limit(1);
+    return result[0];
+  }
+  
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const result = await this.db.select().from(users).where(eq(users.username, username)).limit(1);
+    return result[0];
+  }
+  
+  async createUser(user: InsertUser): Promise<User> {
+    const result = await this.db.insert(users).values(user).returning();
+    return result[0];
+  }
+  
+  // Hardware methods
+  async getHardware(id: number): Promise<Hardware | undefined> {
+    const result = await this.db.select().from(hardware).where(eq(hardware.id, id)).limit(1);
+    return result[0];
+  }
+  
+  async getAllHardware(): Promise<Hardware[]> {
+    return this.db.select().from(hardware);
+  }
+  
+  async getHardwareByCategory(category: string): Promise<Hardware[]> {
+    return this.db.select().from(hardware).where(eq(hardware.category, category));
+  }
+  
+  async createHardware(hardwareItem: InsertHardware): Promise<Hardware> {
+    const result = await this.db.insert(hardware).values(hardwareItem).returning();
+    return result[0];
+  }
+  
+  // Tutorial methods
+  async getTutorial(id: number): Promise<Tutorial | undefined> {
+    const result = await this.db.select().from(tutorials).where(eq(tutorials.id, id)).limit(1);
+    return result[0];
+  }
+  
+  async getAllTutorials(): Promise<Tutorial[]> {
+    return this.db.select().from(tutorials);
+  }
+  
+  async getTutorialsByDifficulty(difficulty: string): Promise<Tutorial[]> {
+    return this.db.select().from(tutorials).where(eq(tutorials.difficulty, difficulty));
+  }
+  
+  async getTutorialsByHardware(hardwareId: number): Promise<Tutorial[]> {
+    const result = await this.db.select().from(tutorials);
+    return result.filter(tutorial => tutorial.hardwareIds.includes(hardwareId));
+  }
+  
+  async createTutorial(tutorial: InsertTutorial): Promise<Tutorial> {
+    const tutorialWithDate = {
+      ...tutorial,
+      publishedAt: new Date().toISOString()
+    };
+    const result = await this.db.insert(tutorials).values(tutorialWithDate).returning();
+    return result[0];
+  }
+  
+  // Tool methods
+  async getTool(id: number): Promise<Tool | undefined> {
+    const result = await this.db.select().from(tools).where(eq(tools.id, id)).limit(1);
+    return result[0];
+  }
+  
+  async getAllTools(): Promise<Tool[]> {
+    return this.db.select().from(tools);
+  }
+  
+  async getToolsByCategory(category: string): Promise<Tool[]> {
+    return this.db.select().from(tools).where(eq(tools.category, category));
+  }
+  
+  async getToolsByHardware(hardwareId: number): Promise<Tool[]> {
+    const result = await this.db.select().from(tools);
+    return result.filter(tool => tool.hardwareIds.includes(hardwareId));
+  }
+  
+  async createTool(tool: InsertTool): Promise<Tool> {
+    const result = await this.db.insert(tools).values(tool).returning();
+    return result[0];
+  }
+  
+  // Project methods
+  async getProject(id: number): Promise<Project | undefined> {
+    const result = await this.db.select().from(projects).where(eq(projects.id, id)).limit(1);
+    return result[0];
+  }
+  
+  async getAllProjects(): Promise<Project[]> {
+    return this.db.select().from(projects);
+  }
+  
+  async getProjectsByTag(tag: string): Promise<Project[]> {
+    return this.db.select().from(projects).where(eq(projects.tag, tag));
+  }
+  
+  async getProjectsByAuthor(authorId: number): Promise<Project[]> {
+    return this.db.select().from(projects).where(eq(projects.authorId, authorId));
+  }
+  
+  async createProject(project: InsertProject): Promise<Project> {
+    const result = await this.db.insert(projects).values(project).returning();
+    return result[0];
+  }
+  
+  async updateProjectStars(id: number, stars: number): Promise<Project | undefined> {
+    const result = await this.db
+      .update(projects)
+      .set({ stars })
+      .where(eq(projects.id, id))
+      .returning();
+    return result[0];
+  }
+  
+  // Forum methods
+  async getForumPost(id: number): Promise<ForumPost | undefined> {
+    const result = await this.db.select().from(forumPosts).where(eq(forumPosts.id, id)).limit(1);
+    return result[0];
+  }
+  
+  async getAllForumPosts(): Promise<ForumPost[]> {
+    return this.db.select().from(forumPosts);
+  }
+  
+  async createForumPost(post: InsertForumPost): Promise<ForumPost> {
+    const postWithDate = {
+      ...post,
+      createdAt: new Date().toISOString(),
+      replies: 0,
+      views: 0
+    };
+    const result = await this.db.insert(forumPosts).values(postWithDate).returning();
+    return result[0];
+  }
+  
+  // Comment methods
+  async getComment(id: number): Promise<Comment | undefined> {
+    const result = await this.db.select().from(comments).where(eq(comments.id, id)).limit(1);
+    return result[0];
+  }
+  
+  async getTutorialComments(tutorialId: number): Promise<Comment[]> {
+    return this.db.select().from(comments).where(eq(comments.tutorialId, tutorialId));
+  }
+  
+  async createComment(comment: InsertComment): Promise<Comment> {
+    const commentWithDate = {
+      ...comment,
+      createdAt: new Date().toISOString(),
+      rating: 0
+    };
+    const result = await this.db.insert(comments).values(commentWithDate).returning();
+    return result[0];
+  }
+  
+  // User Profile methods
+  async getUserProfile(userId: number): Promise<UserProfile | undefined> {
+    const result = await this.db.select().from(userProfiles).where(eq(userProfiles.userId, userId)).limit(1);
+    return result[0];
+  }
+  
+  async createUserProfile(profile: InsertUserProfile): Promise<UserProfile> {
+    const profileWithDefaults = {
+      ...profile,
+      completedTutorials: [],
+      reputation: 0
+    };
+    const result = await this.db.insert(userProfiles).values(profileWithDefaults).returning();
+    return result[0];
+  }
+}
+
+// Use PostgreSQL storage in production, MemStorage for development/testing
+export const storage = process.env.NODE_ENV === 'production' || process.env.DATABASE_URL
+  ? new PostgresStorage()
+  : new MemStorage();
