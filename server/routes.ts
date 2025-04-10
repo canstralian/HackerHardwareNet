@@ -10,7 +10,10 @@ import {
   insertForumPostSchema,
   insertCommentSchema,
   insertUserProfileSchema,
-  insertArticleSchema
+  insertArticleSchema,
+  insertAchievementSchema,
+  insertUserAchievementSchema,
+  insertTutorialProgressSchema
 } from "@shared/schema";
 import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
@@ -491,6 +494,240 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       res.status(500).json({ error: 'Search failed' });
+    }
+  });
+
+  // Achievement routes
+  app.get('/api/achievements', async (_req: Request, res: Response) => {
+    try {
+      const achievements = await storage.getAllAchievements();
+      res.json(achievements);
+    } catch (error) {
+      console.error('Failed to fetch achievements:', error);
+      res.status(500).json({ error: 'Failed to fetch achievements' });
+    }
+  });
+
+  app.get('/api/achievements/:id', async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid achievement ID' });
+      }
+      
+      const achievement = await storage.getAchievement(id);
+      if (!achievement) {
+        return res.status(404).json({ error: 'Achievement not found' });
+      }
+      
+      res.json(achievement);
+    } catch (error) {
+      console.error('Failed to fetch achievement:', error);
+      res.status(500).json({ error: 'Failed to fetch achievement' });
+    }
+  });
+
+  app.get('/api/achievements/category/:category', async (req: Request, res: Response) => {
+    try {
+      const category = req.params.category;
+      const achievements = await storage.getAchievementsByCategory(category);
+      res.json(achievements);
+    } catch (error) {
+      console.error('Failed to fetch achievements by category:', error);
+      res.status(500).json({ error: 'Failed to fetch achievements by category' });
+    }
+  });
+
+  app.post('/api/achievements', async (req: Request, res: Response) => {
+    try {
+      const achievementData = insertAchievementSchema.parse(req.body);
+      const achievement = await storage.createAchievement(achievementData);
+      res.status(201).json(achievement);
+    } catch (error) {
+      console.error('Failed to create achievement:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: fromZodError(error).message });
+      }
+      res.status(500).json({ error: 'Failed to create achievement' });
+    }
+  });
+
+  // User Achievement routes
+  app.get('/api/users/:userId/achievements', async (req: Request, res: Response) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      if (isNaN(userId)) {
+        return res.status(400).json({ error: 'Invalid user ID' });
+      }
+      
+      const userAchievements = await storage.getUserAchievements(userId);
+      res.json(userAchievements);
+    } catch (error) {
+      console.error('Failed to fetch user achievements:', error);
+      res.status(500).json({ error: 'Failed to fetch user achievements' });
+    }
+  });
+
+  app.post('/api/users/:userId/achievements', async (req: Request, res: Response) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      if (isNaN(userId)) {
+        return res.status(400).json({ error: 'Invalid user ID' });
+      }
+      
+      const userAchievementData = insertUserAchievementSchema.parse({
+        ...req.body,
+        userId
+      });
+      
+      const userAchievement = await storage.createUserAchievement(userAchievementData);
+      res.status(201).json(userAchievement);
+    } catch (error) {
+      console.error('Failed to create user achievement:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: fromZodError(error).message });
+      }
+      res.status(500).json({ error: 'Failed to create user achievement' });
+    }
+  });
+
+  app.patch('/api/user-achievements/:id/progress', async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid user achievement ID' });
+      }
+      
+      const { progress } = req.body;
+      if (typeof progress !== 'number' || progress < 0 || progress > 100) {
+        return res.status(400).json({ error: 'Invalid progress value. Must be a number between 0 and 100.' });
+      }
+      
+      const userAchievement = await storage.updateUserAchievementProgress(id, progress);
+      if (!userAchievement) {
+        return res.status(404).json({ error: 'User achievement not found' });
+      }
+      
+      res.json(userAchievement);
+    } catch (error) {
+      console.error('Failed to update user achievement progress:', error);
+      res.status(500).json({ error: 'Failed to update user achievement progress' });
+    }
+  });
+
+  app.post('/api/user-achievements/:id/complete', async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid user achievement ID' });
+      }
+      
+      const userAchievement = await storage.completeUserAchievement(id);
+      if (!userAchievement) {
+        return res.status(404).json({ error: 'User achievement not found' });
+      }
+      
+      res.json(userAchievement);
+    } catch (error) {
+      console.error('Failed to complete user achievement:', error);
+      res.status(500).json({ error: 'Failed to complete user achievement' });
+    }
+  });
+
+  // Tutorial Progress routes
+  app.get('/api/users/:userId/tutorials/progress', async (req: Request, res: Response) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      if (isNaN(userId)) {
+        return res.status(400).json({ error: 'Invalid user ID' });
+      }
+      
+      const tutorialProgress = await storage.getUserTutorialProgress(userId);
+      res.json(tutorialProgress);
+    } catch (error) {
+      console.error('Failed to fetch tutorial progress:', error);
+      res.status(500).json({ error: 'Failed to fetch tutorial progress' });
+    }
+  });
+
+  app.get('/api/users/:userId/tutorials/:tutorialId/progress', async (req: Request, res: Response) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const tutorialId = parseInt(req.params.tutorialId);
+      
+      if (isNaN(userId) || isNaN(tutorialId)) {
+        return res.status(400).json({ error: 'Invalid user ID or tutorial ID' });
+      }
+      
+      const progress = await storage.getTutorialProgress(userId, tutorialId);
+      if (!progress) {
+        return res.status(404).json({ error: 'Tutorial progress not found' });
+      }
+      
+      res.json(progress);
+    } catch (error) {
+      console.error('Failed to fetch tutorial progress:', error);
+      res.status(500).json({ error: 'Failed to fetch tutorial progress' });
+    }
+  });
+
+  app.post('/api/users/:userId/tutorials/:tutorialId/progress', async (req: Request, res: Response) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const tutorialId = parseInt(req.params.tutorialId);
+      
+      if (isNaN(userId) || isNaN(tutorialId)) {
+        return res.status(400).json({ error: 'Invalid user ID or tutorial ID' });
+      }
+      
+      const { progress, notes } = req.body;
+      if (typeof progress !== 'number' || progress < 0 || progress > 100) {
+        return res.status(400).json({ error: 'Invalid progress value. Must be a number between 0 and 100.' });
+      }
+      
+      // Create or update progress
+      let tutorialProgress;
+      const existingProgress = await storage.getTutorialProgress(userId, tutorialId);
+      
+      if (existingProgress) {
+        tutorialProgress = await storage.updateTutorialProgress(userId, tutorialId, progress);
+      } else {
+        tutorialProgress = await storage.createTutorialProgress({
+          userId,
+          tutorialId,
+          progress,
+          notes: notes || null
+        });
+      }
+      
+      res.status(existingProgress ? 200 : 201).json(tutorialProgress);
+    } catch (error) {
+      console.error('Failed to create/update tutorial progress:', error);
+      res.status(500).json({ error: 'Failed to create/update tutorial progress' });
+    }
+  });
+
+  app.post('/api/users/:userId/tutorials/:tutorialId/complete', async (req: Request, res: Response) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const tutorialId = parseInt(req.params.tutorialId);
+      
+      if (isNaN(userId) || isNaN(tutorialId)) {
+        return res.status(400).json({ error: 'Invalid user ID or tutorial ID' });
+      }
+      
+      const tutorialProgress = await storage.completeTutorial(userId, tutorialId);
+      
+      // Check if the completion unlocked any achievements
+      const newAchievements = await storage.checkAndAwardAchievements(userId);
+      
+      res.json({
+        progress: tutorialProgress,
+        newAchievements: newAchievements.length > 0 ? newAchievements : null
+      });
+    } catch (error) {
+      console.error('Failed to complete tutorial:', error);
+      res.status(500).json({ error: 'Failed to complete tutorial' });
     }
   });
 
