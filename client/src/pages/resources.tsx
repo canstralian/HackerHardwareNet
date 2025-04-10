@@ -276,11 +276,92 @@ const Resources = () => {
             <div className="article-container">
               <button 
                 className="mb-6 flex items-center text-[#00FF00] hover:underline"
-                onClick={() => setSelectedArticle(null)}
+                onClick={() => handleBackToListing()}
               >
                 <i className="fas fa-arrow-left mr-2"></i> Back to {categoryName}
               </button>
               
+              {/* Display database article if one is selected */}
+              {selectedArticleId && article ? (
+                <div className="bg-[#1A1A1A] border border-[#00FF00]/20 rounded-lg p-8">
+                  <h1 className="text-3xl font-bold mb-4">{article.title}</h1>
+                  
+                  <div className="flex items-center mb-6">
+                    <div className="w-8 h-8 rounded-full bg-[#00FF00]/20 mr-3"></div>
+                    <div>
+                      <p className="font-medium">{article.authorId ? `Author #${article.authorId}` : 'Anonymous'}</p>
+                      <p className="text-sm text-gray-400">
+                        {new Date(article.publishedAt).toLocaleDateString()} • {article.readTime}
+                        {article.views > 0 && ` • ${article.views} view${article.views > 1 ? 's' : ''}`}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="prose prose-invert max-w-none">
+                    {/* Format Markdown content */}
+                    {article.content.split('\n\n').map((paragraph, idx) => {
+                      // Handle headings
+                      if (paragraph.startsWith('# ')) {
+                        return <h1 key={idx} className="text-3xl font-bold mt-8 mb-4">{paragraph.substring(2)}</h1>;
+                      } else if (paragraph.startsWith('## ')) {
+                        return <h2 key={idx} className="text-2xl font-bold mt-8 mb-4">{paragraph.substring(3)}</h2>;
+                      } else if (paragraph.startsWith('### ')) {
+                        return <h3 key={idx} className="text-xl font-bold mt-6 mb-3">{paragraph.substring(4)}</h3>;
+                      } 
+                      
+                      // Handle lists
+                      else if (paragraph.includes('\n- ')) {
+                        const [listTitle, ...items] = paragraph.split('\n- ');
+                        return (
+                          <div key={idx} className="my-4">
+                            {listTitle && <p className="text-gray-300 mb-2">{listTitle}</p>}
+                            <ul className="list-disc pl-6 space-y-1 text-gray-300">
+                              {items.map((item, i) => (
+                                <li key={i}>{item}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        );
+                      }
+                      
+                      // Regular paragraphs
+                      else {
+                        return <p key={idx} className="text-gray-300 mb-4">{paragraph}</p>;
+                      }
+                    })}
+                    
+                    {/* Tags section */}
+                    <div className="mt-8 pt-6 border-t border-[#00FF00]/20">
+                      <div className="flex flex-wrap gap-2 mb-6">
+                        {article.tags.map((tag, index) => (
+                          <span key={index} className="text-xs px-2 py-1 bg-[#00FF00]/10 text-[#00FF00] rounded">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : isLoadingArticle ? (
+                // Loading state for article
+                <div className="bg-[#1A1A1A] border border-[#00FF00]/20 rounded-lg p-8 animate-pulse">
+                  <div className="h-10 bg-gray-700 rounded mb-8 w-3/4"></div>
+                  <div className="flex items-center mb-6">
+                    <div className="w-8 h-8 rounded-full bg-gray-700 mr-3"></div>
+                    <div className="w-1/3">
+                      <div className="h-4 bg-gray-700 rounded mb-2"></div>
+                      <div className="h-3 bg-gray-700 rounded"></div>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="h-4 bg-gray-700 rounded w-full"></div>
+                    <div className="h-4 bg-gray-700 rounded w-full"></div>
+                    <div className="h-4 bg-gray-700 rounded w-5/6"></div>
+                  </div>
+                </div>
+              ) : null}
+              
+              {/* Legacy articles */}
               {selectedArticle === 'article-1' && <Article1Content />}
               {selectedArticle === 'article-2' && <Article2Content />}
               {selectedArticle === 'specs-pi4' && (
