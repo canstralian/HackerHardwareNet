@@ -67,6 +67,29 @@ export interface IStorage {
   // User Profile CRUD
   getUserProfile(userId: number): Promise<UserProfile | undefined>;
   createUserProfile(profile: InsertUserProfile): Promise<UserProfile>;
+  
+  // Achievement CRUD
+  getAchievement(id: number): Promise<Achievement | undefined>;
+  getAllAchievements(): Promise<Achievement[]>;
+  getAchievementsByCategory(category: string): Promise<Achievement[]>;
+  createAchievement(achievement: InsertAchievement): Promise<Achievement>;
+  
+  // User Achievement CRUD
+  getUserAchievements(userId: number): Promise<UserAchievement[]>;
+  getUserAchievement(userId: number, achievementId: number): Promise<UserAchievement | undefined>;
+  createUserAchievement(userAchievement: InsertUserAchievement): Promise<UserAchievement>;
+  updateUserAchievementProgress(id: number, progress: number): Promise<UserAchievement | undefined>;
+  completeUserAchievement(id: number): Promise<UserAchievement | undefined>;
+  
+  // Tutorial Progress CRUD
+  getTutorialProgress(userId: number, tutorialId: number): Promise<TutorialProgress | undefined>;
+  getUserTutorialProgress(userId: number): Promise<TutorialProgress[]>;
+  createTutorialProgress(progress: InsertTutorialProgress): Promise<TutorialProgress>;
+  updateTutorialProgress(userId: number, tutorialId: number, progress: number): Promise<TutorialProgress | undefined>;
+  completeTutorial(userId: number, tutorialId: number): Promise<TutorialProgress | undefined>;
+  
+  // Achievement checking
+  checkAndAwardAchievements(userId: number): Promise<UserAchievement[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -79,6 +102,9 @@ export class MemStorage implements IStorage {
   private comments: Map<number, Comment>;
   private userProfiles: Map<number, UserProfile>;
   private articles: Map<number, Article>;
+  private achievements: Map<number, Achievement>;
+  private userAchievements: Map<number, UserAchievement>;
+  private tutorialProgress: Map<number, TutorialProgress>;
   
   private currentUserId: number;
   private currentHardwareId: number;
@@ -89,6 +115,9 @@ export class MemStorage implements IStorage {
   private currentCommentId: number;
   private currentProfileId: number;
   private currentArticleId: number;
+  private currentAchievementId: number;
+  private currentUserAchievementId: number;
+  private currentTutorialProgressId: number;
 
   constructor() {
     this.users = new Map();
@@ -100,6 +129,9 @@ export class MemStorage implements IStorage {
     this.comments = new Map();
     this.userProfiles = new Map();
     this.articles = new Map();
+    this.achievements = new Map();
+    this.userAchievements = new Map();
+    this.tutorialProgress = new Map();
     
     this.currentUserId = 1;
     this.currentHardwareId = 1;
@@ -110,6 +142,9 @@ export class MemStorage implements IStorage {
     this.currentCommentId = 1;
     this.currentProfileId = 1;
     this.currentArticleId = 1;
+    this.currentAchievementId = 1;
+    this.currentUserAchievementId = 1;
+    this.currentTutorialProgressId = 1;
     
     // Initialize with some demo data
     this.initializeDemoData();

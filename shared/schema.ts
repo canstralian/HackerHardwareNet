@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, jsonb, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -212,5 +212,78 @@ export type Comment = typeof comments.$inferSelect;
 export type InsertArticle = z.infer<typeof insertArticleSchema>;
 export type Article = typeof articles.$inferSelect;
 
+// Achievements model
+export const achievements = pgTable("achievements", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  icon: text("icon").notNull(),
+  category: text("category").notNull(), // e.g., 'tutorial', 'project', 'social'
+  points: integer("points").default(10),
+  requirement: jsonb("requirement").$type<Record<string, any>>().notNull(), // e.g., {type: 'completeTutorials', count: 5}
+  badgeUrl: text("badge_url"),
+  tier: text("tier").notNull(), // e.g., 'bronze', 'silver', 'gold', 'platinum'
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// User Achievements model (join table between users and achievements)
+export const userAchievements = pgTable("user_achievements", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  achievementId: integer("achievement_id").references(() => achievements.id).notNull(),
+  unlockedAt: timestamp("unlocked_at").defaultNow(),
+  progress: integer("progress").default(0), // For tracking partial completion
+  isComplete: boolean("is_complete").default(false),
+  notified: boolean("notified").default(false), // Whether user has been notified about this achievement
+});
+
+// Tutorial Progress model for tracking user's progress in tutorials
+export const tutorialProgress = pgTable("tutorial_progress", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  tutorialId: integer("tutorial_id").references(() => tutorials.id).notNull(),
+  progress: integer("progress").default(0), // Percentage of completion (0-100)
+  startedAt: timestamp("started_at").defaultNow(),
+  completedAt: timestamp("completed_at"),
+  lastActiveAt: timestamp("last_active_at").defaultNow(),
+  notes: text("notes"),
+});
+
+// Insert schemas for new tables
+export const insertAchievementSchema = createInsertSchema(achievements).pick({
+  name: true,
+  description: true,
+  icon: true,
+  category: true,
+  points: true, 
+  requirement: true,
+  badgeUrl: true,
+  tier: true,
+});
+
+export const insertUserAchievementSchema = createInsertSchema(userAchievements).pick({
+  userId: true,
+  achievementId: true,
+  progress: true,
+  isComplete: true,
+});
+
+export const insertTutorialProgressSchema = createInsertSchema(tutorialProgress).pick({
+  userId: true,
+  tutorialId: true,
+  progress: true,
+  notes: true,
+});
+
 export type InsertUserProfile = z.infer<typeof insertUserProfileSchema>;
 export type UserProfile = typeof userProfiles.$inferSelect;
+
+// Achievement types
+export type InsertAchievement = z.infer<typeof insertAchievementSchema>;
+export type Achievement = typeof achievements.$inferSelect;
+
+export type InsertUserAchievement = z.infer<typeof insertUserAchievementSchema>;
+export type UserAchievement = typeof userAchievements.$inferSelect;
+
+export type InsertTutorialProgress = z.infer<typeof insertTutorialProgressSchema>;
+export type TutorialProgress = typeof tutorialProgress.$inferSelect;
