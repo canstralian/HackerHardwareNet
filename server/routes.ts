@@ -9,7 +9,8 @@ import {
   insertProjectSchema,
   insertForumPostSchema,
   insertCommentSchema,
-  insertUserProfileSchema
+  insertUserProfileSchema,
+  insertArticleSchema
 } from "@shared/schema";
 import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
@@ -372,6 +373,64 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Article routes
+  app.get('/api/articles', async (_req: Request, res: Response) => {
+    try {
+      const articles = await storage.getAllArticles();
+      res.json(articles);
+    } catch (error) {
+      console.error('Failed to fetch articles:', error);
+      res.status(500).json({ error: 'Failed to fetch articles' });
+    }
+  });
+  
+  app.get('/api/articles/:id', async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid article ID' });
+      }
+      
+      const article = await storage.getArticle(id);
+      if (!article) {
+        return res.status(404).json({ error: 'Article not found' });
+      }
+      
+      // Increment view count
+      await storage.incrementArticleViews(id);
+      
+      res.json(article);
+    } catch (error) {
+      console.error('Failed to fetch article:', error);
+      res.status(500).json({ error: 'Failed to fetch article' });
+    }
+  });
+  
+  app.get('/api/articles/category/:category', async (req: Request, res: Response) => {
+    try {
+      const category = req.params.category;
+      const articles = await storage.getArticlesByCategory(category);
+      res.json(articles);
+    } catch (error) {
+      console.error('Failed to fetch articles by category:', error);
+      res.status(500).json({ error: 'Failed to fetch articles by category' });
+    }
+  });
+  
+  app.post('/api/articles', async (req: Request, res: Response) => {
+    try {
+      const articleData = insertArticleSchema.parse(req.body);
+      const article = await storage.createArticle(articleData);
+      res.status(201).json(article);
+    } catch (error) {
+      console.error('Failed to create article:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: fromZodError(error).message });
+      }
+      res.status(500).json({ error: 'Failed to create article' });
+    }
+  });
+
   // Search route
   app.get('/api/search', async (req: Request, res: Response) => {
     try {
@@ -413,12 +472,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   project.description.toLowerCase().includes(lowercaseQuery) ||
                   project.tag.toLowerCase().includes(lowercaseQuery)
       );
+      
+      // Search in articles
+      const articles = await storage.getAllArticles();
+      const matchedArticles = articles.filter(
+        article => article.title.toLowerCase().includes(lowercaseQuery) || 
+                   article.description.toLowerCase().includes(lowercaseQuery) ||
+                   article.content.toLowerCase().includes(lowercaseQuery) ||
+                   article.tags.some(tag => tag.toLowerCase().includes(lowercaseQuery))
+      );
 
       res.json({
         hardware: matchedHardware,
         tutorials: matchedTutorials,
         tools: matchedTools,
-        projects: matchedProjects
+        projects: matchedProjects,
+        articles: matchedArticles
       });
     } catch (error) {
       res.status(500).json({ error: 'Search failed' });

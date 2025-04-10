@@ -6,7 +6,8 @@ import {
   projects, type Project, type InsertProject,
   forumPosts, type ForumPost, type InsertForumPost,
   comments, type Comment, type InsertComment,
-  userProfiles, type UserProfile, type InsertUserProfile
+  userProfiles, type UserProfile, type InsertUserProfile,
+  articles, type Article, type InsertArticle
 } from "@shared/schema";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { eq } from "drizzle-orm";
@@ -56,6 +57,13 @@ export interface IStorage {
   getTutorialComments(tutorialId: number): Promise<Comment[]>;
   createComment(comment: InsertComment): Promise<Comment>;
   
+  // Article CRUD
+  getArticle(id: number): Promise<Article | undefined>;
+  getAllArticles(): Promise<Article[]>;
+  getArticlesByCategory(category: string): Promise<Article[]>;
+  createArticle(article: InsertArticle): Promise<Article>;
+  incrementArticleViews(id: number): Promise<Article | undefined>;
+  
   // User Profile CRUD
   getUserProfile(userId: number): Promise<UserProfile | undefined>;
   createUserProfile(profile: InsertUserProfile): Promise<UserProfile>;
@@ -91,6 +99,7 @@ export class MemStorage implements IStorage {
     this.forumPosts = new Map();
     this.comments = new Map();
     this.userProfiles = new Map();
+    this.articles = new Map();
     
     this.currentUserId = 1;
     this.currentHardwareId = 1;
@@ -100,6 +109,7 @@ export class MemStorage implements IStorage {
     this.currentForumPostId = 1;
     this.currentCommentId = 1;
     this.currentProfileId = 1;
+    this.currentArticleId = 1;
     
     // Initialize with some demo data
     this.initializeDemoData();
@@ -310,6 +320,47 @@ async createComment(insertComment: InsertComment): Promise<Comment> {
   };
   this.comments.set(id, comment);
   return comment;
+}
+
+// Article methods  
+async getArticle(id: number): Promise<Article | undefined> {
+  return this.articles.get(id);
+}
+
+async getAllArticles(): Promise<Article[]> {
+  return Array.from(this.articles.values());
+}
+
+async getArticlesByCategory(category: string): Promise<Article[]> {
+  return Array.from(this.articles.values()).filter(
+    article => article.category.toLowerCase() === category.toLowerCase()
+  );
+}
+
+async createArticle(insertArticle: InsertArticle): Promise<Article> {
+  const id = this.currentArticleId++;
+  const article: Article = {
+    ...insertArticle,
+    id,
+    publishedAt: new Date().toISOString(),
+    imageUrl: insertArticle.imageUrl || null,
+    authorId: insertArticle.authorId || null,
+    tags: Array.isArray(insertArticle.tags) ? insertArticle.tags : [],
+    relatedArticleIds: Array.isArray(insertArticle.relatedArticleIds) ? insertArticle.relatedArticleIds : null,
+    views: 0
+  };
+  this.articles.set(id, article);
+  return article;
+}
+
+async incrementArticleViews(id: number): Promise<Article | undefined> {
+  const article = this.articles.get(id);
+  if (!article) return undefined;
+  
+  const newViews = (article.views || 0) + 1;
+  const updatedArticle = { ...article, views: newViews };
+  this.articles.set(id, updatedArticle);
+  return updatedArticle;
 }
 
 // User Profile methods
