@@ -70,6 +70,7 @@ export class MemStorage implements IStorage {
   private forumPosts: Map<number, ForumPost>;
   private comments: Map<number, Comment>;
   private userProfiles: Map<number, UserProfile>;
+  private articles: Map<number, Article>;
   
   private currentUserId: number;
   private currentHardwareId: number;
@@ -79,6 +80,7 @@ export class MemStorage implements IStorage {
   private currentForumPostId: number;
   private currentCommentId: number;
   private currentProfileId: number;
+  private currentArticleId: number;
 
   constructor() {
     this.users = new Map();
@@ -509,6 +511,43 @@ export class PostgresStorage implements IStorage {
       rating: 0
     };
     const result = await this.db.insert(comments).values(commentWithDate).returning();
+    return result[0];
+  }
+  
+  // Article methods
+  async getArticle(id: number): Promise<Article | undefined> {
+    const result = await this.db.select().from(articles).where(eq(articles.id, id)).limit(1);
+    return result[0];
+  }
+  
+  async getAllArticles(): Promise<Article[]> {
+    return this.db.select().from(articles);
+  }
+  
+  async getArticlesByCategory(category: string): Promise<Article[]> {
+    return this.db.select().from(articles).where(eq(articles.category, category));
+  }
+  
+  async createArticle(article: InsertArticle): Promise<Article> {
+    const now = new Date().toISOString();
+    const articleWithDate = {
+      ...article,
+      publishedAt: now
+    };
+    const result = await this.db.insert(articles).values(articleWithDate).returning();
+    return result[0];
+  }
+  
+  async incrementArticleViews(id: number): Promise<Article | undefined> {
+    const article = await this.getArticle(id);
+    if (!article) return undefined;
+    
+    const newViews = (article.views || 0) + 1;
+    const result = await this.db
+      .update(articles)
+      .set({ views: newViews })
+      .where(eq(articles.id, id))
+      .returning();
     return result[0];
   }
   

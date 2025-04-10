@@ -122,6 +122,22 @@ export type Tool = typeof tools.$inferSelect;
 export type InsertProject = z.infer<typeof insertProjectSchema>;
 export type Project = typeof projects.$inferSelect;
 
+// Article model
+export const articles = pgTable("articles", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  preview: text("preview").notNull(),
+  category: text("category").notNull(),
+  imageUrl: text("image_url"),
+  authorId: integer("author_id").references(() => users.id),
+  publishedAt: text("published_at").notNull(),
+  readTime: text("read_time").notNull(),
+  tags: jsonb("tags").$type<string[]>().notNull(),
+  relatedArticleIds: jsonb("related_article_ids").$type<number[]>(),
+  views: integer("views").default(0),
+});
+
 // Forum model
 export const forumPosts = pgTable("forum_posts", {
   id: serial("id").primaryKey(),
@@ -168,6 +184,18 @@ export const insertCommentSchema = createInsertSchema(comments).pick({
   tutorialId: true,
 });
 
+export const insertArticleSchema = createInsertSchema(articles).pick({
+  title: true,
+  content: true,
+  preview: true,
+  category: true,
+  imageUrl: true,
+  authorId: true,
+  readTime: true,
+  tags: true,
+  relatedArticleIds: true,
+});
+
 export const insertUserProfileSchema = createInsertSchema(userProfiles).pick({
   userId: true,
   expertise: true,
@@ -180,6 +208,9 @@ export type ForumPost = typeof forumPosts.$inferSelect;
 
 export type InsertComment = z.infer<typeof insertCommentSchema>;
 export type Comment = typeof comments.$inferSelect;
+
+export type InsertArticle = z.infer<typeof insertArticleSchema>;
+export type Article = typeof articles.$inferSelect;
 
 export type InsertUserProfile = z.infer<typeof insertUserProfileSchema>;
 export type UserProfile = typeof userProfiles.$inferSelect;
