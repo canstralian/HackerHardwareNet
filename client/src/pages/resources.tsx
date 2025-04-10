@@ -3,7 +3,25 @@ import { useLocation } from 'wouter';
 import Sidebar from '@/components/sidebar';
 import { RESOURCES } from '@/lib/constants';
 import { Article1Content, Article2Content } from '@/components/article-templates';
+import { useQuery } from '@tanstack/react-query';
 
+// Interface for database article type
+interface Article {
+  id: number;
+  title: string;
+  content: string;
+  preview: string;
+  category: string;
+  imageUrl: string;
+  authorId: number | null;
+  publishedAt: string;
+  readTime: string;
+  tags: string[];
+  relatedArticleIds: number[] | null;
+  views: number;
+}
+
+// Legacy interface for mock data
 interface ArticlePreview {
   id: string;
   title: string;
@@ -98,6 +116,21 @@ const Resources = () => {
   const [location] = useLocation();
   const [activeCategory, setActiveCategory] = useState<string>('documentation');
   const [selectedArticle, setSelectedArticle] = useState<string | null>(null);
+  const [selectedArticleId, setSelectedArticleId] = useState<number | null>(null);
+
+  // Fetch all articles
+  const { data: articles, isLoading: isLoadingArticles } = useQuery<Article[]>({ 
+    queryKey: ['/api/articles'],
+    enabled: !selectedArticleId, // Only fetch all articles when not viewing a single article
+  });
+
+  // Fetch single article with ID when viewing a specific article
+  const { data: article, isLoading: isLoadingArticle } = useQuery<Article>({ 
+    queryKey: ['/api/articles', selectedArticleId], 
+    queryFn: () => 
+      fetch(`/api/articles/${selectedArticleId}`).then(res => res.json()),
+    enabled: !!selectedArticleId, // Only fetch when selectedArticleId is not null
+  });
 
   useEffect(() => {
     // Get type from URL query parameter
@@ -107,6 +140,28 @@ const Resources = () => {
       setActiveCategory(type);
     }
   }, [location]);
+
+  // Handle article selection
+  const handleArticleSelect = (articleId: number) => {
+    setSelectedArticleId(articleId);
+    setSelectedArticle(`article-${articleId}`); // For legacy compatibility
+  };
+
+  // Go back to article listing
+  const handleBackToListing = () => {
+    setSelectedArticleId(null);
+    setSelectedArticle(null);
+  };
+
+  // Group articles by category
+  const articlesByCategory = articles?.reduce((acc: Record<string, Article[]>, article) => {
+    const category = article.category.toLowerCase().replace(/\s+/g, '-');
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(article);
+    return acc;
+  }, {}) || {};
 
   const categoryName = RESOURCES.find(r => r.id === activeCategory)?.name || 'Documentation';
 
@@ -141,31 +196,79 @@ const Resources = () => {
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {MOCK_ARTICLES[activeCategory]?.map((article) => (
-                  <div 
-                    key={article.id} 
-                    className="bg-[#1A1A1A] border border-[#00FF00]/20 rounded-lg p-6 hover:border-[#00FF00]/50 transition-colors cursor-pointer"
-                    onClick={() => setSelectedArticle(article.id)}
-                  >
-                    <h2 className="text-xl font-bold mb-2">{article.title}</h2>
-                    <p className="text-gray-300 mb-4">{article.preview}</p>
-                    <div className="flex justify-between items-center">
-                      <div className="text-sm text-gray-400">
-                        <span>{article.author}</span>
-                        <span className="mx-2">•</span>
-                        <span>{article.date}</span>
+                {isLoadingArticles ? (
+                  // Loading skeleton
+                  Array(4).fill(0).map((_, i) => (
+                    <div key={i} className="bg-[#1A1A1A] border border-[#00FF00]/20 rounded-lg p-6 animate-pulse">
+                      <div className="h-7 bg-gray-700 rounded mb-3 w-3/4"></div>
+                      <div className="h-4 bg-gray-700 rounded mb-2 w-full"></div>
+                      <div className="h-4 bg-gray-700 rounded mb-4 w-5/6"></div>
+                      <div className="flex justify-between items-center mb-3">
+                        <div className="h-3 bg-gray-700 rounded w-1/3"></div>
+                        <div className="h-6 bg-gray-700 rounded w-1/6"></div>
                       </div>
-                      <span className="text-sm bg-[#1A1A1A] border border-[#00FF00]/30 px-2 py-1 rounded text-[#00FF00]">{article.readTime}</span>
+                      <div className="flex gap-2">
+                        <div className="h-5 bg-gray-700 rounded w-16"></div>
+                        <div className="h-5 bg-gray-700 rounded w-20"></div>
+                      </div>
                     </div>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {article.tags.map((tag, index) => (
-                        <span key={index} className="text-xs px-2 py-1 bg-[#00FF00]/10 text-[#00FF00] rounded">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  // Show API articles if available, otherwise show mock data
+                  (articlesByCategory[activeCategory]?.length > 0 ? 
+                    articlesByCategory[activeCategory]?.map((article) => (
+                      <div 
+                        key={article.id} 
+                        className="bg-[#1A1A1A] border border-[#00FF00]/20 rounded-lg p-6 hover:border-[#00FF00]/50 transition-colors cursor-pointer"
+                        onClick={() => handleArticleSelect(article.id)}
+                      >
+                        <h2 className="text-xl font-bold mb-2">{article.title}</h2>
+                        <p className="text-gray-300 mb-4">{article.preview}</p>
+                        <div className="flex justify-between items-center">
+                          <div className="text-sm text-gray-400">
+                            <span>{article.authorId ? `Author #${article.authorId}` : 'Anonymous'}</span>
+                            <span className="mx-2">•</span>
+                            <span>{new Date(article.publishedAt).toLocaleDateString()}</span>
+                          </div>
+                          <span className="text-sm bg-[#1A1A1A] border border-[#00FF00]/30 px-2 py-1 rounded text-[#00FF00]">{article.readTime}</span>
+                        </div>
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {article.tags.map((tag, index) => (
+                            <span key={index} className="text-xs px-2 py-1 bg-[#00FF00]/10 text-[#00FF00] rounded">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )) : 
+                    // Fallback to mock data
+                    MOCK_ARTICLES[activeCategory]?.map((article) => (
+                      <div 
+                        key={article.id} 
+                        className="bg-[#1A1A1A] border border-[#00FF00]/20 rounded-lg p-6 hover:border-[#00FF00]/50 transition-colors cursor-pointer"
+                        onClick={() => setSelectedArticle(article.id)}
+                      >
+                        <h2 className="text-xl font-bold mb-2">{article.title}</h2>
+                        <p className="text-gray-300 mb-4">{article.preview}</p>
+                        <div className="flex justify-between items-center">
+                          <div className="text-sm text-gray-400">
+                            <span>{article.author}</span>
+                            <span className="mx-2">•</span>
+                            <span>{article.date}</span>
+                          </div>
+                          <span className="text-sm bg-[#1A1A1A] border border-[#00FF00]/30 px-2 py-1 rounded text-[#00FF00]">{article.readTime}</span>
+                        </div>
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {article.tags.map((tag, index) => (
+                            <span key={index} className="text-xs px-2 py-1 bg-[#00FF00]/10 text-[#00FF00] rounded">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ))
+                  )
+                )}
               </div>
             </>
           ) : (
