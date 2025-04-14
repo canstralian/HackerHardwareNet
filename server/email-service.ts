@@ -37,7 +37,12 @@ export class EmailService {
    */
   private static async getAllEmails(): Promise<EmailNotification[]> {
     // In a real app, we'd have a dedicated query here
-    // For our simulation, we'll just check all user IDs from 1-10
+    // For now, we'll just return an empty array since 
+    // the getUserEmailNotifications method might not be implemented yet
+    return [];
+    
+    // This commented code would be used once getUserEmailNotifications is available
+    /*
     const emails: EmailNotification[] = [];
     
     // This is a simplified approach for demo purposes only
@@ -47,6 +52,7 @@ export class EmailService {
     }
     
     return emails;
+    */
   }
   
   /**
