@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, jsonb, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, jsonb, timestamp, decimal } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -8,7 +8,13 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
   email: text("email").notNull().unique(),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  avatarUrl: text("avatar_url"),
   isAdmin: boolean("is_admin").default(false),
+  isVerified: boolean("is_verified").default(false),
+  lastLogin: timestamp("last_login"),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 // Hardware model
@@ -65,6 +71,9 @@ export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
   email: true,
+  firstName: true,
+  lastName: true,
+  avatarUrl: true,
 });
 
 export const insertHardwareSchema = createInsertSchema(hardware).pick({
@@ -284,6 +293,171 @@ export type Achievement = typeof achievements.$inferSelect;
 
 export type InsertUserAchievement = z.infer<typeof insertUserAchievementSchema>;
 export type UserAchievement = typeof userAchievements.$inferSelect;
+
+// Course model
+export const courses = pgTable("courses", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  imageUrl: text("image_url"),
+  authorId: integer("author_id").references(() => users.id),
+  duration: text("duration").notNull(),
+  difficulty: text("difficulty").notNull(),
+  category: text("category").notNull(),
+  tags: jsonb("tags").$type<string[]>().notNull(),
+  requirements: jsonb("requirements").$type<string[]>().notNull(),
+  whatYoullLearn: jsonb("what_youll_learn").$type<string[]>().notNull(),
+  isFeatured: boolean("is_featured").default(false),
+  isPublished: boolean("is_published").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Course modules model
+export const courseModules = pgTable("course_modules", {
+  id: serial("id").primaryKey(),
+  courseId: integer("course_id").references(() => courses.id).notNull(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  order: integer("order").notNull(), // To determine sequence of modules
+  content: text("content").notNull(),
+  duration: text("duration"),
+  videoUrl: text("video_url"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// User Courses (purchases) model
+export const userCourses = pgTable("user_courses", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  courseId: integer("course_id").references(() => courses.id).notNull(),
+  purchasedAt: timestamp("purchased_at").defaultNow(),
+  expiresAt: timestamp("expires_at"), // For subscription-based courses
+  isPaid: boolean("is_paid").default(true),
+  progress: integer("progress").default(0), // Overall progress percentage
+  currentModuleId: integer("current_module_id"),
+  lastAccessedAt: timestamp("last_accessed_at").defaultNow(),
+});
+
+// Merchandise model
+export const merchandise = pgTable("merchandise", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  imageUrl: text("image_url").notNull(),
+  category: text("category").notNull(),
+  inventory: integer("inventory").default(0),
+  isAvailable: boolean("is_available").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Order model
+export const orders = pgTable("orders", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  totalAmount: decimal("total_amount", { precision: 10, scale: 2 }).notNull(),
+  status: text("status").notNull().default("pending"), // pending, completed, cancelled, refunded
+  paymentMethod: text("payment_method"),
+  billingAddress: jsonb("billing_address").$type<Record<string, string>>(),
+  shippingAddress: jsonb("shipping_address").$type<Record<string, string>>(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Order items model (details of what's in each order)
+export const orderItems = pgTable("order_items", {
+  id: serial("id").primaryKey(),
+  orderId: integer("order_id").references(() => orders.id).notNull(),
+  productType: text("product_type").notNull(), // "course" or "merchandise"
+  productId: integer("product_id").notNull(), // References either courses.id or merchandise.id
+  quantity: integer("quantity").notNull().default(1),
+  unitPrice: decimal("unit_price", { precision: 10, scale: 2 }).notNull(),
+  totalPrice: decimal("total_price", { precision: 10, scale: 2 }).notNull(),
+});
+
+// Insert schemas for new models
+export const insertCourseSchema = createInsertSchema(courses).pick({
+  title: true,
+  description: true,
+  price: true,
+  imageUrl: true,
+  authorId: true,
+  duration: true,
+  difficulty: true,
+  category: true,
+  tags: true,
+  requirements: true,
+  whatYoullLearn: true,
+  isFeatured: true,
+  isPublished: true,
+});
+
+export const insertCourseModuleSchema = createInsertSchema(courseModules).pick({
+  courseId: true,
+  title: true,
+  description: true,
+  order: true,
+  content: true,
+  duration: true,
+  videoUrl: true,
+});
+
+export const insertUserCourseSchema = createInsertSchema(userCourses).pick({
+  userId: true,
+  courseId: true,
+  expiresAt: true,
+  isPaid: true,
+});
+
+export const insertMerchandiseSchema = createInsertSchema(merchandise).pick({
+  name: true,
+  description: true,
+  price: true,
+  imageUrl: true,
+  category: true,
+  inventory: true,
+  isAvailable: true,
+});
+
+export const insertOrderSchema = createInsertSchema(orders).pick({
+  userId: true,
+  totalAmount: true,
+  status: true,
+  paymentMethod: true,
+  billingAddress: true,
+  shippingAddress: true,
+});
+
+export const insertOrderItemSchema = createInsertSchema(orderItems).pick({
+  orderId: true,
+  productType: true,
+  productId: true,
+  quantity: true,
+  unitPrice: true,
+  totalPrice: true,
+});
+
+// Types for new models
+export type InsertCourse = z.infer<typeof insertCourseSchema>;
+export type Course = typeof courses.$inferSelect;
+
+export type InsertCourseModule = z.infer<typeof insertCourseModuleSchema>;
+export type CourseModule = typeof courseModules.$inferSelect;
+
+export type InsertUserCourse = z.infer<typeof insertUserCourseSchema>;
+export type UserCourse = typeof userCourses.$inferSelect;
+
+export type InsertMerchandise = z.infer<typeof insertMerchandiseSchema>;
+export type Merchandise = typeof merchandise.$inferSelect;
+
+export type InsertOrder = z.infer<typeof insertOrderSchema>;
+export type Order = typeof orders.$inferSelect;
+
+export type InsertOrderItem = z.infer<typeof insertOrderItemSchema>;
+export type OrderItem = typeof orderItems.$inferSelect;
 
 export type InsertTutorialProgress = z.infer<typeof insertTutorialProgressSchema>;
 export type TutorialProgress = typeof tutorialProgress.$inferSelect;
