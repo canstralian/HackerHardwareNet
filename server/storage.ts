@@ -10,7 +10,13 @@ import {
   articles, type Article, type InsertArticle,
   achievements, type Achievement, type InsertAchievement,
   userAchievements, type UserAchievement, type InsertUserAchievement,
-  tutorialProgress, type TutorialProgress, type InsertTutorialProgress
+  tutorialProgress, type TutorialProgress, type InsertTutorialProgress,
+  courses, type Course, type InsertCourse,
+  courseModules, type CourseModule, type InsertCourseModule,
+  userCourses, type UserCourse, type InsertUserCourse,
+  merchandise, type Merchandise, type InsertMerchandise,
+  orders, type Order, type InsertOrder,
+  orderItems, type OrderItem, type InsertOrderItem
 } from "@shared/schema";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { eq } from "drizzle-orm";
@@ -20,7 +26,10 @@ export interface IStorage {
   // User CRUD
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  updateUser(id: number, userData: Partial<InsertUser>): Promise<User | undefined>;
+  updateUserLastLogin(id: number): Promise<User | undefined>;
   
   // Hardware CRUD
   getHardware(id: number): Promise<Hardware | undefined>;
@@ -163,12 +172,47 @@ export class MemStorage implements IStorage {
       (user) => user.username === username,
     );
   }
+  
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(
+      (user) => user.email === email,
+    );
+  }
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.currentUserId++;
-    const user: User = { ...insertUser, id, isAdmin: false };
+    const now = new Date();
+    const user: User = {
+      ...insertUser,
+      id,
+      isAdmin: false,
+      isVerified: false,
+      firstName: insertUser.firstName || null,
+      lastName: insertUser.lastName || null,
+      avatarUrl: insertUser.avatarUrl || null,
+      lastLogin: null,
+      createdAt: now
+    };
     this.users.set(id, user);
     return user;
+  }
+  
+  async updateUser(id: number, userData: Partial<InsertUser>): Promise<User | undefined> {
+    const user = this.users.get(id);
+    if (!user) return undefined;
+    
+    const updatedUser = { ...user, ...userData };
+    this.users.set(id, updatedUser);
+    return updatedUser;
+  }
+  
+  async updateUserLastLogin(id: number): Promise<User | undefined> {
+    const user = this.users.get(id);
+    if (!user) return undefined;
+    
+    const updatedUser = { ...user, lastLogin: new Date() };
+    this.users.set(id, updatedUser);
+    return updatedUser;
   }
   
   // Hardware methods
@@ -748,8 +792,38 @@ export class PostgresStorage implements IStorage {
     return result[0];
   }
   
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const result = await this.db.select().from(users).where(eq(users.email, email)).limit(1);
+    return result[0];
+  }
+  
   async createUser(user: InsertUser): Promise<User> {
-    const result = await this.db.insert(users).values(user).returning();
+    const now = new Date();
+    const userData = {
+      ...user,
+      isVerified: false,
+      createdAt: now
+    };
+    const result = await this.db.insert(users).values(userData).returning();
+    return result[0];
+  }
+  
+  async updateUser(id: number, userData: Partial<InsertUser>): Promise<User | undefined> {
+    const result = await this.db
+      .update(users)
+      .set(userData)
+      .where(eq(users.id, id))
+      .returning();
+    return result[0];
+  }
+  
+  async updateUserLastLogin(id: number): Promise<User | undefined> {
+    const now = new Date();
+    const result = await this.db
+      .update(users)
+      .set({ lastLogin: now })
+      .where(eq(users.id, id))
+      .returning();
     return result[0];
   }
   
