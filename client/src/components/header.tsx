@@ -80,10 +80,30 @@ const Header = () => {
           >
             <i className="fas fa-bars"></i>
           </button>
-          <Link href="#" className="hidden md:flex items-center space-x-1 text-[#00FF00] hover:bg-[#00FF00]/10 px-4 py-2 rounded-md transition-colors">
-            <i className="fas fa-user-circle"></i>
-            <span>Sign In</span>
-          </Link>
+          
+          {authLoading ? (
+            // Loading state
+            <div className="w-8 h-8 rounded-full bg-[#1A1A1A] border border-[#00FF00]/30 animate-pulse"></div>
+          ) : authStatus?.isAuthenticated ? (
+            // Authenticated user
+            <div className="flex items-center gap-3">
+              <Link href="/dashboard" className="hidden md:flex items-center space-x-1 text-[#00FF00] hover:bg-[#00FF00]/10 px-4 py-2 rounded-md transition-colors">
+                <User size={18} className="mr-1" />
+                <span>Dashboard</span>
+              </Link>
+            </div>
+          ) : (
+            // Unauthenticated user
+            <div className="flex items-center gap-2">
+              <Link href="/login" className="hidden md:flex items-center space-x-1 text-[#00FF00] hover:bg-[#00FF00]/10 px-4 py-2 rounded-md transition-colors">
+                <LogIn size={18} className="mr-1" />
+                <span>Login</span>
+              </Link>
+              <Link href="/register" className="hidden md:flex items-center bg-[#00FF00] text-black hover:bg-[#00FF00]/90 px-4 py-2 rounded-md transition-colors">
+                <span>Register</span>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 
@@ -112,10 +132,25 @@ const Header = () => {
             <Link href="#" className="text-white py-2 border-b border-[#1A1A1A]/50">
               About
             </Link>
-            <Link href="#" className="flex items-center space-x-1 text-[#00FF00]">
-              <i className="fas fa-user-circle"></i>
-              <span>Sign In</span>
-            </Link>
+            
+            {authStatus?.isAuthenticated ? (
+              // Authenticated user
+              <Link href="/dashboard" className="flex items-center space-x-1 text-[#00FF00] py-2">
+                <User size={18} className="mr-1" />
+                <span>Dashboard</span>
+              </Link>
+            ) : (
+              // Unauthenticated user
+              <div className="flex flex-col gap-2 pt-2">
+                <Link href="/login" className="flex items-center space-x-1 text-[#00FF00] py-2">
+                  <LogIn size={18} className="mr-1" />
+                  <span>Login</span>
+                </Link>
+                <Link href="/register" className="flex items-center justify-center bg-[#00FF00] text-black hover:bg-[#00FF00]/90 py-2 rounded-md transition-colors">
+                  <span>Register</span>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}
