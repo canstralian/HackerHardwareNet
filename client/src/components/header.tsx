@@ -36,7 +36,7 @@ const Header = () => {
             <i className="fas fa-microchip"></i>
           </div>
           <h1 className="text-2xl font-mono font-bold">
-            <span className="text-[#00FF00]">hacker</span>hardware<span className="text-[#00FF00]">.net</span>
+            <span className="text-[#00FF00]">Hackerhardware</span><span className="text-[#00FF00]">.net</span>
           </h1>
         </div>
 

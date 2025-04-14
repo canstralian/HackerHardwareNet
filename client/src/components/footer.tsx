@@ -35,7 +35,7 @@ const Footer = () => {
                 <i className="fas fa-microchip"></i>
               </div>
               <h2 className="text-xl font-mono font-bold">
-                <span className="text-[#00FF00]">hacker</span>hardware<span className="text-[#00FF00]">.net</span>
+                <span className="text-[#00FF00]">Hackerhardware</span><span className="text-[#00FF00]">.net</span>
               </h2>
             </div>
             <p className="text-gray-400 mb-4">Educational platform for cybersecurity and ethical hacking with hardware.</p>
