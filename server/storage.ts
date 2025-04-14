@@ -106,6 +106,66 @@ export interface IStorage {
   
   // Achievement checking
   checkAndAwardAchievements(userId: number): Promise<UserAchievement[]>;
+  
+  // Course CRUD
+  getCourse(id: number): Promise<Course | undefined>;
+  getAllCourses(): Promise<Course[]>;
+  getCoursesByCategory(category: string): Promise<Course[]>;
+  getCoursesByAuthor(authorId: number): Promise<Course[]>;
+  createCourse(course: InsertCourse): Promise<Course>;
+  
+  // Course Module CRUD
+  getCourseModule(id: number): Promise<CourseModule | undefined>;
+  getCourseModules(courseId: number): Promise<CourseModule[]>;
+  createCourseModule(module: InsertCourseModule): Promise<CourseModule>;
+  
+  // User Course CRUD
+  getUserCourse(userId: number, courseId: number): Promise<UserCourse | undefined>;
+  getUserCourses(userId: number): Promise<UserCourse[]>;
+  createUserCourse(userCourse: InsertUserCourse): Promise<UserCourse>;
+  updateUserCourseProgress(userId: number, courseId: number, progress: number): Promise<UserCourse | undefined>;
+  
+  // Merchandise CRUD
+  getMerchandise(id: number): Promise<Merchandise | undefined>;
+  getAllMerchandise(): Promise<Merchandise[]>;
+  getMerchandiseByCategory(category: string): Promise<Merchandise[]>;
+  createMerchandise(merchandise: InsertMerchandise): Promise<Merchandise>;
+  updateMerchandiseInventory(id: number, inventory: number): Promise<Merchandise | undefined>;
+  
+  // Order CRUD
+  getOrder(id: number): Promise<Order | undefined>;
+  getUserOrders(userId: number): Promise<Order[]>;
+  createOrder(order: InsertOrder): Promise<Order>;
+  updateOrderStatus(id: number, status: string): Promise<Order | undefined>;
+  
+  // Order Item CRUD
+  getOrderItems(orderId: number): Promise<OrderItem[]>;
+  createOrderItem(item: InsertOrderItem): Promise<OrderItem>;
+  
+  // Payment Method CRUD
+  getPaymentMethod(id: number): Promise<PaymentMethod | undefined>;
+  getUserPaymentMethods(userId: number): Promise<PaymentMethod[]>;
+  createPaymentMethod(method: InsertPaymentMethod): Promise<PaymentMethod>;
+  setDefaultPaymentMethod(userId: number, paymentMethodId: number): Promise<PaymentMethod | undefined>;
+  
+  // Payment CRUD
+  getPayment(id: number): Promise<Payment | undefined>;
+  getOrderPayments(orderId: number): Promise<Payment[]>;
+  createPayment(payment: InsertPayment): Promise<Payment>;
+  updatePaymentStatus(id: number, status: string): Promise<Payment | undefined>;
+  
+  // Subscription CRUD
+  getSubscription(id: number): Promise<Subscription | undefined>;
+  getUserSubscriptions(userId: number): Promise<Subscription[]>;
+  createSubscription(subscription: InsertSubscription): Promise<Subscription>;
+  updateSubscriptionStatus(id: number, status: string): Promise<Subscription | undefined>;
+  cancelSubscription(id: number): Promise<Subscription | undefined>;
+  
+  // Email Notification CRUD
+  getEmailNotification(id: number): Promise<EmailNotification | undefined>;
+  getUserEmailNotifications(userId: number): Promise<EmailNotification[]>;
+  createEmailNotification(notification: InsertEmailNotification): Promise<EmailNotification>;
+  updateEmailNotificationStatus(id: number, status: string, sentAt?: Date): Promise<EmailNotification | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -121,6 +181,16 @@ export class MemStorage implements IStorage {
   private achievements: Map<number, Achievement>;
   private userAchievements: Map<number, UserAchievement>;
   private tutorialProgress: Map<number, TutorialProgress>;
+  private courses: Map<number, Course>;
+  private courseModules: Map<number, CourseModule>;
+  private userCourses: Map<number, UserCourse>;
+  private merchandise: Map<number, Merchandise>;
+  private orders: Map<number, Order>;
+  private orderItems: Map<number, OrderItem>;
+  private paymentMethods: Map<number, PaymentMethod>;
+  private payments: Map<number, Payment>;
+  private subscriptions: Map<number, Subscription>;
+  private emailNotifications: Map<number, EmailNotification>;
   
   private currentUserId: number;
   private currentHardwareId: number;
@@ -134,6 +204,16 @@ export class MemStorage implements IStorage {
   private currentAchievementId: number;
   private currentUserAchievementId: number;
   private currentTutorialProgressId: number;
+  private currentCourseId: number;
+  private currentCourseModuleId: number;
+  private currentUserCourseId: number;
+  private currentMerchandiseId: number;
+  private currentOrderId: number;
+  private currentOrderItemId: number;
+  private currentPaymentMethodId: number;
+  private currentPaymentId: number;
+  private currentSubscriptionId: number;
+  private currentEmailNotificationId: number;
 
   constructor() {
     this.users = new Map();
@@ -148,6 +228,16 @@ export class MemStorage implements IStorage {
     this.achievements = new Map();
     this.userAchievements = new Map();
     this.tutorialProgress = new Map();
+    this.courses = new Map();
+    this.courseModules = new Map();
+    this.userCourses = new Map();
+    this.merchandise = new Map();
+    this.orders = new Map();
+    this.orderItems = new Map();
+    this.paymentMethods = new Map();
+    this.payments = new Map();
+    this.subscriptions = new Map();
+    this.emailNotifications = new Map();
     
     this.currentUserId = 1;
     this.currentHardwareId = 1;
@@ -161,6 +251,16 @@ export class MemStorage implements IStorage {
     this.currentAchievementId = 1;
     this.currentUserAchievementId = 1;
     this.currentTutorialProgressId = 1;
+    this.currentCourseId = 1;
+    this.currentCourseModuleId = 1;
+    this.currentUserCourseId = 1;
+    this.currentMerchandiseId = 1;
+    this.currentOrderId = 1;
+    this.currentOrderItemId = 1;
+    this.currentPaymentMethodId = 1;
+    this.currentPaymentId = 1;
+    this.currentSubscriptionId = 1;
+    this.currentEmailNotificationId = 1;
     
     // Initialize with some demo data
     this.initializeDemoData();
@@ -656,6 +756,454 @@ async completeTutorial(userId: number, tutorialId: number): Promise<TutorialProg
 }
 
 // Achievement checking
+// Course CRUD methods
+async getCourse(id: number): Promise<Course | undefined> {
+  return this.courses.get(id);
+}
+
+async getAllCourses(): Promise<Course[]> {
+  return Array.from(this.courses.values());
+}
+
+async getCoursesByCategory(category: string): Promise<Course[]> {
+  return Array.from(this.courses.values()).filter(
+    course => course.category.toLowerCase() === category.toLowerCase()
+  );
+}
+
+async getCoursesByAuthor(authorId: number): Promise<Course[]> {
+  return Array.from(this.courses.values()).filter(
+    course => course.authorId === authorId
+  );
+}
+
+async createCourse(insertCourse: InsertCourse): Promise<Course> {
+  const id = this.currentCourseId++;
+  const now = new Date();
+  const course: Course = {
+    ...insertCourse,
+    id,
+    createdAt: now,
+    imageUrl: insertCourse.imageUrl || null,
+    price: insertCourse.price || 0,
+    duration: insertCourse.duration || null,
+    authorId: insertCourse.authorId || null,
+    difficulty: insertCourse.difficulty || 'beginner',
+    enrollmentCount: 0,
+    rating: 0,
+    tags: Array.isArray(insertCourse.tags) ? insertCourse.tags : []
+  };
+  
+  this.courses.set(id, course);
+  return course;
+}
+
+// Course Module CRUD methods
+async getCourseModule(id: number): Promise<CourseModule | undefined> {
+  return this.courseModules.get(id);
+}
+
+async getCourseModules(courseId: number): Promise<CourseModule[]> {
+  return Array.from(this.courseModules.values()).filter(
+    module => module.courseId === courseId
+  );
+}
+
+async createCourseModule(insertCourseModule: InsertCourseModule): Promise<CourseModule> {
+  const id = this.currentCourseModuleId++;
+  const module: CourseModule = {
+    ...insertCourseModule,
+    id,
+    moduleNumber: insertCourseModule.moduleNumber || 1,
+    duration: insertCourseModule.duration || null
+  };
+  
+  this.courseModules.set(id, module);
+  return module;
+}
+
+// User Course CRUD methods
+async getUserCourse(userId: number, courseId: number): Promise<UserCourse | undefined> {
+  return Array.from(this.userCourses.values()).find(
+    userCourse => userCourse.userId === userId && userCourse.courseId === courseId
+  );
+}
+
+async getUserCourses(userId: number): Promise<UserCourse[]> {
+  return Array.from(this.userCourses.values()).filter(
+    userCourse => userCourse.userId === userId
+  );
+}
+
+async createUserCourse(insertUserCourse: InsertUserCourse): Promise<UserCourse> {
+  const id = this.currentUserCourseId++;
+  const now = new Date();
+  const userCourse: UserCourse = {
+    ...insertUserCourse,
+    id,
+    enrolledAt: now,
+    lastAccessedAt: now,
+    completedAt: null,
+    progress: 0,
+    certificate: null
+  };
+  
+  this.userCourses.set(id, userCourse);
+  
+  // Update course enrollment count
+  const course = this.courses.get(userCourse.courseId);
+  if (course) {
+    const updatedCourse = { 
+      ...course, 
+      enrollmentCount: (course.enrollmentCount || 0) + 1 
+    };
+    this.courses.set(course.id, updatedCourse);
+  }
+  
+  return userCourse;
+}
+
+async updateUserCourseProgress(userId: number, courseId: number, progress: number): Promise<UserCourse | undefined> {
+  const userCourse = await this.getUserCourse(userId, courseId);
+  
+  if (!userCourse) {
+    // Create a new user course if it doesn't exist
+    return this.createUserCourse({
+      userId,
+      courseId,
+      progress,
+      currentModuleId: null,
+      isPublic: false
+    });
+  }
+  
+  const now = new Date();
+  const updatedUserCourse = { 
+    ...userCourse, 
+    progress, 
+    lastAccessedAt: now,
+    completedAt: progress >= 100 ? now : userCourse.completedAt
+  };
+  
+  this.userCourses.set(userCourse.id, updatedUserCourse);
+  return updatedUserCourse;
+}
+
+// Merchandise CRUD methods
+async getMerchandise(id: number): Promise<Merchandise | undefined> {
+  return this.merchandise.get(id);
+}
+
+async getAllMerchandise(): Promise<Merchandise[]> {
+  return Array.from(this.merchandise.values());
+}
+
+async getMerchandiseByCategory(category: string): Promise<Merchandise[]> {
+  return Array.from(this.merchandise.values()).filter(
+    item => item.category.toLowerCase() === category.toLowerCase()
+  );
+}
+
+async createMerchandise(insertMerchandise: InsertMerchandise): Promise<Merchandise> {
+  const id = this.currentMerchandiseId++;
+  const now = new Date();
+  const merchandise: Merchandise = {
+    ...insertMerchandise,
+    id,
+    createdAt: now,
+    imageUrl: insertMerchandise.imageUrl || null,
+    inventory: insertMerchandise.inventory || 0,
+    isAvailable: insertMerchandise.isAvailable !== false,
+    discountPrice: insertMerchandise.discountPrice || null
+  };
+  
+  this.merchandise.set(id, merchandise);
+  return merchandise;
+}
+
+async updateMerchandiseInventory(id: number, inventory: number): Promise<Merchandise | undefined> {
+  const merchandise = this.merchandise.get(id);
+  if (!merchandise) return undefined;
+  
+  const updatedMerchandise = { 
+    ...merchandise, 
+    inventory,
+    isAvailable: inventory > 0 && merchandise.isAvailable
+  };
+  
+  this.merchandise.set(id, updatedMerchandise);
+  return updatedMerchandise;
+}
+
+// Order CRUD methods
+async getOrder(id: number): Promise<Order | undefined> {
+  return this.orders.get(id);
+}
+
+async getUserOrders(userId: number): Promise<Order[]> {
+  return Array.from(this.orders.values()).filter(
+    order => order.userId === userId
+  );
+}
+
+async createOrder(insertOrder: InsertOrder): Promise<Order> {
+  const id = this.currentOrderId++;
+  const now = new Date();
+  const order: Order = {
+    ...insertOrder,
+    id,
+    createdAt: now,
+    updatedAt: now,
+    shippingAddress: insertOrder.shippingAddress || null,
+    notes: insertOrder.notes || null,
+    shippedAt: null,
+    deliveredAt: null
+  };
+  
+  this.orders.set(id, order);
+  return order;
+}
+
+async updateOrderStatus(id: number, status: string): Promise<Order | undefined> {
+  const order = this.orders.get(id);
+  if (!order) return undefined;
+  
+  const now = new Date();
+  const updatedOrder = { 
+    ...order, 
+    status, 
+    updatedAt: now,
+    shippedAt: status === 'shipped' ? now : order.shippedAt,
+    deliveredAt: status === 'delivered' ? now : order.deliveredAt
+  };
+  
+  this.orders.set(id, updatedOrder);
+  return updatedOrder;
+}
+
+// Order Item CRUD methods
+async getOrderItems(orderId: number): Promise<OrderItem[]> {
+  return Array.from(this.orderItems.values()).filter(
+    item => item.orderId === orderId
+  );
+}
+
+async createOrderItem(insertOrderItem: InsertOrderItem): Promise<OrderItem> {
+  const id = this.currentOrderItemId++;
+  const orderItem: OrderItem = {
+    ...insertOrderItem,
+    id
+  };
+  
+  this.orderItems.set(id, orderItem);
+  
+  // If this is a merchandise order, update the inventory
+  if (orderItem.merchandiseId) {
+    const merchandise = this.merchandise.get(orderItem.merchandiseId);
+    if (merchandise) {
+      const newInventory = (merchandise.inventory || 0) - orderItem.quantity;
+      await this.updateMerchandiseInventory(orderItem.merchandiseId, Math.max(0, newInventory));
+    }
+  }
+  
+  return orderItem;
+}
+
+// Payment Method CRUD methods
+async getPaymentMethod(id: number): Promise<PaymentMethod | undefined> {
+  return this.paymentMethods.get(id);
+}
+
+async getUserPaymentMethods(userId: number): Promise<PaymentMethod[]> {
+  return Array.from(this.paymentMethods.values()).filter(
+    method => method.userId === userId
+  );
+}
+
+async createPaymentMethod(insertPaymentMethod: InsertPaymentMethod): Promise<PaymentMethod> {
+  const id = this.currentPaymentMethodId++;
+  const now = new Date();
+  const paymentMethod: PaymentMethod = {
+    ...insertPaymentMethod,
+    id,
+    metadata: insertPaymentMethod.metadata || {},
+    billingAddress: insertPaymentMethod.billingAddress || {},
+    createdAt: now,
+    updatedAt: now
+  };
+  
+  // If this is marked as default or if this is the first payment method for the user, make it default
+  if (paymentMethod.isDefault || (await this.getUserPaymentMethods(paymentMethod.userId)).length === 0) {
+    // Set existing default payment methods to non-default
+    const existingMethods = await this.getUserPaymentMethods(paymentMethod.userId);
+    for (const method of existingMethods) {
+      if (method.isDefault) {
+        method.isDefault = false;
+        this.paymentMethods.set(method.id, method);
+      }
+    }
+    paymentMethod.isDefault = true;
+  }
+
+  this.paymentMethods.set(id, paymentMethod);
+  return paymentMethod;
+}
+
+async setDefaultPaymentMethod(userId: number, paymentMethodId: number): Promise<PaymentMethod | undefined> {
+  const paymentMethod = Array.from(this.paymentMethods.values()).find(
+    method => method.id === paymentMethodId && method.userId === userId
+  );
+  
+  if (!paymentMethod) return undefined;
+  
+  // Set existing default payment methods to non-default
+  const existingMethods = await this.getUserPaymentMethods(userId);
+  for (const method of existingMethods) {
+    const updatedMethod = { ...method, isDefault: method.id === paymentMethodId };
+    this.paymentMethods.set(method.id, updatedMethod);
+  }
+  
+  return this.paymentMethods.get(paymentMethodId);
+}
+
+// Payment CRUD methods
+async getPayment(id: number): Promise<Payment | undefined> {
+  return this.payments.get(id);
+}
+
+async getOrderPayments(orderId: number): Promise<Payment[]> {
+  return Array.from(this.payments.values()).filter(
+    payment => payment.orderId === orderId
+  );
+}
+
+async createPayment(insertPayment: InsertPayment): Promise<Payment> {
+  const id = this.currentPaymentId++;
+  const now = new Date();
+  const payment: Payment = {
+    ...insertPayment,
+    id,
+    metadata: insertPayment.metadata || {},
+    createdAt: now,
+    updatedAt: now
+  };
+  
+  this.payments.set(id, payment);
+  return payment;
+}
+
+async updatePaymentStatus(id: number, status: string): Promise<Payment | undefined> {
+  const payment = this.payments.get(id);
+  if (!payment) return undefined;
+  
+  const now = new Date();
+  const updatedPayment = { 
+    ...payment, 
+    status, 
+    updatedAt: now 
+  };
+  
+  this.payments.set(id, updatedPayment);
+  return updatedPayment;
+}
+
+// Subscription CRUD methods
+async getSubscription(id: number): Promise<Subscription | undefined> {
+  return this.subscriptions.get(id);
+}
+
+async getUserSubscriptions(userId: number): Promise<Subscription[]> {
+  return Array.from(this.subscriptions.values()).filter(
+    subscription => subscription.userId === userId
+  );
+}
+
+async createSubscription(insertSubscription: InsertSubscription): Promise<Subscription> {
+  const id = this.currentSubscriptionId++;
+  const now = new Date();
+  const subscription: Subscription = {
+    ...insertSubscription,
+    id,
+    metadata: insertSubscription.metadata || {},
+    cancelAtPeriodEnd: insertSubscription.cancelAtPeriodEnd || false,
+    createdAt: now,
+    updatedAt: now
+  };
+  
+  this.subscriptions.set(id, subscription);
+  return subscription;
+}
+
+async updateSubscriptionStatus(id: number, status: string): Promise<Subscription | undefined> {
+  const subscription = this.subscriptions.get(id);
+  if (!subscription) return undefined;
+  
+  const now = new Date();
+  const updatedSubscription = { 
+    ...subscription, 
+    status, 
+    updatedAt: now 
+  };
+  
+  this.subscriptions.set(id, updatedSubscription);
+  return updatedSubscription;
+}
+
+async cancelSubscription(id: number): Promise<Subscription | undefined> {
+  const subscription = this.subscriptions.get(id);
+  if (!subscription) return undefined;
+  
+  const now = new Date();
+  const updatedSubscription = { 
+    ...subscription, 
+    cancelAtPeriodEnd: true, 
+    updatedAt: now 
+  };
+  
+  this.subscriptions.set(id, updatedSubscription);
+  return updatedSubscription;
+}
+
+// Email Notification CRUD methods
+async getEmailNotification(id: number): Promise<EmailNotification | undefined> {
+  return this.emailNotifications.get(id);
+}
+
+async getUserEmailNotifications(userId: number): Promise<EmailNotification[]> {
+  return Array.from(this.emailNotifications.values()).filter(
+    notification => notification.userId === userId
+  );
+}
+
+async createEmailNotification(insertEmailNotification: InsertEmailNotification): Promise<EmailNotification> {
+  const id = this.currentEmailNotificationId++;
+  const now = new Date();
+  const emailNotification: EmailNotification = {
+    ...insertEmailNotification,
+    id,
+    metadata: insertEmailNotification.metadata || {},
+    createdAt: now
+  };
+  
+  this.emailNotifications.set(id, emailNotification);
+  return emailNotification;
+}
+
+async updateEmailNotificationStatus(id: number, status: string, sentAt?: Date): Promise<EmailNotification | undefined> {
+  const notification = this.emailNotifications.get(id);
+  if (!notification) return undefined;
+  
+  const now = sentAt || new Date();
+  const updatedNotification = { 
+    ...notification, 
+    status, 
+    sentAt: status === 'sent' ? now : notification.sentAt 
+  };
+  
+  this.emailNotifications.set(id, updatedNotification);
+  return updatedNotification;
+}
+
 async checkAndAwardAchievements(userId: number): Promise<UserAchievement[]> {
   const newAchievements: UserAchievement[] = [];
   const userProfile = await this.getUserProfile(userId);
