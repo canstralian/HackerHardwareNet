@@ -36,23 +36,21 @@ export class EmailService {
    * Get all email notifications
    */
   private static async getAllEmails(): Promise<EmailNotification[]> {
-    // In a real app, we'd have a dedicated query here
-    // For now, we'll just return an empty array since 
-    // the getUserEmailNotifications method might not be implemented yet
-    return [];
-    
-    // This commented code would be used once getUserEmailNotifications is available
-    /*
+    // This is a simplified approach for demo purposes only
     const emails: EmailNotification[] = [];
     
-    // This is a simplified approach for demo purposes only
-    for (let userId = 1; userId <= 10; userId++) {
-      const userEmails = await storage.getUserEmailNotifications(userId);
-      emails.push(...userEmails);
+    // Get email notifications for the first 100 users
+    // In a real app, we would query the database directly
+    for (let userId = 1; userId <= 100; userId++) {
+      try {
+        const userEmails = await storage.getUserEmailNotifications(userId);
+        emails.push(...userEmails);
+      } catch (error) {
+        // Skip if user doesn't exist or has no emails
+      }
     }
     
     return emails;
-    */
   }
   
   /**
