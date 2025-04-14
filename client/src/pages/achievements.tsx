@@ -76,34 +76,34 @@ const AchievementCard = ({ achievement, userAchievement }: { achievement: Achiev
       "border-2 transition-all duration-300",
       isComplete ? "border-green-500 shadow-md shadow-green-200" : "border-gray-200"
     )}>
-      <CardHeader className="relative pb-2">
-        <div className="absolute top-3 right-3">
-          <Badge className={cn("font-semibold", tierColor)}>
+      <CardHeader className="relative pb-2 px-3 sm:px-4 pt-3 sm:pt-4">
+        <div className="absolute top-2 sm:top-3 right-2 sm:right-3">
+          <Badge className={cn("font-semibold text-xs sm:text-sm", tierColor)}>
             {achievement.tier.toUpperCase()}
           </Badge>
         </div>
-        <div className="flex items-center space-x-2">
-          {IconComponent && <IconComponent className="h-6 w-6 text-primary" />}
+        <div className="flex items-center space-x-2 pt-1">
+          {IconComponent && <IconComponent className="h-5 w-5 sm:h-6 sm:w-6 text-primary flex-shrink-0" />}
           <div>
-            <CardTitle className="text-lg">{achievement.name}</CardTitle>
-            <CardDescription>{achievement.description}</CardDescription>
+            <CardTitle className="text-base sm:text-lg line-clamp-1">{achievement.name}</CardTitle>
+            <CardDescription className="text-xs sm:text-sm line-clamp-2">{achievement.description}</CardDescription>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="pb-2">
-        <div className="text-sm text-muted-foreground mb-2">{requirementText}</div>
-        <div className="flex items-center justify-between text-sm">
+      <CardContent className="pb-2 px-3 sm:px-4">
+        <div className="text-xs sm:text-sm text-muted-foreground mb-2 line-clamp-1">{requirementText}</div>
+        <div className="flex items-center justify-between text-xs sm:text-sm">
           <span>Progress</span>
           <span>{progress}%</span>
         </div>
         <Progress value={progress} className="mt-1" />
       </CardContent>
-      <CardFooter className="flex justify-between pt-2">
-        <div className="text-sm text-muted-foreground">
+      <CardFooter className="flex justify-between pt-2 px-3 sm:px-4 pb-3 sm:pb-4">
+        <div className="text-xs sm:text-sm text-muted-foreground">
           <span className="font-semibold">{achievement.points}</span> points
         </div>
         {isComplete && (
-          <Badge variant="outline" className="border-green-500 text-green-600">
+          <Badge variant="outline" className="border-green-500 text-green-600 text-xs h-6">
             <Icons.checkCircle className="mr-1 h-3 w-3" />
             Unlocked
           </Badge>
@@ -158,19 +158,19 @@ const AchievementsPage = () => {
     .reduce((sum: number, a: Achievement) => sum + a.points, 0);
   
   return (
-    <div className="container max-w-4xl py-10">
-      <h1 className="text-3xl font-bold mb-2">Achievements</h1>
-      <p className="text-muted-foreground mb-6">
+    <div className="container max-w-4xl px-4 sm:px-6 py-6 sm:py-10">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-2">Achievements</h1>
+      <p className="text-muted-foreground text-sm sm:text-base mb-6">
         Complete tasks and tutorials to earn achievements and build your hacker reputation.
       </p>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Progress</CardTitle>
+          <CardHeader className="pb-2 px-4 py-3 sm:py-4">
+            <CardTitle className="text-base sm:text-lg">Progress</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{unlockedAchievements} / {totalAchievements}</div>
+          <CardContent className="px-4 pb-4">
+            <div className="text-xl sm:text-3xl font-bold">{unlockedAchievements} / {totalAchievements}</div>
             <Progress 
               value={(unlockedAchievements / Math.max(1, totalAchievements)) * 100} 
               className="mt-2" 
@@ -179,11 +179,11 @@ const AchievementsPage = () => {
         </Card>
         
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Points Earned</CardTitle>
+          <CardHeader className="pb-2 px-4 py-3 sm:py-4">
+            <CardTitle className="text-base sm:text-lg">Points Earned</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{earnedPoints} / {totalPoints}</div>
+          <CardContent className="px-4 pb-4">
+            <div className="text-xl sm:text-3xl font-bold">{earnedPoints} / {totalPoints}</div>
             <Progress 
               value={(earnedPoints / Math.max(1, totalPoints)) * 100} 
               className="mt-2" 
@@ -191,17 +191,17 @@ const AchievementsPage = () => {
           </CardContent>
         </Card>
         
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Rank</CardTitle>
+        <Card className="sm:col-span-2 md:col-span-1">
+          <CardHeader className="pb-2 px-4 py-3 sm:py-4">
+            <CardTitle className="text-base sm:text-lg">Rank</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">
+          <CardContent className="px-4 pb-4">
+            <div className="text-xl sm:text-3xl font-bold">
               {earnedPoints >= 300 ? 'Expert' : 
                earnedPoints >= 200 ? 'Advanced' : 
                earnedPoints >= 100 ? 'Intermediate' : 'Beginner'}
             </div>
-            <div className="text-sm text-muted-foreground mt-2">
+            <div className="text-xs sm:text-sm text-muted-foreground mt-2">
               {earnedPoints >= 300 ? 'You\'ve mastered the art of hacking!' : 
                earnedPoints >= 200 ? 'You\'re well on your way to mastery.' : 
                earnedPoints >= 100 ? 'You\'re making good progress.' : 'Just getting started.'}
@@ -210,12 +210,16 @@ const AchievementsPage = () => {
         </Card>
       </div>
       
-      <Tabs defaultValue="all" value={activeCategory} onValueChange={setActiveCategory}>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold">Achievement Collection</h2>
-          <TabsList>
+      <Tabs defaultValue="all" value={activeCategory} onValueChange={setActiveCategory} className="w-full">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
+          <h2 className="text-lg sm:text-xl font-semibold">Achievement Collection</h2>
+          <TabsList className="h-auto overflow-x-auto w-full sm:w-auto flex flex-nowrap">
             {categories.map(category => (
-              <TabsTrigger key={category} value={category} className="capitalize">
+              <TabsTrigger 
+                key={category} 
+                value={category} 
+                className="capitalize text-xs sm:text-sm whitespace-nowrap h-8 sm:h-10"
+              >
                 {category}
               </TabsTrigger>
             ))}
@@ -236,12 +240,12 @@ const AchievementsPage = () => {
                 </div>
               ) : (
                 achievementsByTier.map(tierGroup => (
-                  <div key={tierGroup.tier} className="mb-8">
-                    <div className="flex items-center mb-4">
-                      <h3 className="text-lg font-medium capitalize">{tierGroup.tier} Tier</h3>
+                  <div key={tierGroup.tier} className="mb-6 sm:mb-8">
+                    <div className="flex items-center mb-3 sm:mb-4">
+                      <h3 className="text-base sm:text-lg font-medium capitalize">{tierGroup.tier} Tier</h3>
                       <Separator className="ml-4 flex-1" />
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                       {tierGroup.achievements.map((achievement: Achievement) => (
                         <AchievementCard 
                           key={achievement.id} 
