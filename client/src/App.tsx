@@ -15,6 +15,7 @@ import Login from "@/pages/login";
 import Register from "@/pages/register";
 import Dashboard from "@/pages/dashboard";
 import Checkout from "@/pages/checkout";
+import OLEDArticlePage from "@/pages/oled-article";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 
@@ -36,6 +37,7 @@ function Router() {
           <Route path="/achievements" component={Achievements} />
           <Route path="/compatibility-checker" component={CompatibilityChecker} />
           <Route path="/tutorial/:id" component={Tutorial} />
+          <Route path="/oled-article" component={OLEDArticlePage} />
           <Route component={NotFound} />
         </Switch>
       </div>
