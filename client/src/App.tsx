@@ -11,6 +11,9 @@ import Tutorial from "@/pages/tutorial";
 import Resources from "@/pages/resources";
 import Achievements from "@/pages/achievements";
 import CompatibilityChecker from "@/pages/compatibility-checker";
+import Login from "@/pages/login";
+import Register from "@/pages/register";
+import Dashboard from "@/pages/dashboard";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 
@@ -21,6 +24,9 @@ function Router() {
       <div className="flex flex-1">
         <Switch>
           <Route path="/" component={Home} />
+          <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
+          <Route path="/dashboard" component={Dashboard} />
           <Route path="/learning-paths" component={LearningPaths} />
           <Route path="/hardware-library" component={HardwareLibrary} />
           <Route path="/tools" component={Tools} />

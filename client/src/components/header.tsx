@@ -1,11 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
+import { useQuery } from '@tanstack/react-query';
 import SearchBar from '@/components/search-bar';
-import React, { useEffect } from 'react'; // Added useEffect import
+import { Button } from '@/components/ui/button';
+import { LogIn, LogOut, User } from 'lucide-react';
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [location] = useLocation();
+  
+  // Fetch authentication status
+  const { data: authStatus, isLoading: authLoading } = useQuery({
+    queryKey: ['/api/auth/status'],
+    refetchOnWindowFocus: true,
+  });
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
