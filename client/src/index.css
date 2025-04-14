@@ -93,7 +93,7 @@
     border-radius: 0.25rem;
     overflow-x: auto;
   }
-  
+
   .terminal-header {
     background-color: hsl(240 14% 10%);
     border-top-left-radius: 0.5rem;
@@ -101,7 +101,7 @@
     padding: 0.5rem 1rem;
     border-bottom: 1px solid #333;
   }
-  
+
   .terminal-body {
     background-color: hsl(240 14% 5%);
     border: 1px solid #333;
@@ -111,22 +111,39 @@
     padding: 1rem;
     font-family: 'Fira Code', monospace;
   }
-  
+
   .nav-link {
     transition: all 0.2s ease;
   }
-  
+
   .nav-link:hover {
     background-color: rgba(0, 255, 0, 0.1);
     border-left-color: hsl(120 100% 50%) !important;
   }
-  
+
   .card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 1rem;
+    font-size: 1rem;
   }
-  
+
   .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0, 255, 0, 0.1);
+  }
+
+  @media (max-width: 640px) {
+    .card {
+      padding: 0.5rem;
+      font-size: 0.875rem; /* Smaller font size for mobile */
+    }
+
+    h1, h2, h3, h4, h5, h6 { /* Adjust headings for mobile */
+      font-size: 1.25rem;
+    }
+
+    .nav-link {
+      padding: 0.5rem 0;
+    }
   }
 }
