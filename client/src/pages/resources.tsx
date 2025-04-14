@@ -58,6 +58,16 @@ const MOCK_ARTICLES: { [key: string]: ArticlePreview[] } = {
   ],
   'hardware-specs': [
     {
+      id: 'oled-article',
+      title: 'Running a 0.96" OLED Display on Your Orange Pi Zero 2W and Raspberry Pi Zero 2W',
+      category: 'hardware-specs',
+      preview: 'Learn how to connect and program a 0.96" OLED display with the SSD1306 driver on both Orange Pi and Raspberry Pi boards.',
+      author: 'HackerBoard Team',
+      date: 'April 14, 2025',
+      readTime: '15 min read',
+      tags: ['Orange Pi', 'Raspberry Pi', 'OLED', 'I2C', 'Python']
+    },
+    {
       id: 'specs-pi4',
       title: 'Raspberry Pi 4 Technical Specifications',
       category: 'hardware-specs',

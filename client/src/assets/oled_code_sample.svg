@@ -1,104 +1,126 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="800px" height="500px" viewBox="0 0 800 500" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <title>OLED Display Code Sample</title>
-    <defs>
-        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="codeGradient">
-            <stop stop-color="#1E1E2E" offset="0%"></stop>
-            <stop stop-color="#282A36" offset="100%"></stop>
-        </linearGradient>
-        <filter x="-5%" y="-5%" width="110%" height="110%" filterUnits="objectBoundingBox" id="codeShadow">
-            <feGaussianBlur stdDeviation="5" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
-            <feOffset dx="0" dy="3" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
-            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
-            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.2 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
-        </filter>
-    </defs>
-    <g id="Code-Sample" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <!-- Background -->
-        <rect fill="#F0F0F0" x="0" y="0" width="800" height="500"></rect>
-        
-        <!-- Code Editor Window -->
-        <rect id="code-window" fill="url(#codeGradient)" x="100" y="80" width="600" height="340" rx="6" filter="url(#codeShadow)"></rect>
-        
-        <!-- Code Editor Title Bar -->
-        <rect id="title-bar" fill="#1A1A1A" x="100" y="80" width="600" height="30" rx="6 6 0 0"></rect>
-        <circle id="close-btn" fill="#FF5F56" cx="125" cy="95" r="6"></circle>
-        <circle id="minimize-btn" fill="#FFBD2E" cx="145" cy="95" r="6"></circle>
-        <circle id="maximize-btn" fill="#27C93F" cx="165" cy="95" r="6"></circle>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" font-weight="normal" fill="#FFFFFF" text-anchor="middle" x="400" y="100">oled_example.py</text>
-        
-        <!-- Line Numbers -->
-        <rect id="line-numbers-bg" fill="#282A36" x="100" y="110" width="30" height="310"></rect>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="110" y="130">1</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="110" y="150">2</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="110" y="170">3</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="110" y="190">4</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="110" y="210">5</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="110" y="230">6</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="110" y="250">7</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="110" y="270">8</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="110" y="290">9</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="110" y="310">10</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="110" y="330">11</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="110" y="350">12</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="110" y="370">13</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="110" y="390">14</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="110" y="410">15</text>
-        
-        <!-- Python Code -->
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#FF79C6" x="140" y="130">import</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#F8F8F2" x="185" y="130">time, board, busio</text>
-        
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#FF79C6" x="140" y="150">import</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#F8F8F2" x="185" y="150">adafruit_ssd1306</text>
-        
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#FF79C6" x="140" y="170">from</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#F8F8F2" x="170" y="170">PIL</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#FF79C6" x="195" y="170">import</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#F8F8F2" x="235" y="170">Image, ImageDraw, ImageFont</text>
-
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="140" y="190"># Create the I2C interface</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#F8F8F2" x="140" y="210">i2c = busio.I2C(board.SCL, board.SDA)</text>
-        
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="140" y="230"># Create the SSD1306 OLED display (128x64 pixels)</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#F8F8F2" x="140" y="250">display = adafruit_ssd1306.SSD1306_I2C(128, 64, i2c, addr=</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#BD93F9" x="465" y="250">0x3C</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#F8F8F2" x="490" y="250">)</text>
-        
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="140" y="270"># Clear the display</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#F8F8F2" x="140" y="290">display.fill(</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#BD93F9" x="215" y="290">0</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#F8F8F2" x="220" y="290">)</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#F8F8F2" x="140" y="310">display.show()</text>
-        
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="140" y="330"># Create image and draw object</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#F8F8F2" x="140" y="350">image = Image.new(</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#F1FA8C" x="235" y="350">'1'</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#F8F8F2" x="245" y="350">, (display.width, display.height))</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#F8F8F2" x="140" y="370">draw = ImageDraw.Draw(image)</text>
-        
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#6272A4" x="140" y="390"># Display text</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#F8F8F2" x="140" y="410">draw.text((0, 0), </text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#F1FA8C" x="220" y="410">"Hello from Pi Zero!"</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#F8F8F2" x="350" y="410">, fill=</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#BD93F9" x="385" y="410">1</text>
-        <text font-family="Monaco, Menlo, monospace" font-size="12" fill="#F8F8F2" x="390" y="410">)</text>
-        
-        <!-- Title -->
-        <text font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#333333" text-anchor="middle" x="400" y="50">OLED Display Python Code Example</text>
-        
-        <!-- Info Box -->
-        <rect fill="#FFFFFF" opacity="0.9" x="600" y="140" width="150" height="230" rx="5" stroke="#CCCCCC" stroke-width="1"></rect>
-        <text font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333333" x="615" y="165">Required:</text>
-        <text font-family="Arial, sans-serif" font-size="12" fill="#333333" x="615" y="190">• board</text>
-        <text font-family="Arial, sans-serif" font-size="12" fill="#333333" x="615" y="210">• busio</text>
-        <text font-family="Arial, sans-serif" font-size="12" fill="#333333" x="615" y="230">• adafruit_ssd1306</text>
-        <text font-family="Arial, sans-serif" font-size="12" fill="#333333" x="615" y="250">• PIL (Pillow)</text>
-        
-        <text font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333333" x="615" y="280">Installation:</text>
-        <text font-family="Arial, sans-serif" font-size="10" fill="#333333" x="615" y="300">sudo pip3 install</text>
-        <text font-family="Arial, sans-serif" font-size="10" fill="#333333" x="615" y="315">adafruit-circuitpython-ssd1306</text>
-        <text font-family="Arial, sans-serif" font-size="10" fill="#333333" x="615" y="330">sudo pip3 install</text>
-        <text font-family="Arial, sans-serif" font-size="10" fill="#333333" x="615" y="345">Pillow</text>
+<svg width="700" height="500" viewBox="0 0 700 500" xmlns="http://www.w3.org/2000/svg">
+  <rect width="700" height="500" fill="#1e1e1e"/>
+  
+  <!-- Code Window Background -->
+  <rect x="50" y="50" width="600" height="400" rx="5" fill="#252526" stroke="#3c3c3c" stroke-width="2"/>
+  
+  <!-- Window Header -->
+  <rect x="50" y="50" width="600" height="30" rx="5" fill="#3c3c3c" stroke="#505050" stroke-width="1"/>
+  <text x="70" y="70" font-family="monospace" font-size="14" fill="#fff">oled_display.py - Python Code for SSD1306 OLED Display</text>
+  
+  <!-- Window Controls -->
+  <circle cx="75" cy="65" r="6" fill="#ff5f56" stroke="#e0443e" stroke-width="1"/>
+  <circle cx="95" cy="65" r="6" fill="#ffbd2e" stroke="#dea123" stroke-width="1"/>
+  <circle cx="115" cy="65" r="6" fill="#27c93f" stroke="#1aab29" stroke-width="1"/>
+  
+  <!-- Code Content -->
+  <g transform="translate(70, 100)" font-family="monospace" font-size="12">
+    <!-- Line Numbers -->
+    <g fill="#6a737d">
+      <text y="15">1</text>
+      <text y="35">2</text>
+      <text y="55">3</text>
+      <text y="75">4</text>
+      <text y="95">5</text>
+      <text y="115">6</text>
+      <text y="135">7</text>
+      <text y="155">8</text>
+      <text y="175">9</text>
+      <text y="195">10</text>
+      <text y="215">11</text>
+      <text y="235">12</text>
+      <text y="255">13</text>
+      <text y="275">14</text>
+      <text y="295">15</text>
+      <text y="315">16</text>
+      <text y="335">17</text>
+      <text y="355">18</text>
     </g>
+    
+    <!-- Code Syntax Highlighting -->
+    <g transform="translate(25, 0)">
+      <!-- Import Section -->
+      <text fill="#cb4b16" y="15">import</text>
+      <text fill="#f8f8f2" x="56" y="15">board</text>
+      <text fill="#cb4b16" x="0" y="35">import</text>
+      <text fill="#f8f8f2" x="56" y="35">busio</text>
+      <text fill="#cb4b16" x="0" y="55">import</text>
+      <text fill="#f8f8f2" x="56" y="55">adafruit_ssd1306</text>
+      <text fill="#cb4b16" x="0" y="75">from</text>
+      <text fill="#f8f8f2" x="40" y="75">PIL</text>
+      <text fill="#cb4b16" x="65" y="75">import</text>
+      <text fill="#f8f8f2" x="110" y="75">Image, ImageDraw, ImageFont</text>
+      
+      <!-- Comment -->
+      <text fill="#6a737d" x="0" y="95"># Initialize I2C bus</text>
+      <text fill="#f8f8f2" x="0" y="115">i2c = busio.I2C(board.SCL, board.SDA)</text>
+      
+      <!-- Comment -->
+      <text fill="#6a737d" x="0" y="135"># Create the SSD1306 OLED display instance</text>
+      <text fill="#f8f8f2" x="0" y="155">oled = adafruit_ssd1306.SSD1306_I2C(128, 64, i2c, addr=</text>
+      <text fill="#bd93f9" x="360" y="155">0x3C</text>
+      <text fill="#f8f8f2" x="390" y="155">)</text>
+      
+      <!-- Comment -->
+      <text fill="#6a737d" x="0" y="175"># Clear display</text>
+      <text fill="#f8f8f2" x="0" y="195">oled.fill(</text>
+      <text fill="#bd93f9" x="70" y="195">0</text>
+      <text fill="#f8f8f2" x="80" y="195">)</text>
+      <text fill="#f8f8f2" x="0" y="215">oled.show()</text>
+      
+      <!-- Comment -->
+      <text fill="#6a737d" x="0" y="235"># Create blank image for drawing</text>
+      <text fill="#f8f8f2" x="0" y="255">image = Image.new(</text>
+      <text fill="#50fa7b" x="120" y="255">'1'</text>
+      <text fill="#f8f8f2" x="130" y="255">, (128, 64))</text>
+      <text fill="#f8f8f2" x="0" y="275">draw = ImageDraw.Draw(image)</text>
+      
+      <!-- Comment -->
+      <text fill="#6a737d" x="0" y="295"># Draw some text</text>
+      <text fill="#f8f8f2" x="0" y="315">draw.text((0, 0), </text>
+      <text fill="#50fa7b" x="100" y="315">'Hello Pi Zero!'</text>
+      <text fill="#f8f8f2" x="180" y="315">, fill=</text>
+      <text fill="#bd93f9" x="230" y="315">1</text>
+      <text fill="#f8f8f2" x="240" y="315">)</text>
+      
+      <!-- Comment -->
+      <text fill="#6a737d" x="0" y="335"># Display image</text>
+      <text fill="#f8f8f2" x="0" y="355">oled.image(image)</text>
+      <text fill="#f8f8f2" x="0" y="375">oled.show()</text>
+    </g>
+  </g>
+  
+  <!-- Highlight Box -->
+  <rect x="95" y="252" width="250" height="20" fill="#264f78" opacity="0.3"/>
+  <rect x="95" y="312" width="250" height="20" fill="#264f78" opacity="0.3"/>
+  
+  <!-- Note Box -->
+  <g transform="translate(500, 130)">
+    <rect width="130" height="100" rx="5" fill="#2d2d2d" stroke="#3c3c3c" stroke-width="1"/>
+    <text x="10" y="20" font-family="Arial" font-size="12" fill="#f8f8f2" font-weight="bold">Notes:</text>
+    <text x="10" y="40" font-family="Arial" font-size="11" fill="#f8f8f2">• Default I2C address</text>
+    <text x="15" y="60" font-family="Arial" font-size="11" fill="#f8f8f2">is 0x3C (60)</text>
+    <text x="10" y="80" font-family="Arial" font-size="11" fill="#f8f8f2">• Use '1' mode for</text>
+    <text x="15" y="95" font-family="Arial" font-size="11" fill="#f8f8f2">monochrome display</text>
+  </g>
+  
+  <!-- Annotation Lines -->
+  <g stroke="#f8f8f2" stroke-width="1" fill="none" stroke-dasharray="2,2">
+    <path d="M 455 155 L 490 140"/>
+    <path d="M 345 255 L 490 170"/>
+  </g>
+  
+  <!-- Output Preview -->
+  <g transform="translate(500, 260)">
+    <rect width="130" height="80" rx="5" fill="#000" stroke="#666" stroke-width="1"/>
+    <text x="10" y="30" font-family="monospace" font-size="14" fill="#fff">Hello Pi Zero!</text>
+    <text x="20" y="70" font-family="Arial" font-size="10" fill="#666">Output Preview</text>
+  </g>
+  
+  <!-- Arrow -->
+  <g transform="translate(475, 290)">
+    <path d="M 0,0 L 20,0" stroke="#666" stroke-width="1"/>
+    <path d="M 15,-5 L 20,0 L 15,5" fill="none" stroke="#666" stroke-width="1"/>
+  </g>
 </svg>

@@ -1,91 +1,144 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="800px" height="600px" viewBox="0 0 800 600" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <title>OLED Display Visualization</title>
-    <defs>
-        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="displayGradient">
-            <stop stop-color="#000000" offset="0%"></stop>
-            <stop stop-color="#101010" offset="100%"></stop>
-        </linearGradient>
-        <filter x="-8%" y="-8%" width="116%" height="116%" filterUnits="objectBoundingBox" id="displayShadow">
-            <feGaussianBlur stdDeviation="8" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
-            <feOffset dx="0" dy="3" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
-            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
-            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.3 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
-        </filter>
-        <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" id="screenGlowGradient">
-            <stop stop-color="#39e3ff" stop-opacity="0.2" offset="0%"></stop>
-            <stop stop-color="#76f9ff" stop-opacity="0.6" offset="50%"></stop>
-            <stop stop-color="#39e3ff" stop-opacity="0.2" offset="100%"></stop>
-        </linearGradient>
-    </defs>
-    <g id="OLED-Display" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <!-- Background -->
-        <rect fill="#f4f4f8" x="0" y="0" width="800" height="600"></rect>
-        
-        <!-- Display Module Base -->
-        <rect id="display-base" fill="#192430" x="250" y="100" width="300" height="250" rx="4" filter="url(#displayShadow)"></rect>
-        <rect id="display-base-border" stroke="#142536" stroke-width="2" fill="none" x="251" y="101" width="298" height="248" rx="3"></rect>
-        
-        <!-- Display Screen Area -->
-        <rect id="screen-area" fill="url(#displayGradient)" x="275" y="120" width="250" height="200" rx="2"></rect>
-        
-        <!-- Active Display Area with Blue OLED Glow -->
-        <rect id="active-area" fill="#000000" x="285" y="130" width="230" height="180" rx="1"></rect>
-        <rect id="screen-glow" fill="url(#screenGlowGradient)" x="285" y="130" width="230" height="180" rx="1" opacity="0.9"></rect>
-        
-        <!-- Display Content -->
-        <text font-family="Courier New, monospace" font-size="10" font-weight="normal" fill="#FFFFFF" x="295" y="150">HELLO WORLD!</text>
-        <text font-family="Courier New, monospace" font-size="9" font-weight="normal" fill="#FFFFFF" x="295" y="170">Temperature: 24.5°C</text>
-        <text font-family="Courier New, monospace" font-size="9" font-weight="normal" fill="#FFFFFF" x="295" y="185">Humidity: 67%</text>
-        
-        <!-- Status Bar -->
-        <rect id="status-bar" fill="#000000" stroke="#37F3FF" stroke-width="1" x="295" y="200" width="210" height="12" rx="2"></rect>
-        <rect id="status-bar-progress" fill="#37F3FF" x="297" y="202" width="140" height="8" rx="1"></rect>
-        
-        <!-- WiFi Signal Icon -->
-        <path id="wifi-icon" fill="#FFFFFF" d="M450,240 L460,230 L465,235 L460,240 L450,240 Z M445,245 L465,225 L470,230 L450,250 L445,245 Z M440,250 L470,220 L475,225 L445,255 L440,250 Z"></path>
-        
-        <!-- Battery Icon -->
-        <rect id="battery-outline" stroke="#FFFFFF" stroke-width="1" fill="none" x="480" y="235" width="20" height="10" rx="1"></rect>
-        <rect id="battery-level" fill="#FFFFFF" x="482" y="237" width="14" height="6" rx="1"></rect>
-        <rect id="battery-tip" fill="#FFFFFF" x="500" y="238" width="2" height="4"></rect>
-        
-        <!-- Display Text -->
-        <text font-family="Courier New, monospace" font-size="18" font-weight="bold" fill="#FFFFFF" x="340" y="290">Pi Zero OLED</text>
-        
-        <!-- I²C Pins Highlight -->
-        <circle id="pin-sda" fill="#50E3C2" cx="270" y="330" r="5"></circle>
-        <circle id="pin-scl" fill="#F5A623" cx="290" y="330" r="5"></circle>
-        <circle id="pin-vcc" fill="#FF5252" cx="310" y="330" r="5"></circle>
-        <circle id="pin-gnd" fill="#4A4A4A" cx="330" y="330" r="5"></circle>
-        
-        <text font-family="Arial, sans-serif" font-size="10" fill="#333333" x="260" y="350">SDA</text>
-        <text font-family="Arial, sans-serif" font-size="10" fill="#333333" x="280" y="350">SCL</text>
-        <text font-family="Arial, sans-serif" font-size="10" fill="#333333" x="300" y="350">VCC</text>
-        <text font-family="Arial, sans-serif" font-size="10" fill="#333333" x="320" y="350">GND</text>
-        
-        <!-- Hardware Labels -->
-        <text font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#333333" text-anchor="middle" x="400" y="50">0.96" OLED Display (SSD1306)</text>
-        <text font-family="Arial, sans-serif" font-size="16" fill="#666666" text-anchor="middle" x="400" y="75">I²C Interface, 128x64 Resolution</text>
-        
-        <!-- Module Specifications -->
-        <rect id="specs-box" fill="#FFFFFF" stroke="#CCCCCC" stroke-width="1" x="500" y="360" width="200" height="160" rx="5"></rect>
-        <text font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333333" x="520" y="385">Specifications:</text>
-        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="520" y="410">• Resolution: 128x64 pixels</text>
-        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="520" y="430">• Size: 0.96 inch</text>
-        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="520" y="450">• Controller: SSD1306</text>
-        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="520" y="470">• Interface: I²C</text>
-        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="520" y="490">• Operating Voltage: 3.3V</text>
-        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="520" y="510">• I²C Address: 0x3C</text>
-        
-        <!-- Compatible Boards Box -->
-        <rect id="compat-box" fill="#FFFFFF" stroke="#CCCCCC" stroke-width="1" x="100" y="360" width="200" height="160" rx="5"></rect>
-        <text font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333333" x="120" y="385">Compatible with:</text>
-        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="120" y="410">• Raspberry Pi Zero 2W</text>
-        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="120" y="430">• Orange Pi Zero 2W</text>
-        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="120" y="450">• Raspberry Pi 3/4/5</text>
-        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="120" y="470">• Arduino (with level shifter)</text>
-        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="120" y="490">• ESP32/ESP8266</text>
-        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="120" y="510">• Other SBCs with I²C</text>
+<svg width="800" height="500" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="500" fill="#1e1e1e"/>
+  
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial" font-size="24" fill="#fff" text-anchor="middle" font-weight="bold">SSD1306 0.96" OLED Display</text>
+  <text x="400" y="70" font-family="Arial" font-size="16" fill="#aaa" text-anchor="middle">128x64 Pixel Monochrome Display for Raspberry Pi Zero &amp; Orange Pi Zero</text>
+  
+  <!-- OLED Module -->
+  <g transform="translate(280, 100)">
+    <!-- PCB Board -->
+    <rect width="240" height="200" rx="5" fill="#071" stroke="#0a2" stroke-width="2"/>
+    
+    <!-- Display Area -->
+    <rect x="25" y="15" width="190" height="100" rx="2" fill="#000" stroke="#333" stroke-width="1"/>
+    
+    <!-- Screen Contents Sample -->
+    <g transform="translate(25, 15)">
+      <!-- Grid pattern -->
+      <g stroke="#111" stroke-width="0.5">
+        <line x1="0" y1="20" x2="190" y2="20"/>
+        <line x1="0" y1="40" x2="190" y2="40"/>
+        <line x1="0" y1="60" x2="190" y2="60"/>
+        <line x1="0" y1="80" x2="190" y2="80"/>
+        <line x1="38" y1="0" x2="38" y2="100"/>
+        <line x1="76" y1="0" x2="76" y2="100"/>
+        <line x1="114" y1="0" x2="114" y2="100"/>
+        <line x1="152" y1="0" x2="152" y2="100"/>
+      </g>
+      
+      <!-- Sample Content -->
+      <text x="95" y="25" font-family="monospace" font-size="11" fill="#fff" text-anchor="middle">HACKER HARDWARE</text>
+      <text x="95" y="40" font-family="monospace" font-size="9" fill="#fff" text-anchor="middle">Pi Zero 2W OLED</text>
+      
+      <g transform="translate(35, 60)">
+        <rect x="0" y="0" width="120" height="30" fill="none" stroke="#fff" stroke-width="1"/>
+        <text x="60" y="20" font-family="monospace" font-size="14" fill="#fff" text-anchor="middle">Hello World!</text>
+      </g>
     </g>
+    
+    <!-- Module Interface Pins -->
+    <g transform="translate(25, 140)">
+      <g font-family="monospace" font-size="12">
+        <rect x="0" y="0" width="30" height="15" rx="1" fill="#222" stroke="#444" stroke-width="1"/>
+        <text x="15" y="12" fill="#fff" text-anchor="middle">GND</text>
+        
+        <rect x="40" y="0" width="30" height="15" rx="1" fill="#222" stroke="#444" stroke-width="1"/>
+        <text x="55" y="12" fill="#fff" text-anchor="middle">VCC</text>
+        
+        <rect x="80" y="0" width="30" height="15" rx="1" fill="#222" stroke="#444" stroke-width="1"/>
+        <text x="95" y="12" fill="#fff" text-anchor="middle">SCL</text>
+        
+        <rect x="120" y="0" width="30" height="15" rx="1" fill="#222" stroke="#444" stroke-width="1"/>
+        <text x="135" y="12" fill="#fff" text-anchor="middle">SDA</text>
+        
+        <rect x="160" y="0" width="30" height="15" rx="1" fill="#222" stroke="#444" stroke-width="1"/>
+        <text x="175" y="12" fill="#fff" text-anchor="middle">RST</text>
+      </g>
+    </g>
+  </g>
+  
+  <!-- Component Information -->
+  <g transform="translate(250, 320)">
+    <rect width="300" height="140" rx="5" fill="#252526" stroke="#3c3c3c" stroke-width="2"/>
+    <text x="20" y="30" font-family="Arial" font-size="16" fill="#fff" font-weight="bold">Display Specifications:</text>
+    
+    <g transform="translate(20, 40)" font-family="Arial" font-size="14">
+      <text y="20" fill="#ddd">• Resolution: 128x64 pixels</text>
+      <text y="45" fill="#ddd">• Controller: SSD1306</text>
+      <text y="70" fill="#ddd">• Interface: I²C (also supports SPI)</text>
+      <text y="95" fill="#ddd">• Display Color: White (monochrome)</text>
+    </g>
+  </g>
+  
+  <!-- Features -->
+  <g transform="translate(50, 150)">
+    <rect width="200" height="170" rx="5" fill="#252526" stroke="#3c3c3c" stroke-width="2"/>
+    <text x="20" y="30" font-family="Arial" font-size="16" fill="#fff" font-weight="bold">Key Features:</text>
+    
+    <g transform="translate(20, 40)" font-family="Arial" font-size="13">
+      <text y="20" fill="#ddd">• Low power consumption</text>
+      <text y="45" fill="#ddd">• High contrast</text>
+      <text y="70" fill="#ddd">• Wide viewing angle</text>
+      <text y="95" fill="#ddd">• No backlight required</text>
+      <text y="120" fill="#ddd">• Small footprint</text>
+    </g>
+  </g>
+  
+  <!-- Side View Diagram -->
+  <g transform="translate(550, 150)">
+    <rect width="200" height="170" rx="5" fill="#252526" stroke="#3c3c3c" stroke-width="2"/>
+    <text x="20" y="30" font-family="Arial" font-size="16" fill="#fff" font-weight="bold">Side View:</text>
+    
+    <!-- Side view diagram -->
+    <g transform="translate(20, 60)">
+      <!-- PCB -->
+      <rect x="20" y="30" width="160" height="10" fill="#071" stroke="#0a2" stroke-width="1"/>
+      
+      <!-- Display Module -->
+      <rect x="35" y="10" width="130" height="20" fill="#111" stroke="#333" stroke-width="1"/>
+      
+      <!-- Glass -->
+      <rect x="35" y="5" width="130" height="5" fill="#57a" stroke="#333" stroke-width="1" fill-opacity="0.5"/>
+      
+      <!-- Pins -->
+      <g fill="#aaa" stroke="#888" stroke-width="1">
+        <rect x="40" y="40" width="5" height="20"/>
+        <rect x="60" y="40" width="5" height="20"/>
+        <rect x="80" y="40" width="5" height="20"/>
+        <rect x="100" y="40" width="5" height="20"/>
+        <rect x="120" y="40" width="5" height="20"/>
+        <rect x="140" y="40" width="5" height="20"/>
+      </g>
+      
+      <!-- Thickness labels -->
+      <text x="180" y="15" font-family="Arial" font-size="10" fill="#ddd">1.5mm</text>
+      <text x="180" y="35" font-family="Arial" font-size="10" fill="#ddd">1.6mm</text>
+    </g>
+  </g>
+  
+  <!-- Typical Applications -->
+  <g transform="translate(50, 340)">
+    <rect width="200" height="120" rx="5" fill="#252526" stroke="#3c3c3c" stroke-width="2"/>
+    <text x="20" y="30" font-family="Arial" font-size="16" fill="#fff" font-weight="bold">Applications:</text>
+    
+    <g transform="translate(20, 40)" font-family="Arial" font-size="13">
+      <text y="20" fill="#ddd">• System monitoring</text>
+      <text y="45" fill="#ddd">• Status displays</text>
+      <text y="70" fill="#ddd">• Menu interfaces</text>
+    </g>
+  </g>
+  
+  <!-- Dimensions -->
+  <g transform="translate(550, 340)">
+    <rect width="200" height="120" rx="5" fill="#252526" stroke="#3c3c3c" stroke-width="2"/>
+    <text x="20" y="30" font-family="Arial" font-size="16" fill="#fff" font-weight="bold">Dimensions:</text>
+    
+    <g transform="translate(20, 40)" font-family="Arial" font-size="13">
+      <text y="20" fill="#ddd">• PCB: 27mm × 27mm</text>
+      <text y="45" fill="#ddd">• Display area: 21.7mm × 11.2mm</text>
+      <text y="70" fill="#ddd">• Pixel size: 0.17mm × 0.17mm</text>
+    </g>
+  </g>
 </svg>
