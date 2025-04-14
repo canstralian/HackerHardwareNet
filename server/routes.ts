@@ -1,6 +1,8 @@
 import express, { type Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { passport, isAuthenticated, isAdmin } from "./auth";
+import bcrypt from "bcrypt";
 import { 
   insertUserSchema, 
   insertHardwareSchema, 
@@ -729,6 +731,153 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error('Failed to complete tutorial:', error);
       res.status(500).json({ error: 'Failed to complete tutorial' });
     }
+  });
+
+  // ===== Authentication Routes =====
+  
+  // Registration route
+  app.post('/api/auth/register', async (req: Request, res: Response) => {
+    try {
+      // Check if user already exists
+      const { username, email, password, firstName, lastName } = req.body;
+      
+      const existingUsername = await storage.getUserByUsername(username);
+      if (existingUsername) {
+        return res.status(400).json({ error: 'Username already taken' });
+      }
+      
+      const existingEmail = await storage.getUserByEmail(email);
+      if (existingEmail) {
+        return res.status(400).json({ error: 'Email already registered' });
+      }
+      
+      // Hash password
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+      
+      // Create user with hashed password
+      const userData = insertUserSchema.parse({
+        username,
+        email,
+        password: hashedPassword,
+        firstName,
+        lastName
+      });
+      
+      const user = await storage.createUser(userData);
+      
+      // Create default user profile
+      await storage.createUserProfile({
+        userId: user.id,
+        expertise: 'Beginner',
+        bio: null,
+        skills: []
+      });
+      
+      // Auto-login after registration
+      req.login(user, (err) => {
+        if (err) {
+          return res.status(500).json({ error: 'Login after registration failed' });
+        }
+        
+        // Update last login time
+        storage.updateUserLastLogin(user.id);
+        
+        return res.status(201).json({ 
+          message: 'Registration successful', 
+          user: { 
+            id: user.id, 
+            username: user.username, 
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            isAdmin: user.isAdmin
+          } 
+        });
+      });
+    } catch (error) {
+      console.error('Registration error:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: fromZodError(error).message });
+      }
+      res.status(500).json({ error: 'Registration failed' });
+    }
+  });
+  
+  // Login route
+  app.post('/api/auth/login', (req: Request, res: Response, next) => {
+    passport.authenticate('local', (err: any, user: any, info: any) => {
+      if (err) {
+        return res.status(500).json({ error: 'Authentication error' });
+      }
+      
+      if (!user) {
+        return res.status(401).json({ error: info.message || 'Invalid credentials' });
+      }
+      
+      req.login(user, async (loginErr) => {
+        if (loginErr) {
+          return res.status(500).json({ error: 'Login failed' });
+        }
+        
+        // Update last login time
+        await storage.updateUserLastLogin(user.id);
+        
+        return res.json({ 
+          message: 'Login successful', 
+          user: { 
+            id: user.id, 
+            username: user.username, 
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            isAdmin: user.isAdmin
+          } 
+        });
+      });
+    })(req, res, next);
+  });
+  
+  // Logout route
+  app.post('/api/auth/logout', (req: Request, res: Response) => {
+    req.logout((err) => {
+      if (err) {
+        return res.status(500).json({ error: 'Logout failed' });
+      }
+      res.json({ message: 'Logged out successfully' });
+    });
+  });
+  
+  // Get current user
+  app.get('/api/auth/me', isAuthenticated, (req: Request, res: Response) => {
+    const user = req.user;
+    res.json({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      isAdmin: user.isAdmin
+    });
+  });
+  
+  // Check authentication status
+  app.get('/api/auth/status', (req: Request, res: Response) => {
+    if (req.isAuthenticated()) {
+      const user = req.user;
+      return res.json({
+        isAuthenticated: true,
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          isAdmin: user.isAdmin
+        }
+      });
+    }
+    res.json({ isAuthenticated: false });
   });
 
   return httpServer;
