@@ -19,6 +19,8 @@ import {
 } from "@shared/schema";
 import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
+import paymentRoutes from "./payment-routes";
+import { EmailService } from "./email-service";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Middleware to parse JSON
@@ -26,6 +28,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Create HTTP server
   const httpServer = createServer(app);
+
+  // Mount payment routes with authentication middleware
+  app.use('/api', isAuthenticated, paymentRoutes);
+
+  // Setup email processing
+  // In a real application, this would be a scheduled job or separate worker
+  setInterval(() => {
+    EmailService.processEmailQueue().catch(err => {
+      console.error('Error processing email queue:', err);
+    });
+  }, 60000); // Process every minute
 
   // ===== User Routes =====
   app.post('/api/users', async (req: Request, res: Response) => {
