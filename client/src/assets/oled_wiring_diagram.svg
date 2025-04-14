@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="800" height="500" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with cyberpunk feel -->
+  <rect width="800" height="500" fill="#111122" />
+  
+  <!-- Grid for background -->
+  <g stroke="#00FF00" stroke-width="0.5" opacity="0.1">
+    <g id="horizontal-lines">
+      <line x1="0" y1="50" x2="800" y2="50" />
+      <line x1="0" y1="100" x2="800" y2="100" />
+      <line x1="0" y1="150" x2="800" y2="150" />
+      <line x1="0" y1="200" x2="800" y2="200" />
+      <line x1="0" y1="250" x2="800" y2="250" />
+      <line x1="0" y1="300" x2="800" y2="300" />
+      <line x1="0" y1="350" x2="800" y2="350" />
+      <line x1="0" y1="400" x2="800" y2="400" />
+      <line x1="0" y1="450" x2="800" y2="450" />
+    </g>
+    <g id="vertical-lines">
+      <line x1="50" y1="0" x2="50" y2="500" />
+      <line x1="100" y1="0" x2="100" y2="500" />
+      <line x1="150" y1="0" x2="150" y2="500" />
+      <line x1="200" y1="0" x2="200" y2="500" />
+      <line x1="250" y1="0" x2="250" y2="500" />
+      <line x1="300" y1="0" x2="300" y2="500" />
+      <line x1="350" y1="0" x2="350" y2="500" />
+      <line x1="400" y1="0" x2="400" y2="500" />
+      <line x1="450" y1="0" x2="450" y2="500" />
+      <line x1="500" y1="0" x2="500" y2="500" />
+      <line x1="550" y1="0" x2="550" y2="500" />
+      <line x1="600" y1="0" x2="600" y2="500" />
+      <line x1="650" y1="0" x2="650" y2="500" />
+      <line x1="700" y1="0" x2="700" y2="500" />
+      <line x1="750" y1="0" x2="750" y2="500" />
+    </g>
+  </g>
+  
+  <!-- Title -->
+  <text x="400" y="35" font-family="Arial" font-size="24" fill="#00FF00" text-anchor="middle" font-weight="bold">OLED Display Wiring Diagram</text>
+  
+  <!-- SBC GPIO Header -->
+  <g transform="translate(200, 200)">
+    <rect x="-80" y="-120" width="160" height="240" rx="5" ry="5" fill="#1A1A1A" stroke="#333333" stroke-width="2" />
+    
+    <!-- GPIO Pins Labels - Left Side -->
+    <g font-family="Arial" font-size="10" fill="#FFFFFF" text-anchor="end">
+      <text x="-10" y="-100">3.3V Power</text>
+      <text x="-10" y="-80">5V Power</text>
+      <text x="-10" y="-60">GPIO 2 (SDA)</text>
+      <text x="-10" y="-40">5V Power</text>
+      <text x="-10" y="-20">GPIO 3 (SCL)</text>
+      <text x="-10" y="0">Ground</text>
+      <text x="-10" y="20">GPIO 4</text>
+      <text x="-10" y="40">GPIO 14 (TX)</text>
+      <text x="-10" y="60">Ground</text>
+      <text x="-10" y="80">GPIO 15 (RX)</text>
+    </g>
+    
+    <!-- GPIO Pins - Left Side -->
+    <g fill="#888888" stroke="#444444" stroke-width="1">
+      <circle cx="0" cy="-100" r="5" />
+      <circle cx="0" cy="-80" r="5" />
+      <circle cx="0" cy="-60" r="5" fill="#00AAFF" />
+      <circle cx="0" cy="-40" r="5" />
+      <circle cx="0" cy="-20" r="5" fill="#FFFF00" />
+      <circle cx="0" cy="0" r="5" fill="#444444" />
+      <circle cx="0" cy="20" r="5" />
+      <circle cx="0" cy="40" r="5" />
+      <circle cx="0" cy="60" r="5" />
+      <circle cx="0" cy="80" r="5" />
+    </g>
+    
+    <!-- GPIO Pins - Right Side -->
+    <g fill="#888888" stroke="#444444" stroke-width="1">
+      <circle cx="70" cy="-100" r="5" />
+      <circle cx="70" cy="-80" r="5" />
+      <circle cx="70" cy="-60" r="5" />
+      <circle cx="70" cy="-40" r="5" />
+      <circle cx="70" cy="-20" r="5" />
+      <circle cx="70" cy="0" r="5" />
+      <circle cx="70" cy="20" r="5" />
+      <circle cx="70" cy="40" r="5" />
+      <circle cx="70" cy="60" r="5" />
+      <circle cx="70" cy="80" r="5" />
+    </g>
+    
+    <!-- GPIO Pins Labels - Right Side -->
+    <g font-family="Arial" font-size="10" fill="#FFFFFF" text-anchor="start">
+      <text x="80" y="-100">Ground</text>
+      <text x="80" y="-80">GPIO 17</text>
+      <text x="80" y="-60">GPIO 27</text>
+      <text x="80" y="-40">GPIO 22</text>
+      <text x="80" y="-20">3.3V Power</text>
+      <text x="80" y="0">GPIO 10 (SPI0 MOSI)</text>
+      <text x="80" y="20">GPIO 9 (SPI0 MISO)</text>
+      <text x="80" y="40">GPIO 11 (SPI0 SCLK)</text>
+      <text x="80" y="60">Ground</text>
+      <text x="80" y="80">GPIO 0 (ID_SD)</text>
+    </g>
+    
+    <text x="0" y="110" font-family="Arial" font-size="14" fill="#00FF00" text-anchor="middle">GPIO Header</text>
+  </g>
+  
+  <!-- OLED Display Module -->
+  <g transform="translate(600, 200)">
+    <!-- Display Board -->
+    <rect x="-70" y="-50" width="140" height="100" rx="5" ry="5" fill="#222222" stroke="#444444" stroke-width="2" />
+    
+    <!-- Display area -->
+    <rect x="-50" y="-40" width="100" height="60" rx="2" ry="2" fill="#000033" stroke="#000066" stroke-width="1" />
+    
+    <!-- Display text -->
+    <text x="0" y="-10" font-family="monospace" font-size="14" fill="#00FFFF" text-anchor="middle">HELLO</text>
+    <text x="0" y="10" font-family="monospace" font-size="14" fill="#00FFFF" text-anchor="middle">WORLD!</text>
+    
+    <!-- Connection pins -->
+    <g fill="#AAAAAA" stroke="#666666" stroke-width="1">
+      <circle cx="-45" cy="70" r="6" />
+      <circle cx="-15" cy="70" r="6" />
+      <circle cx="15" cy="70" r="6" />
+      <circle cx="45" cy="70" r="6" />
+    </g>
+    
+    <!-- Pin labels -->
+    <g font-family="Arial" font-size="10" fill="#FFFFFF" text-anchor="middle">
+      <text x="-45" y="90">VCC</text>
+      <text x="-15" y="90">GND</text>
+      <text x="15" y="90">SDA</text>
+      <text x="45" y="90">SCL</text>
+    </g>
+    
+    <text x="0" y="-65" font-family="Arial" font-size="14" fill="#00FF00" text-anchor="middle">0.96" OLED Display</text>
+    <text x="0" y="-80" font-family="Arial" font-size="10" fill="#888888" text-anchor="middle">SSD1306/SH1106</text>
+  </g>
+  
+  <!-- Connection wires -->
+  <g stroke-width="3" fill="none">
+    <!-- VCC (3.3V) - Red -->
+    <path d="M 200 100 C 250 100, 400 120, 555 200" stroke="#FF0000" />
+    <circle cx="200" cy="100" r="6" fill="#FF0000" />
+    <circle cx="555" cy="200" r="6" fill="#FF0000" />
+    
+    <!-- GND - Black -->
+    <path d="M 200 200 C 250 200, 400 180, 585 200" stroke="#444444" />
+    <circle cx="200" cy="200" r="6" fill="#444444" />
+    <circle cx="585" cy="200" r="6" fill="#444444" />
+    
+    <!-- SDA - Blue -->
+    <path d="M 200 140 C 250 140, 400 160, 615 200" stroke="#0000FF" />
+    <circle cx="200" cy="140" r="6" fill="#00AAFF" />
+    <circle cx="615" cy="200" r="6" fill="#00AAFF" />
+    
+    <!-- SCL - Yellow -->
+    <path d="M 200 180 C 250 180, 400 200, 645 200" stroke="#FFFF00" />
+    <circle cx="200" cy="180" r="6" fill="#FFFF00" />
+    <circle cx="645" cy="200" r="6" fill="#FFFF00" />
+  </g>
+  
+  <!-- Legend -->
+  <g transform="translate(100, 400)">
+    <text x="0" y="0" font-family="Arial" font-size="16" fill="#FFFFFF" font-weight="bold">Connection Legend:</text>
+    
+    <rect x="0" y="20" width="30" height="8" fill="#FF0000" />
+    <text x="40" y="28" font-family="Arial" font-size="14" fill="#FFFFFF">VCC - 3.3V Power</text>
+    
+    <rect x="200" y="20" width="30" height="8" fill="#444444" />
+    <text x="240" y="28" font-family="Arial" font-size="14" fill="#FFFFFF">GND - Ground</text>
+    
+    <rect x="400" y="20" width="30" height="8" fill="#00AAFF" />
+    <text x="440" y="28" font-family="Arial" font-size="14" fill="#FFFFFF">SDA - I²C Data (GPIO 2)</text>
+    
+    <rect x="600" y="20" width="30" height="8" fill="#FFFF00" />
+    <text x="640" y="28" font-family="Arial" font-size="14" fill="#FFFFFF">SCL - I²C Clock (GPIO 3)</text>
+  </g>
+  
+  <!-- Notes -->
+  <g transform="translate(400, 450)">
+    <text x="0" y="0" font-family="Arial" font-size="12" fill="#00FF00" text-anchor="middle" font-style="italic">
+      Note: Exact GPIO pin numbers may vary between different SBC models. Consult your board's pinout diagram.
+    </text>
+  </g>
+</svg>
