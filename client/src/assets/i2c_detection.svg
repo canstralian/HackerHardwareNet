@@ -1,47 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="800px" height="400px" viewBox="0 0 800 400" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <title>I2C Detection Terminal Output</title>
+    <title>I2C Address Detection</title>
     <defs>
         <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="terminalGradient">
-            <stop stop-color="#000000" offset="0%"></stop>
-            <stop stop-color="#111111" offset="100%"></stop>
+            <stop stop-color="#2B303B" offset="0%"></stop>
+            <stop stop-color="#1C1E26" offset="100%"></stop>
         </linearGradient>
+        <filter x="-3%" y="-3%" width="106%" height="106%" filterUnits="objectBoundingBox" id="terminalShadow">
+            <feGaussianBlur stdDeviation="3" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="0" dy="2" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.3 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
     </defs>
-    <g id="I2C-Detection-Terminal" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <!-- Terminal Window Background -->
-        <rect fill="url(#terminalGradient)" x="100" y="50" width="600" height="300" rx="8"></rect>
-        <rect stroke="#444444" stroke-width="2" fill="none" x="100" y="50" width="600" height="300" rx="8"></rect>
+    <g id="i2c-detection" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <!-- Background -->
+        <rect fill="#F8F9FA" x="0" y="0" width="800" height="400"></rect>
         
-        <!-- Terminal Header -->
-        <rect fill="#333333" x="100" y="50" width="600" height="30" rx="8" ry="0"></rect>
-        <circle fill="#FF5F57" cx="125" cy="65" r="8"></circle>
-        <circle fill="#FFBD2E" cx="150" cy="65" r="8"></circle>
-        <circle fill="#28CA41" cx="175" cy="65" r="8"></circle>
-        <text font-family="Arial" font-size="14" font-weight="bold" fill="#FFFFFF" x="350" y="70">Terminal</text>
+        <!-- Title -->
+        <text font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#333333" text-anchor="middle" x="400" y="40">I²C Address Detection</text>
+        <text font-family="Arial, sans-serif" font-size="14" fill="#666666" text-anchor="middle" x="400" y="65">SSD1306 OLED display detection on Raspberry Pi and Orange Pi</text>
         
-        <!-- Terminal Content -->
-        <text font-family="Courier New" font-size="14" fill="#33FF33" x="120" y="110">pi@raspberrypi:~ $ sudo i2cdetect -y 1</text>
+        <!-- Terminal Window - Raspberry Pi -->
+        <rect id="rpi-terminal-bg" fill="url(#terminalGradient)" x="100" y="100" width="280" height="250" rx="5" filter="url(#terminalShadow)"></rect>
+        <rect id="rpi-terminal-header" fill="#1D1F21" x="100" y="100" width="280" height="25" rx="5" ry="0"></rect>
+        <text font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#FFFFFF" x="110" y="117">Raspberry Pi Terminal</text>
         
-        <!-- I2C Detection Output -->
-        <text font-family="Courier New" font-size="14" fill="#FFFFFF" x="120" y="135">     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f</text>
-        <text font-family="Courier New" font-size="14" fill="#FFFFFF" x="120" y="155">00:          -- -- -- -- -- -- -- -- -- -- -- -- --</text>
-        <text font-family="Courier New" font-size="14" fill="#FFFFFF" x="120" y="175">10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --</text>
-        <text font-family="Courier New" font-size="14" fill="#FFFFFF" x="120" y="195">20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --</text>
-        <text font-family="Courier New" font-size="14" fill="#FFFFFF" x="120" y="215">30: -- -- -- -- -- -- -- -- -- -- -- -- </text>
-        <text font-family="Courier New" font-size="14" fill="#FF33FF" x="380" y="215">3c</text>
-        <text font-family="Courier New" font-size="14" fill="#FFFFFF" x="395" y="215"> -- -- --</text>
-        <text font-family="Courier New" font-size="14" fill="#FFFFFF" x="120" y="235">40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --</text>
-        <text font-family="Courier New" font-size="14" fill="#FFFFFF" x="120" y="255">50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --</text>
-        <text font-family="Courier New" font-size="14" fill="#FFFFFF" x="120" y="275">60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --</text>
-        <text font-family="Courier New" font-size="14" fill="#FFFFFF" x="120" y="295">70: -- -- -- -- -- -- -- --</text>
+        <!-- Close, Minimize, Maximize buttons -->
+        <circle id="rpi-close-btn" fill="#FF5F56" cx="360" cy="112" r="6"></circle>
+        <circle id="rpi-minimize-btn" fill="#FFBD2E" cx="340" cy="112" r="6"></circle>
+        <circle id="rpi-maximize-btn" fill="#27C93F" cx="320" cy="112" r="6"></circle>
         
-        <!-- Note/Explanation -->
-        <rect fill="#222222" stroke="#555555" stroke-width="1" x="150" y="320" width="500" height="60" rx="4"></rect>
-        <text font-family="Arial" font-size="12" fill="#33FF33" x="170" y="340">OLED Display Detected at Address 0x3C (60 decimal)</text>
-        <text font-family="Arial" font-size="12" fill="#DDDDDD" x="170" y="360">The highlighted "3c" indicates the I2C address of the SSD1306 OLED display</text>
+        <!-- Terminal Content - Raspberry Pi -->
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="110" y="150">pi@raspberrypi:~ $ i2cdetect -y 1</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="110" y="170">     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="110" y="190">00:          -- -- -- -- -- -- -- -- -- -- -- -- --</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="110" y="210">10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="110" y="230">20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="110" y="250">30: -- -- -- -- -- -- -- -- -- -- -- -- </text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#4CAF50" x="350" y="250">3c</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="365" y="250"> -- -- --</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="110" y="270">40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="110" y="290">50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="110" y="310">60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="110" y="330">70: -- -- -- -- -- -- -- --</text>
         
-        <!-- Command Prompt Cursor -->
-        <rect fill="#33FF33" x="120" y="310" width="8" height="2"></rect>
-        <text font-family="Courier New" font-size="14" fill="#33FF33" x="120" y="310">pi@raspberrypi:~ $</text>
+        <!-- Terminal Window - Orange Pi -->
+        <rect id="orangepi-terminal-bg" fill="url(#terminalGradient)" x="420" y="100" width="280" height="250" rx="5" filter="url(#terminalShadow)"></rect>
+        <rect id="orangepi-terminal-header" fill="#1D1F21" x="420" y="100" width="280" height="25" rx="5" ry="0"></rect>
+        <text font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#FFFFFF" x="430" y="117">Orange Pi Terminal</text>
+        
+        <!-- Close, Minimize, Maximize buttons -->
+        <circle id="orangepi-close-btn" fill="#FF5F56" cx="680" cy="112" r="6"></circle>
+        <circle id="orangepi-minimize-btn" fill="#FFBD2E" cx="660" cy="112" r="6"></circle>
+        <circle id="orangepi-maximize-btn" fill="#27C93F" cx="640" cy="112" r="6"></circle>
+        
+        <!-- Terminal Content - Orange Pi -->
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="430" y="150">orangepi@orangepizero2:~ $ i2cdetect -y 0</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="430" y="170">     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="430" y="190">00:          -- -- -- -- -- -- -- -- -- -- -- -- --</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="430" y="210">10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="430" y="230">20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="430" y="250">30: -- -- -- -- -- -- -- -- -- -- -- -- </text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#4CAF50" x="670" y="250">3c</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="685" y="250"> -- -- --</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="430" y="270">40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="430" y="290">50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="430" y="310">60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --</text>
+        <text font-family="Courier New, monospace" font-size="12" fill="#A9B7C6" x="430" y="330">70: -- -- -- -- -- -- -- --</text>
+        
+        <!-- Note Box -->
+        <rect id="note-box" fill="#FFFFFF" stroke="#DDDDDD" stroke-width="1" x="100" y="360" width="600" height="30" rx="3"></rect>
+        <text font-family="Arial, sans-serif" font-size="12" fill="#333333" text-anchor="middle" x="400" y="380">Note: The OLED display with I²C address 0x3C (60 decimal) is detected on both devices</text>
+        
+        <!-- I2C Device Highlight -->
+        <circle id="rpi-highlight" fill="#4CAF50" opacity="0.2" cx="350" cy="250" r="15"></circle>
+        <circle id="orangepi-highlight" fill="#4CAF50" opacity="0.2" cx="670" cy="250" r="15"></circle>
+        
+        <!-- Additional Info -->
+        <text font-family="Arial, sans-serif" font-size="10" fill="#666666" x="100" y="345">Bus: 1</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#666666" x="420" y="345">Bus: 0</text>
+        
+        <text font-family="Arial, sans-serif" font-size="10" fill="#666666" x="180" y="345">SDA: GPIO2 (Pin 3)</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#666666" x="280" y="345">SCL: GPIO3 (Pin 5)</text>
+        
+        <text font-family="Arial, sans-serif" font-size="10" fill="#666666" x="500" y="345">SDA: GPIO3 (Pin 3)</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#666666" x="600" y="345">SCL: GPIO2 (Pin 5)</text>
     </g>
 </svg>

@@ -1,61 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="800px" height="400px" viewBox="0 0 800 400" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<svg width="800px" height="600px" viewBox="0 0 800 600" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>OLED Display Visualization</title>
     <defs>
         <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="displayGradient">
             <stop stop-color="#000000" offset="0%"></stop>
-            <stop stop-color="#121212" offset="100%"></stop>
+            <stop stop-color="#101010" offset="100%"></stop>
         </linearGradient>
-        <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" id="textGradient">
-            <stop stop-color="#CCCCFF" offset="0%"></stop>
-            <stop stop-color="#FFFFFF" offset="100%"></stop>
+        <filter x="-8%" y="-8%" width="116%" height="116%" filterUnits="objectBoundingBox" id="displayShadow">
+            <feGaussianBlur stdDeviation="8" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="0" dy="3" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.3 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" id="screenGlowGradient">
+            <stop stop-color="#39e3ff" stop-opacity="0.2" offset="0%"></stop>
+            <stop stop-color="#76f9ff" stop-opacity="0.6" offset="50%"></stop>
+            <stop stop-color="#39e3ff" stop-opacity="0.2" offset="100%"></stop>
         </linearGradient>
     </defs>
-    <g id="OLED-Display-Graphic" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <!-- Display Board -->
-        <rect fill="#001D3D" x="200" y="100" width="400" height="200" rx="4"></rect>
+    <g id="OLED-Display" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <!-- Background -->
+        <rect fill="#f4f4f8" x="0" y="0" width="800" height="600"></rect>
         
-        <!-- OLED Display Screen -->
-        <rect fill="url(#displayGradient)" x="250" y="120" width="300" height="100" rx="2"></rect>
+        <!-- Display Module Base -->
+        <rect id="display-base" fill="#192430" x="250" y="100" width="300" height="250" rx="4" filter="url(#displayShadow)"></rect>
+        <rect id="display-base-border" stroke="#142536" stroke-width="2" fill="none" x="251" y="101" width="298" height="248" rx="3"></rect>
         
-        <!-- Display Content (Hello World) -->
-        <text font-family="Courier New" font-size="18" font-weight="bold" fill="url(#textGradient)" x="300" y="170">Hello, World!</text>
+        <!-- Display Screen Area -->
+        <rect id="screen-area" fill="url(#displayGradient)" x="275" y="120" width="250" height="200" rx="2"></rect>
         
-        <!-- I2C Pins and Labels -->
-        <rect fill="#FFD700" x="240" y="240" width="16" height="16" rx="2"></rect>
-        <text font-family="Arial" font-size="12" fill="#FFFFFF" x="220" y="270">VCC</text>
+        <!-- Active Display Area with Blue OLED Glow -->
+        <rect id="active-area" fill="#000000" x="285" y="130" width="230" height="180" rx="1"></rect>
+        <rect id="screen-glow" fill="url(#screenGlowGradient)" x="285" y="130" width="230" height="180" rx="1" opacity="0.9"></rect>
         
-        <rect fill="#C0C0C0" x="280" y="240" width="16" height="16" rx="2"></rect>
-        <text font-family="Arial" font-size="12" fill="#FFFFFF" x="270" y="270">GND</text>
+        <!-- Display Content -->
+        <text font-family="Courier New, monospace" font-size="10" font-weight="normal" fill="#FFFFFF" x="295" y="150">HELLO WORLD!</text>
+        <text font-family="Courier New, monospace" font-size="9" font-weight="normal" fill="#FFFFFF" x="295" y="170">Temperature: 24.5°C</text>
+        <text font-family="Courier New, monospace" font-size="9" font-weight="normal" fill="#FFFFFF" x="295" y="185">Humidity: 67%</text>
         
-        <rect fill="#00FF00" x="320" y="240" width="16" height="16" rx="2"></rect>
-        <text font-family="Arial" font-size="12" fill="#FFFFFF" x="315" y="270">SCL</text>
+        <!-- Status Bar -->
+        <rect id="status-bar" fill="#000000" stroke="#37F3FF" stroke-width="1" x="295" y="200" width="210" height="12" rx="2"></rect>
+        <rect id="status-bar-progress" fill="#37F3FF" x="297" y="202" width="140" height="8" rx="1"></rect>
         
-        <rect fill="#00BFFF" x="360" y="240" width="16" height="16" rx="2"></rect>
-        <text font-family="Arial" font-size="12" fill="#FFFFFF" x="355" y="270">SDA</text>
+        <!-- WiFi Signal Icon -->
+        <path id="wifi-icon" fill="#FFFFFF" d="M450,240 L460,230 L465,235 L460,240 L450,240 Z M445,245 L465,225 L470,230 L450,250 L445,245 Z M440,250 L470,220 L475,225 L445,255 L440,250 Z"></path>
         
-        <!-- Display Specs -->
-        <rect fill="#333344" stroke="#4444FF" stroke-width="1" x="550" y="120" width="200" height="160" rx="4"></rect>
-        <text font-family="Arial" font-size="14" font-weight="bold" fill="#FFFFFF" x="580" y="145">0.96" OLED Display</text>
-        <text font-family="Arial" font-size="12" fill="#FFFFFF" x="560" y="170">• Resolution: 128x64</text>
-        <text font-family="Arial" font-size="12" fill="#FFFFFF" x="560" y="190">• I2C Interface</text>
-        <text font-family="Arial" font-size="12" fill="#FFFFFF" x="560" y="210">• Address: 0x3C</text>
-        <text font-family="Arial" font-size="12" fill="#FFFFFF" x="560" y="230">• SSD1306 Controller</text>
-        <text font-family="Arial" font-size="12" fill="#FFFFFF" x="560" y="250">• Monochrome</text>
-        <text font-family="Arial" font-size="12" fill="#FFFFFF" x="560" y="270">• 3.3V-5V Compatible</text>
+        <!-- Battery Icon -->
+        <rect id="battery-outline" stroke="#FFFFFF" stroke-width="1" fill="none" x="480" y="235" width="20" height="10" rx="1"></rect>
+        <rect id="battery-level" fill="#FFFFFF" x="482" y="237" width="14" height="6" rx="1"></rect>
+        <rect id="battery-tip" fill="#FFFFFF" x="500" y="238" width="2" height="4"></rect>
         
-        <!-- Title -->
-        <text font-family="Arial" font-size="24" font-weight="bold" fill="#4444FF" x="260" y="70">0.96" OLED Display Module</text>
+        <!-- Display Text -->
+        <text font-family="Courier New, monospace" font-size="18" font-weight="bold" fill="#FFFFFF" x="340" y="290">Pi Zero OLED</text>
         
-        <!-- Raspberry Pi / Orange Pi Logo Placeholder -->
-        <circle fill="#FF4444" cx="140" cy="200" r="50"></circle>
-        <text font-family="Arial" font-size="14" font-weight="bold" fill="#FFFFFF" x="105" y="205">Single Board</text>
-        <text font-family="Arial" font-size="14" font-weight="bold" fill="#FFFFFF" x="120" y="225">Computer</text>
+        <!-- I²C Pins Highlight -->
+        <circle id="pin-sda" fill="#50E3C2" cx="270" y="330" r="5"></circle>
+        <circle id="pin-scl" fill="#F5A623" cx="290" y="330" r="5"></circle>
+        <circle id="pin-vcc" fill="#FF5252" cx="310" y="330" r="5"></circle>
+        <circle id="pin-gnd" fill="#4A4A4A" cx="330" y="330" r="5"></circle>
         
-        <!-- Connection Lines -->
-        <path d="M190,200 C220,200 220,248 240,248" stroke="#FFD700" stroke-width="2" stroke-dasharray="5,5"></path>
-        <path d="M190,210 C230,210 250,248 280,248" stroke="#C0C0C0" stroke-width="2" stroke-dasharray="5,5"></path>
-        <path d="M190,190 C240,190 300,248 320,248" stroke="#00FF00" stroke-width="2" stroke-dasharray="5,5"></path>
-        <path d="M190,180 C250,180 350,248 360,248" stroke="#00BFFF" stroke-width="2" stroke-dasharray="5,5"></path>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#333333" x="260" y="350">SDA</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#333333" x="280" y="350">SCL</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#333333" x="300" y="350">VCC</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#333333" x="320" y="350">GND</text>
+        
+        <!-- Hardware Labels -->
+        <text font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#333333" text-anchor="middle" x="400" y="50">0.96" OLED Display (SSD1306)</text>
+        <text font-family="Arial, sans-serif" font-size="16" fill="#666666" text-anchor="middle" x="400" y="75">I²C Interface, 128x64 Resolution</text>
+        
+        <!-- Module Specifications -->
+        <rect id="specs-box" fill="#FFFFFF" stroke="#CCCCCC" stroke-width="1" x="500" y="360" width="200" height="160" rx="5"></rect>
+        <text font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333333" x="520" y="385">Specifications:</text>
+        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="520" y="410">• Resolution: 128x64 pixels</text>
+        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="520" y="430">• Size: 0.96 inch</text>
+        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="520" y="450">• Controller: SSD1306</text>
+        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="520" y="470">• Interface: I²C</text>
+        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="520" y="490">• Operating Voltage: 3.3V</text>
+        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="520" y="510">• I²C Address: 0x3C</text>
+        
+        <!-- Compatible Boards Box -->
+        <rect id="compat-box" fill="#FFFFFF" stroke="#CCCCCC" stroke-width="1" x="100" y="360" width="200" height="160" rx="5"></rect>
+        <text font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#333333" x="120" y="385">Compatible with:</text>
+        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="120" y="410">• Raspberry Pi Zero 2W</text>
+        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="120" y="430">• Orange Pi Zero 2W</text>
+        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="120" y="450">• Raspberry Pi 3/4/5</text>
+        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="120" y="470">• Arduino (with level shifter)</text>
+        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="120" y="490">• ESP32/ESP8266</text>
+        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="120" y="510">• Other SBCs with I²C</text>
     </g>
 </svg>

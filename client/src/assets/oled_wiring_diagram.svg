@@ -1,88 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="800px" height="600px" viewBox="0 0 800 600" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <title>OLED Display Wiring Diagram</title>
+<svg width="800px" height="500px" viewBox="0 0 800 500" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>OLED Wiring Diagram</title>
     <defs>
-        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="backgroundGradient">
-            <stop stop-color="#0A0A20" offset="0%"></stop>
-            <stop stop-color="#101030" offset="100%"></stop>
-        </linearGradient>
+        <filter x="-5%" y="-5%" width="110%" height="110%" filterUnits="objectBoundingBox" id="boardShadow">
+            <feGaussianBlur stdDeviation="2" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="0" dy="2" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.2 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
     </defs>
-    <g id="OLED-Wiring-Diagram" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Wiring-Diagram" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <!-- Background -->
-        <rect fill="url(#backgroundGradient)" x="0" y="0" width="800" height="600"></rect>
+        <rect fill="#F8F9FA" x="0" y="0" width="800" height="500"></rect>
         
         <!-- Title -->
-        <text font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#4E9AF1" x="220" y="40">OLED Display Wiring Diagram</text>
-        <text font-family="Arial, sans-serif" font-size="16" fill="#8A9EAD" x="270" y="70">For Orange Pi Zero 2W / Raspberry Pi Zero 2W</text>
+        <text font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#333333" text-anchor="middle" x="400" y="40">OLED Display Wiring Diagram</text>
+        <text font-family="Arial, sans-serif" font-size="14" fill="#666666" text-anchor="middle" x="400" y="65">I²C Connection for Raspberry Pi Zero 2W and Orange Pi Zero 2W</text>
         
         <!-- Raspberry Pi Board -->
-        <rect fill="#2A863D" x="80" y="150" width="240" height="180" rx="10"></rect>
-        <rect fill="#227031" x="90" y="160" width="220" height="160" rx="5"></rect>
-        <text font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#FFFFFF" x="115" y="210">Raspberry Pi</text>
-        <text font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#FFFFFF" x="147" y="235">Zero 2W</text>
+        <rect id="rpi-board" fill="#3BB14A" x="100" y="150" width="200" height="150" rx="5" filter="url(#boardShadow)"></rect>
+        <text font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#FFFFFF" x="130" y="180">Raspberry Pi Zero 2W</text>
         
-        <!-- GPIO Pins on Pi -->
-        <rect fill="#888888" x="110" y="300" width="180" height="20" rx="2"></rect>
-        <circle fill="#DDDDDD" cx="130" cy="310" r="5"></circle>
-        <circle fill="#DDDDDD" cx="150" cy="310" r="5"></circle>
-        <circle fill="#DDDDDD" cx="170" cy="310" r="5"></circle>
-        <circle fill="#DDDDDD" cx="190" cy="310" r="5"></circle>
-        <circle fill="#DDDDDD" cx="210" cy="310" r="5"></circle>
-        <circle fill="#DDDDDD" cx="230" cy="310" r="5"></circle>
-        <circle fill="#DDDDDD" cx="250" cy="310" r="5"></circle>
-        <circle fill="#DDDDDD" cx="270" cy="310" r="5"></circle>
+        <!-- Pi GPIO Header -->
+        <rect id="rpi-gpio" fill="#333333" x="115" y="190" width="170" height="40" rx="2"></rect>
         
-        <!-- Labels for Important GPIO Pins -->
-        <text font-family="Courier New, monospace" font-size="12" fill="#FFFFFF" x="125" y="340">3.3V</text>
-        <text font-family="Courier New, monospace" font-size="12" fill="#FFFFFF" x="147" y="340">GND</text>
-        <text font-family="Courier New, monospace" font-size="12" fill="#FFFFFF" x="165" y="340">GPIO2</text>
-        <text font-family="Courier New, monospace" font-size="12" fill="#FFFFFF" x="207" y="340">GPIO3</text>
-        <text font-family="Courier New, monospace" font-size="12" fill="#FFFFFF" x="250" y="340">5V</text>
+        <!-- Pi GPIO Pins -->
+        <circle id="rpi-3v3-pin" fill="#FF5252" cx="135" cy="210" r="5"></circle>
+        <circle id="rpi-sda-pin" fill="#4CAF50" cx="155" cy="210" r="5"></circle>
+        <circle id="rpi-scl-pin" fill="#FFC107" cx="175" cy="210" r="5"></circle>
+        <circle id="rpi-gnd-pin" fill="#9E9E9E" cx="195" cy="210" r="5"></circle>
+        
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="135" y="230" text-anchor="middle">3.3V</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="155" y="230" text-anchor="middle">SDA</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="175" y="230" text-anchor="middle">SCL</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="195" y="230" text-anchor="middle">GND</text>
+        
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="135" y="200" text-anchor="middle">1</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="155" y="200" text-anchor="middle">3</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="175" y="200" text-anchor="middle">5</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="195" y="200" text-anchor="middle">9</text>
+        
+        <!-- Orange Pi Board -->
+        <rect id="orangepi-board" fill="#F57C00" x="500" y="150" width="200" height="150" rx="5" filter="url(#boardShadow)"></rect>
+        <text font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#FFFFFF" x="530" y="180">Orange Pi Zero 2W</text>
+        
+        <!-- Orange Pi GPIO Header -->
+        <rect id="orangepi-gpio" fill="#333333" x="515" y="190" width="170" height="40" rx="2"></rect>
+        
+        <!-- Orange Pi GPIO Pins -->
+        <circle id="orangepi-3v3-pin" fill="#FF5252" cx="535" cy="210" r="5"></circle>
+        <circle id="orangepi-sda-pin" fill="#4CAF50" cx="555" cy="210" r="5"></circle>
+        <circle id="orangepi-scl-pin" fill="#FFC107" cx="575" cy="210" r="5"></circle>
+        <circle id="orangepi-gnd-pin" fill="#9E9E9E" cx="595" cy="210" r="5"></circle>
+        
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="535" y="230" text-anchor="middle">3.3V</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="555" y="230" text-anchor="middle">SDA</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="575" y="230" text-anchor="middle">SCL</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="595" y="230" text-anchor="middle">GND</text>
+        
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="535" y="200" text-anchor="middle">1</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="555" y="200" text-anchor="middle">3</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="575" y="200" text-anchor="middle">5</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="595" y="200" text-anchor="middle">9</text>
         
         <!-- OLED Display -->
-        <rect fill="#111111" x="480" y="150" width="200" height="140" rx="8"></rect>
-        <rect fill="#0000AA" x="500" y="170" width="160" height="80" rx="4"></rect>
-        <text font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#FFFFFF" x="525" y="280">SSD1306 OLED</text>
-        <text font-family="Arial, sans-serif" font-size="14" fill="#DDDDDD" x="535" y="300">Display (0.96")</text>
+        <rect id="oled-display" fill="#212121" x="300" y="350" width="200" height="100" rx="3" filter="url(#boardShadow)"></rect>
+        <rect id="oled-screen" fill="#000000" x="320" y="360" width="160" height="60" rx="2"></rect>
         
         <!-- OLED Pins -->
-        <rect fill="#888888" x="500" y="320" width="160" height="20" rx="2"></rect>
-        <circle fill="#DDDDDD" cx="520" cy="330" r="5"></circle>
-        <circle fill="#DDDDDD" cx="540" cy="330" r="5"></circle>
-        <circle fill="#DDDDDD" cx="560" cy="330" r="5"></circle>
-        <circle fill="#DDDDDD" cx="580" cy="330" r="5"></circle>
+        <circle id="oled-vcc-pin" fill="#FF5252" cx="330" cy="440" r="5"></circle>
+        <circle id="oled-gnd-pin" fill="#9E9E9E" cx="350" cy="440" r="5"></circle>
+        <circle id="oled-scl-pin" fill="#FFC107" cx="370" cy="440" r="5"></circle>
+        <circle id="oled-sda-pin" fill="#4CAF50" cx="390" cy="440" r="5"></circle>
         
-        <!-- OLED Pin Labels -->
-        <text font-family="Courier New, monospace" font-size="12" fill="#FFFFFF" x="516" y="355">VCC</text>
-        <text font-family="Courier New, monospace" font-size="12" fill="#FFFFFF" x="536" y="355">GND</text>
-        <text font-family="Courier New, monospace" font-size="12" fill="#FFFFFF" x="556" y="355">SCL</text>
-        <text font-family="Courier New, monospace" font-size="12" fill="#FFFFFF" x="576" y="355">SDA</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="330" y="460" text-anchor="middle">VCC</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="350" y="460" text-anchor="middle">GND</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="370" y="460" text-anchor="middle">SCL</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="390" y="460" text-anchor="middle">SDA</text>
         
-        <!-- Connection Lines -->
-        <!-- VCC to 3.3V -->
-        <path d="M130,310 L130,380 L420,380 L420,330 L520,330" stroke="#FF5722" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-        <!-- GND to GND -->
-        <path d="M150,310 L150,400 L440,400 L440,330 L540,330" stroke="#607D8B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-        <!-- GPIO2/SCL to SCL -->
-        <path d="M170,310 L170,420 L460,420 L460,330 L560,330" stroke="#4CAF50" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-        <!-- GPIO3/SDA to SDA -->
-        <path d="M210,310 L210,440 L480,440 L480,330 L580,330" stroke="#2196F3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+        <text font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#FFFFFF" x="350" y="385">OLED Display</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="335" y="400">SSD1306 - 128x64</text>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF" x="335" y="415">I²C Address: 0x3C</text>
         
-        <!-- Connection Labels -->
-        <text font-family="Arial, sans-serif" font-size="14" fill="#FF5722" x="280" y="380">3.3V Power</text>
-        <text font-family="Arial, sans-serif" font-size="14" fill="#607D8B" x="280" y="400">Ground</text>
-        <text font-family="Arial, sans-serif" font-size="14" fill="#4CAF50" x="280" y="420">Clock (SCL)</text>
-        <text font-family="Arial, sans-serif" font-size="14" fill="#2196F3" x="280" y="440">Data (SDA)</text>
+        <!-- Wiring for Raspberry Pi -->
+        <!-- VCC wire -->
+        <path id="rpi-vcc-wire" stroke="#FF5252" stroke-width="2" d="M135,215 C135,290 135,350 330,440"></path>
+        <!-- GND wire -->
+        <path id="rpi-gnd-wire" stroke="#9E9E9E" stroke-width="2" d="M195,215 C195,280 195,350 350,440"></path>
+        <!-- SCL wire -->
+        <path id="rpi-scl-wire" stroke="#FFC107" stroke-width="2" d="M175,215 C175,270 175,350 370,440"></path>
+        <!-- SDA wire -->
+        <path id="rpi-sda-wire" stroke="#4CAF50" stroke-width="2" d="M155,215 C155,260 155,350 390,440"></path>
         
-        <!-- Note Box -->
-        <rect fill="#1A237E" opacity="0.7" x="150" y="480" width="500" height="90" rx="8"></rect>
-        <text font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#FFFFFF" x="170" y="510">Note: I2C Connection</text>
-        <text font-family="Arial, sans-serif" font-size="14" fill="#E0E0E0" x="170" y="535">• OLED display communicates with the Pi via I2C protocol</text>
-        <text font-family="Arial, sans-serif" font-size="14" fill="#E0E0E0" x="170" y="555">• Standard I2C address for SSD1306 is 0x3C (hexadecimal)</text>
+        <!-- Wiring for Orange Pi -->
+        <!-- VCC wire -->
+        <path id="orangepi-vcc-wire" stroke="#FF5252" stroke-width="2" stroke-dasharray="5,5" d="M535,215 C535,290 535,350 330,440"></path>
+        <!-- GND wire -->
+        <path id="orangepi-gnd-wire" stroke="#9E9E9E" stroke-width="2" stroke-dasharray="5,5" d="M595,215 C595,280 595,350 350,440"></path>
+        <!-- SCL wire -->
+        <path id="orangepi-scl-wire" stroke="#FFC107" stroke-width="2" stroke-dasharray="5,5" d="M575,215 C575,270 575,350 370,440"></path>
+        <!-- SDA wire -->
+        <path id="orangepi-sda-wire" stroke="#4CAF50" stroke-width="2" stroke-dasharray="5,5" d="M555,215 C555,260 555,350 390,440"></path>
         
-        <!-- Sample Display on OLED -->
-        <rect fill="#FFFFFF" x="520" y="190" width="120" height="40" rx="0"></rect>
-        <text font-family="Courier New, monospace" font-size="10" fill="#000000" x="530" y="210">Hello, World!</text>
-        <text font-family="Courier New, monospace" font-size="10" fill="#000000" x="530" y="225">Orange Pi Zero 2W</text>
+        <!-- Legend -->
+        <rect id="legend-box" fill="#FFFFFF" stroke="#CCCCCC" stroke-width="1" x="600" y="350" width="150" height="120" rx="5"></rect>
+        <text font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#333333" x="620" y="370">Wire Legend</text>
+        
+        <rect id="legend-vcc" fill="#FF5252" x="620" y="385" width="20" height="10" rx="2"></rect>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#333333" x="650" y="393">VCC (3.3V)</text>
+        
+        <rect id="legend-gnd" fill="#9E9E9E" x="620" y="405" width="20" height="10" rx="2"></rect>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#333333" x="650" y="413">GND</text>
+        
+        <rect id="legend-scl" fill="#FFC107" x="620" y="425" width="20" height="10" rx="2"></rect>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#333333" x="650" y="433">SCL (Clock)</text>
+        
+        <rect id="legend-sda" fill="#4CAF50" x="620" y="445" width="20" height="10" rx="2"></rect>
+        <text font-family="Arial, sans-serif" font-size="10" fill="#333333" x="650" y="453">SDA (Data)</text>
+        
+        <!-- Connection Type -->
+        <line x1="620" y1="120" x2="730" y2="120" stroke="#000000" stroke-width="2"></line>
+        <text font-family="Arial, sans-serif" font-size="12" fill="#333333" x="735" y="124">Raspberry Pi</text>
+        
+        <line x1="620" y1="140" x2="730" y2="140" stroke="#000000" stroke-width="2" stroke-dasharray="5,5"></line>
+        <text font-family="Arial, sans-serif" font-size="12" fill="#333333" x="735" y="144">Orange Pi</text>
+        
+        <!-- Additional Notes -->
+        <text font-family="Arial, sans-serif" font-size="12" fill="#666666" x="400" y="490" text-anchor="middle">Note: Connect only one board at a time. The dashed lines represent Orange Pi connections.</text>
     </g>
 </svg>
