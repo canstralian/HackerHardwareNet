@@ -16,7 +16,11 @@ import {
   userCourses, type UserCourse, type InsertUserCourse,
   merchandise, type Merchandise, type InsertMerchandise,
   orders, type Order, type InsertOrder,
-  orderItems, type OrderItem, type InsertOrderItem
+  orderItems, type OrderItem, type InsertOrderItem,
+  paymentMethods, type PaymentMethod, type InsertPaymentMethod,
+  payments, type Payment, type InsertPayment,
+  subscriptions, type Subscription, type InsertSubscription,
+  emailNotifications, type EmailNotification, type InsertEmailNotification
 } from "@shared/schema";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { eq } from "drizzle-orm";

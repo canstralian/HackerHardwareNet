@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, jsonb, timestamp, decimal } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, jsonb, timestamp, decimal, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -461,3 +461,132 @@ export type OrderItem = typeof orderItems.$inferSelect;
 
 export type InsertTutorialProgress = z.infer<typeof insertTutorialProgressSchema>;
 export type TutorialProgress = typeof tutorialProgress.$inferSelect;
+
+// Payment methods model
+export const paymentMethods = pgTable("payment_methods", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  type: text("type").notNull(), // credit_card, paypal, etc.
+  provider: text("provider"), // visa, mastercard, amex, etc.
+  accountNumber: varchar("account_number", { length: 255 }), // Last 4 digits or tokenized version
+  expiryDate: varchar("expiry_date", { length: 10 }),
+  isDefault: boolean("is_default").default(false),
+  billingAddress: jsonb("billing_address").$type<Record<string, string>>(),
+  metadata: jsonb("metadata").$type<Record<string, any>>(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Payments model
+export const payments = pgTable("payments", {
+  id: serial("id").primaryKey(),
+  orderId: integer("order_id").references(() => orders.id).notNull(),
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
+  currency: varchar("currency", { length: 3 }).notNull().default("USD"),
+  status: text("status").notNull(), // pending, completed, failed, refunded
+  paymentMethodId: integer("payment_method_id").references(() => paymentMethods.id),
+  provider: text("provider").notNull(), // stripe, paypal, etc.
+  transactionId: text("transaction_id"), // External payment provider transaction ID
+  receiptUrl: text("receipt_url"),
+  errorMessage: text("error_message"),
+  metadata: jsonb("metadata").$type<Record<string, any>>(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Subscriptions model
+export const subscriptions = pgTable("subscriptions", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  planId: integer("plan_id"), // References a plans table if you have one
+  status: text("status").notNull(), // active, cancelled, suspended, etc.
+  currentPeriodStart: timestamp("current_period_start").notNull(),
+  currentPeriodEnd: timestamp("current_period_end").notNull(),
+  cancelAtPeriodEnd: boolean("cancel_at_period_end").default(false),
+  paymentMethodId: integer("payment_method_id").references(() => paymentMethods.id),
+  externalId: text("external_id"), // External subscription ID from provider
+  metadata: jsonb("metadata").$type<Record<string, any>>(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Email Notifications model
+export const emailNotifications = pgTable("email_notifications", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  type: text("type").notNull(), // order_confirmation, receipt, shipping_update, etc.
+  relatedId: integer("related_id"), // Could be order ID, payment ID, etc.
+  relatedType: text("related_type"), // orders, payments, etc.
+  status: text("status").notNull(), // queued, sent, failed, etc.
+  recipientEmail: text("recipient_email").notNull(),
+  subject: text("subject").notNull(),
+  content: text("content").notNull(),
+  sentAt: timestamp("sent_at"),
+  errorMessage: text("error_message"),
+  metadata: jsonb("metadata").$type<Record<string, any>>(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Insert schemas for payment related tables
+export const insertPaymentMethodSchema = createInsertSchema(paymentMethods).pick({
+  userId: true,
+  type: true,
+  provider: true,
+  accountNumber: true,
+  expiryDate: true,
+  isDefault: true,
+  billingAddress: true,
+  metadata: true,
+});
+
+export const insertPaymentSchema = createInsertSchema(payments).pick({
+  orderId: true,
+  amount: true,
+  currency: true,
+  status: true,
+  paymentMethodId: true,
+  provider: true,
+  transactionId: true,
+  receiptUrl: true,
+  errorMessage: true,
+  metadata: true,
+});
+
+export const insertSubscriptionSchema = createInsertSchema(subscriptions).pick({
+  userId: true,
+  planId: true,
+  status: true,
+  currentPeriodStart: true,
+  currentPeriodEnd: true,
+  cancelAtPeriodEnd: true,
+  paymentMethodId: true,
+  externalId: true,
+  metadata: true,
+});
+
+export const insertEmailNotificationSchema = createInsertSchema(emailNotifications).pick({
+  userId: true,
+  type: true,
+  relatedId: true,
+  relatedType: true,
+  status: true,
+  recipientEmail: true,
+  subject: true,
+  content: true,
+  sentAt: true,
+  errorMessage: true,
+  metadata: true,
+});
+
+// Types for payment related models
+export type InsertPaymentMethod = z.infer<typeof insertPaymentMethodSchema>;
+export type PaymentMethod = typeof paymentMethods.$inferSelect;
+
+export type InsertPayment = z.infer<typeof insertPaymentSchema>;
+export type Payment = typeof payments.$inferSelect;
+
+export type InsertSubscription = z.infer<typeof insertSubscriptionSchema>;
+export type Subscription = typeof subscriptions.$inferSelect;
+
+export type InsertEmailNotification = z.infer<typeof insertEmailNotificationSchema>;
+export type EmailNotification = typeof emailNotifications.$inferSelect;
