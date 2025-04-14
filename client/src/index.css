@@ -116,6 +116,28 @@
     transition: all 0.2s ease;
   }
 
+  @media (max-width: 640px) {
+    .container {
+      padding: 1rem;
+    }
+
+    .nav-link {
+      padding: 0.75rem 0;
+    }
+
+    /* Ensure buttons are not too small */
+    button {
+      padding: 0.75rem;
+      font-size: 0.875rem;
+    }
+
+    .hero-section {
+      text-align: center;
+    }
+
+    /* Adjust other necessary elements as needed */
+  }
+
   .nav-link:hover {
     background-color: rgba(0, 255, 0, 0.1);
     border-left-color: hsl(120 100% 50%) !important;
