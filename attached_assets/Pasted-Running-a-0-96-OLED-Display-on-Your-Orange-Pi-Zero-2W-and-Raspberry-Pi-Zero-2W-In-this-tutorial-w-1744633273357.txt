@@ -1,0 +1,179 @@
+Running a 0.96″ OLED Display on Your Orange Pi Zero 2W and Raspberry Pi Zero 2W
+
+In this tutorial, we’ll show you how to connect and run a 4‑pin 0.96″ OLED (typically an SSD1306/SH1106 module) on two popular single‑board computers: the Orange Pi Zero 2W and the Raspberry Pi Zero 2W. Whether you’re hacking together a custom IoT display or integrating status information into your security projects, this guide provides step‑by‑step instructions for wiring, configuring the software, and writing your first “Hello World” display program.
+
+Overview
+   •   What You’ll Learn:
+      •   How to wire the 4‑pin OLED display to the SBC (Single Board Computer)
+      •   How to enable and test I²C communication on both boards
+      •   Installing Python libraries and running sample code that displays text and graphics
+      •   Tips for troubleshooting common issues
+   •   Who This is For:
+Hackers, makers, and tinkerers working with low‑cost SBCs who want to add a compact OLED interface to monitor system status or display messages.
+
+Required Components & Tools
+   •   Hardware:
+      •   0.96″ OLED display (4‑pin; VCC, GND, SDA, SCL) based on the SSD1306 (or compatible SH1106) driver
+      •   Orange Pi Zero 2W board
+      •   Raspberry Pi Zero 2W board
+      •   Female-to‑male jumper wires or DuPont cables (four per board)
+      •   Breadboard (optional)
+      •   Micro USB power supply
+      •   (Optional) Case
+   •   Software:
+      •   Linux‑based development system
+      •   Terminal access via SSH or serial
+      •   Python 3
+      •   Required Python libraries:
+         •   luma.oled or Adafruit CircuitPython SSD1306
+   •   Tools:
+      •   Computer
+      •   Terminal/SSH client
+
+Step 1: Wiring the OLED Display
+
+Both boards use the I²C interface. The 4-pin OLED connector maps as follows:
+   •   VCC: 3.3V
+   •   GND: Ground
+   •   SDA: I²C data
+   •   SCL: I²C clock
+
+Wiring Diagram
+   •   OLED VCC → 3.3V pin on the board
+   •   OLED GND → Ground (GND)
+   •   OLED SDA → I²C SDA pin
+   •   OLED SCL → I²C SCL pin
+
+Check your board’s pinout diagram for exact pin numbers.
+
+Step 2: Enabling I²C on Your Board
+
+Raspberry Pi Zero 2W:
+
+sudo raspi-config
+
+Enable I²C under Interfacing Options. Reboot:
+
+sudo reboot
+
+Install tools:
+
+sudo apt-get install i2c-tools
+sudo i2cdetect -y 1
+
+Look for address (commonly 0x3C).
+
+Orange Pi Zero 2W:
+
+Install tools:
+
+sudo apt-get update
+sudo apt-get install i2c-tools python3-smbus
+
+Check devices:
+
+sudo i2cdetect -y 0
+
+Adjust bus number if needed.
+
+Step 3: Installing and Testing the Software
+
+Option A: luma.oled Library
+
+Install:
+
+sudo apt-get install python3-pip python3-dev python3-pil
+sudo pip3 install luma.oled
+
+Create oled_test.py:
+
+from luma.core.interface.serial import i2c
+from luma.oled.device import ssd1306
+from luma.core.render import canvas
+from PIL import ImageFont
+import time
+
+WIDTH = 128
+HEIGHT = 64
+
+serial = i2c(port=1, address=0x3C)
+device = ssd1306(serial)
+
+while True:
+    with canvas(device) as draw:
+        font = ImageFont.load_default()
+        text = "Hello World!"
+        text_width, text_height = font.getsize(text)
+        draw.text(((WIDTH - text_width) // 2, (HEIGHT - text_height) // 2), text, font=font, fill=255)
+    time.sleep(1)
+
+Run:
+
+python3 oled_test.py
+
+Option B: Adafruit CircuitPython SSD1306
+
+Install:
+
+sudo pip3 install adafruit-blinka adafruit-circuitpython-ssd1306
+
+Create oled_circuitpython.py:
+
+import board
+import time
+from PIL import Image, ImageDraw, ImageFont
+import adafruit_ssd1306
+
+WIDTH = 128
+HEIGHT = 64
+
+i2c = board.I2C()
+oled = adafruit_ssd1306.SSD1306_I2C(WIDTH, HEIGHT, i2c, addr=0x3C)
+
+oled.fill(0)
+oled.show()
+
+image = Image.new("1", (WIDTH, HEIGHT))
+draw = ImageDraw.Draw(image)
+
+draw.rectangle((0, 0, WIDTH, HEIGHT), outline=255, fill=255)
+BORDER = 5
+draw.rectangle((BORDER, BORDER, WIDTH - BORDER - 1, HEIGHT - BORDER - 1), outline=0, fill=0)
+
+font = ImageFont.load_default()
+text = "Hello World!"
+text_width, text_height = draw.textsize(text, font=font)
+draw.text(((WIDTH - text_width) // 2, (HEIGHT - text_height) // 2), text, font=font, fill=255)
+
+oled.image(image)
+oled.show()
+
+while True:
+    time.sleep(1)
+
+Run:
+
+python3 oled_circuitpython.py
+
+Step 4: Testing and Troubleshooting
+   •   Check I²C Communication:
+
+i2cdetect -y 1
+
+or
+
+i2cdetect -y 0
+
+
+   •   Issues:
+      •   Blank screen: verify wiring
+      •   No I²C address: confirm bus number
+      •   Import errors: check Python version and libraries
+      •   Display timeout: keep a loop or delay active
+
+Final Thoughts
+
+You now have your OLED showing “Hello World!” on both boards. Possible next steps:
+   •   Displaying graphics and sensor data
+   •   Status monitoring applications
+   •   Custom IoT dashboard displays
