@@ -1,126 +1,151 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="700" height="500" viewBox="0 0 700 500" xmlns="http://www.w3.org/2000/svg">
-  <rect width="700" height="500" fill="#1e1e1e"/>
+<svg width="800" height="500" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="500" fill="#1e1e1e"/>
   
-  <!-- Code Window Background -->
-  <rect x="50" y="50" width="600" height="400" rx="5" fill="#252526" stroke="#3c3c3c" stroke-width="2"/>
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial" font-size="24" fill="#fff" text-anchor="middle" font-weight="bold">Python Code for SSD1306 OLED Display</text>
+  <text x="400" y="70" font-family="Arial" font-size="16" fill="#aaa" text-anchor="middle">Sample Scripts for Raspberry Pi Zero &amp; Orange Pi Zero</text>
   
-  <!-- Window Header -->
-  <rect x="50" y="50" width="600" height="30" rx="5" fill="#3c3c3c" stroke="#505050" stroke-width="1"/>
-  <text x="70" y="70" font-family="monospace" font-size="14" fill="#fff">oled_display.py - Python Code for SSD1306 OLED Display</text>
-  
-  <!-- Window Controls -->
-  <circle cx="75" cy="65" r="6" fill="#ff5f56" stroke="#e0443e" stroke-width="1"/>
-  <circle cx="95" cy="65" r="6" fill="#ffbd2e" stroke="#dea123" stroke-width="1"/>
-  <circle cx="115" cy="65" r="6" fill="#27c93f" stroke="#1aab29" stroke-width="1"/>
-  
-  <!-- Code Content -->
-  <g transform="translate(70, 100)" font-family="monospace" font-size="12">
+  <!-- Code Editor Window -->
+  <g transform="translate(50, 100)">
+    <rect width="700" height="330" rx="5" fill="#111" stroke="#333" stroke-width="2"/>
+    
+    <!-- Editor Header -->
+    <rect width="700" height="25" rx="5" fill="#333" stroke="#444" stroke-width="1"/>
+    <circle cx="15" cy="12.5" r="6" fill="#ff5f56" stroke="#e0443e" stroke-width="1"/>
+    <circle cx="35" cy="12.5" r="6" fill="#ffbd2e" stroke="#dea123" stroke-width="1"/>
+    <circle cx="55" cy="12.5" r="6" fill="#27c93f" stroke="#1aab29" stroke-width="1"/>
+    <text x="350" y="17.5" font-family="Arial" font-size="12" fill="#ccc" text-anchor="middle">oled_demo.py</text>
+    
     <!-- Line Numbers -->
-    <g fill="#6a737d">
-      <text y="15">1</text>
-      <text y="35">2</text>
-      <text y="55">3</text>
-      <text y="75">4</text>
-      <text y="95">5</text>
-      <text y="115">6</text>
-      <text y="135">7</text>
-      <text y="155">8</text>
-      <text y="175">9</text>
-      <text y="195">10</text>
-      <text y="215">11</text>
-      <text y="235">12</text>
-      <text y="255">13</text>
-      <text y="275">14</text>
-      <text y="295">15</text>
-      <text y="315">16</text>
-      <text y="335">17</text>
-      <text y="355">18</text>
+    <g transform="translate(10, 45)" font-family="monospace" font-size="12" fill="#555">
+      <text y="0">1</text>
+      <text y="20">2</text>
+      <text y="40">3</text>
+      <text y="60">4</text>
+      <text y="80">5</text>
+      <text y="100">6</text>
+      <text y="120">7</text>
+      <text y="140">8</text>
+      <text y="160">9</text>
+      <text y="180">10</text>
+      <text y="200">11</text>
+      <text y="220">12</text>
+      <text y="240">13</text>
+      <text y="260">14</text>
+      <text y="280">15</text>
     </g>
     
-    <!-- Code Syntax Highlighting -->
-    <g transform="translate(25, 0)">
-      <!-- Import Section -->
-      <text fill="#cb4b16" y="15">import</text>
-      <text fill="#f8f8f2" x="56" y="15">board</text>
-      <text fill="#cb4b16" x="0" y="35">import</text>
-      <text fill="#f8f8f2" x="56" y="35">busio</text>
-      <text fill="#cb4b16" x="0" y="55">import</text>
-      <text fill="#f8f8f2" x="56" y="55">adafruit_ssd1306</text>
-      <text fill="#cb4b16" x="0" y="75">from</text>
-      <text fill="#f8f8f2" x="40" y="75">PIL</text>
-      <text fill="#cb4b16" x="65" y="75">import</text>
-      <text fill="#f8f8f2" x="110" y="75">Image, ImageDraw, ImageFont</text>
+    <!-- Code Content -->
+    <g transform="translate(30, 45)" font-family="monospace" font-size="12">
+      <!-- Import section -->
+      <text fill="#c586c0">import</text>
+      <text x="42" fill="#9cdcfe">time</text>
+      <text x="60" fill="#dcdcaa">,</text>
+      <text x="68" fill="#dcdcaa">board</text>
+      <text x="100" fill="#dcdcaa">,</text>
+      <text x="108" fill="#dcdcaa">busio</text>
       
-      <!-- Comment -->
-      <text fill="#6a737d" x="0" y="95"># Initialize I2C bus</text>
-      <text fill="#f8f8f2" x="0" y="115">i2c = busio.I2C(board.SCL, board.SDA)</text>
+      <text y="20" fill="#c586c0">import</text>
+      <text x="42" y="20" fill="#9cdcfe">adafruit_ssd1306</text>
       
-      <!-- Comment -->
-      <text fill="#6a737d" x="0" y="135"># Create the SSD1306 OLED display instance</text>
-      <text fill="#f8f8f2" x="0" y="155">oled = adafruit_ssd1306.SSD1306_I2C(128, 64, i2c, addr=</text>
-      <text fill="#bd93f9" x="360" y="155">0x3C</text>
-      <text fill="#f8f8f2" x="390" y="155">)</text>
+      <text y="40" fill="#c586c0">from</text>
+      <text x="36" y="40" fill="#9cdcfe">PIL</text>
+      <text x="56" y="40" fill="#c586c0">import</text>
+      <text x="98" y="40" fill="#9cdcfe">Image</text>
+      <text x="135" y="40" fill="#dcdcaa">,</text>
+      <text x="143" y="40" fill="#9cdcfe">ImageDraw</text>
+      <text x="208" y="40" fill="#dcdcaa">,</text>
+      <text x="216" y="40" fill="#9cdcfe">ImageFont</text>
       
-      <!-- Comment -->
-      <text fill="#6a737d" x="0" y="175"># Clear display</text>
-      <text fill="#f8f8f2" x="0" y="195">oled.fill(</text>
-      <text fill="#bd93f9" x="70" y="195">0</text>
-      <text fill="#f8f8f2" x="80" y="195">)</text>
-      <text fill="#f8f8f2" x="0" y="215">oled.show()</text>
+      <!-- Code block separation -->
+      <text y="60" fill="#6a9955"># Create the I2C interface</text>
+      <text y="80" fill="#9cdcfe">i2c</text>
+      <text x="28" y="80" fill="#d4d4d4">=</text>
+      <text x="36" y="80" fill="#dcdcaa">busio</text>
+      <text x="66" y="80" fill="#d4d4d4">.</text>
+      <text x="74" y="80" fill="#dcdcaa">I2C</text>
+      <text x="96" y="80" fill="#d4d4d4">(</text>
+      <text x="100" y="80" fill="#dcdcaa">board</text>
+      <text x="132" y="80" fill="#d4d4d4">.</text>
+      <text x="140" y="80" fill="#dcdcaa">SCL</text>
+      <text x="162" y="80" fill="#dcdcaa">,</text>
+      <text x="170" y="80" fill="#dcdcaa">board</text>
+      <text x="200" y="80" fill="#d4d4d4">.</text>
+      <text x="208" y="80" fill="#dcdcaa">SDA</text>
+      <text x="230" y="80" fill="#d4d4d4">)</text>
       
-      <!-- Comment -->
-      <text fill="#6a737d" x="0" y="235"># Create blank image for drawing</text>
-      <text fill="#f8f8f2" x="0" y="255">image = Image.new(</text>
-      <text fill="#50fa7b" x="120" y="255">'1'</text>
-      <text fill="#f8f8f2" x="130" y="255">, (128, 64))</text>
-      <text fill="#f8f8f2" x="0" y="275">draw = ImageDraw.Draw(image)</text>
+      <!-- OLED display setup -->
+      <text y="100" fill="#6a9955"># Define display dimensions (128x64 pixels)</text>
+      <text y="120" fill="#9cdcfe">WIDTH</text>
+      <text x="50" y="120" fill="#d4d4d4">=</text>
+      <text x="58" y="120" fill="#b5cea8">128</text>
       
-      <!-- Comment -->
-      <text fill="#6a737d" x="0" y="295"># Draw some text</text>
-      <text fill="#f8f8f2" x="0" y="315">draw.text((0, 0), </text>
-      <text fill="#50fa7b" x="100" y="315">'Hello Pi Zero!'</text>
-      <text fill="#f8f8f2" x="180" y="315">, fill=</text>
-      <text fill="#bd93f9" x="230" y="315">1</text>
-      <text fill="#f8f8f2" x="240" y="315">)</text>
+      <text y="140" fill="#9cdcfe">HEIGHT</text>
+      <text x="56" y="140" fill="#d4d4d4">=</text>
+      <text x="64" y="140" fill="#b5cea8">64</text>
       
-      <!-- Comment -->
-      <text fill="#6a737d" x="0" y="335"># Display image</text>
-      <text fill="#f8f8f2" x="0" y="355">oled.image(image)</text>
-      <text fill="#f8f8f2" x="0" y="375">oled.show()</text>
+      <text y="160" fill="#6a9955"># Create OLED display object (I2C address is typically 0x3C)</text>
+      <text y="180" fill="#9cdcfe">display</text>
+      <text x="56" y="180" fill="#d4d4d4">=</text>
+      <text x="64" y="180" fill="#dcdcaa">adafruit_ssd1306</text>
+      <text x="172" y="180" fill="#d4d4d4">.</text>
+      <text x="180" y="180" fill="#dcdcaa">SSD1306_I2C</text>
+      <text x="268" y="180" fill="#d4d4d4">(</text>
+      <text x="272" y="180" fill="#9cdcfe">WIDTH</text>
+      <text x="307" y="180" fill="#dcdcaa">,</text>
+      <text x="315" y="180" fill="#9cdcfe">HEIGHT</text>
+      <text x="357" y="180" fill="#dcdcaa">,</text>
+      <text x="365" y="180" fill="#9cdcfe">i2c</text>
+      <text x="387" y="180" fill="#dcdcaa">,</text>
+      <text x="395" y="180" fill="#9cdcfe">addr</text>
+      <text x="423" y="180" fill="#d4d4d4">=</text>
+      <text x="431" y="180" fill="#b5cea8">0x3C</text>
+      <text x="458" y="180" fill="#d4d4d4">)</text>
+      
+      <!-- Create image and display text -->
+      <text y="200" fill="#6a9955"># Clear the display</text>
+      <text y="220" fill="#9cdcfe">display</text>
+      <text x="56" y="220" fill="#d4d4d4">.</text>
+      <text x="64" y="220" fill="#dcdcaa">fill</text>
+      <text x="88" y="220" fill="#d4d4d4">(</text>
+      <text x="92" y="220" fill="#b5cea8">0</text>
+      <text x="99" y="220" fill="#d4d4d4">)</text>
+      <text x="107" y="220" fill="#6a9955"># Black background</text>
+      
+      <text y="240" fill="#9cdcfe">display</text>
+      <text x="56" y="240" fill="#d4d4d4">.</text>
+      <text x="64" y="240" fill="#dcdcaa">text</text>
+      <text x="88" y="240" fill="#d4d4d4">(</text>
+      <text x="92" y="240" fill="#ce9178">"Hello, Pi Zero!"</text>
+      <text x="207" y="240" fill="#dcdcaa">,</text>
+      <text x="215" y="240" fill="#b5cea8">0</text>
+      <text x="222" y="240" fill="#dcdcaa">,</text>
+      <text x="230" y="240" fill="#b5cea8">0</text>
+      <text x="237" y="240" fill="#dcdcaa">,</text>
+      <text x="245" y="240" fill="#b5cea8">1</text>
+      <text x="253" y="240" fill="#d4d4d4">)</text>
+      <text x="260" y="240" fill="#6a9955"># Write at (0,0) in white</text>
+      
+      <text y="260" fill="#6a9955"># Show the display</text>
+      <text y="280" fill="#9cdcfe">display</text>
+      <text x="56" y="280" fill="#d4d4d4">.</text>
+      <text x="64" y="280" fill="#dcdcaa">show</text>
+      <text x="88" y="280" fill="#d4d4d4">()</text>
     </g>
   </g>
   
-  <!-- Highlight Box -->
-  <rect x="95" y="252" width="250" height="20" fill="#264f78" opacity="0.3"/>
-  <rect x="95" y="312" width="250" height="20" fill="#264f78" opacity="0.3"/>
-  
-  <!-- Note Box -->
-  <g transform="translate(500, 130)">
-    <rect width="130" height="100" rx="5" fill="#2d2d2d" stroke="#3c3c3c" stroke-width="1"/>
-    <text x="10" y="20" font-family="Arial" font-size="12" fill="#f8f8f2" font-weight="bold">Notes:</text>
-    <text x="10" y="40" font-family="Arial" font-size="11" fill="#f8f8f2">• Default I2C address</text>
-    <text x="15" y="60" font-family="Arial" font-size="11" fill="#f8f8f2">is 0x3C (60)</text>
-    <text x="10" y="80" font-family="Arial" font-size="11" fill="#f8f8f2">• Use '1' mode for</text>
-    <text x="15" y="95" font-family="Arial" font-size="11" fill="#f8f8f2">monochrome display</text>
+  <!-- Alternative Script for Without Adafruit Libraries -->
+  <g transform="translate(400, 450)">
+    <rect width="350" height="35" rx="3" fill="#252526" stroke="#3c3c3c" stroke-width="1"/>
+    <text x="10" y="20" font-family="Arial" font-size="12" fill="#fff">For direct Python SMBus usage:</text>
+    <text x="190" y="20" font-family="monospace" font-size="11" fill="#9cdcfe">from smbus import SMBus</text>
   </g>
   
-  <!-- Annotation Lines -->
-  <g stroke="#f8f8f2" stroke-width="1" fill="none" stroke-dasharray="2,2">
-    <path d="M 455 155 L 490 140"/>
-    <path d="M 345 255 L 490 170"/>
-  </g>
-  
-  <!-- Output Preview -->
-  <g transform="translate(500, 260)">
-    <rect width="130" height="80" rx="5" fill="#000" stroke="#666" stroke-width="1"/>
-    <text x="10" y="30" font-family="monospace" font-size="14" fill="#fff">Hello Pi Zero!</text>
-    <text x="20" y="70" font-family="Arial" font-size="10" fill="#666">Output Preview</text>
-  </g>
-  
-  <!-- Arrow -->
-  <g transform="translate(475, 290)">
-    <path d="M 0,0 L 20,0" stroke="#666" stroke-width="1"/>
-    <path d="M 15,-5 L 20,0 L 15,5" fill="none" stroke="#666" stroke-width="1"/>
+  <!-- Key Features -->
+  <g transform="translate(50, 450)">
+    <rect width="310" height="35" rx="3" fill="#252526" stroke="#3c3c3c" stroke-width="1"/>
+    <text x="10" y="20" font-family="Arial" font-size="12" fill="#fff">Required libraries:</text>
+    <text x="130" y="20" font-family="monospace" font-size="11" fill="#ce9178">pip install adafruit-circuitpython-ssd1306 pillow</text>
   </g>
 </svg>

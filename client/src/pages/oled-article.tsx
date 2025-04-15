@@ -6,10 +6,10 @@ import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Clock, Calendar, User } from "lucide-react";
 
 // Import SVG assets
-import oledDisplaySvg from "@assets/oled_display.svg";
-import oledWiringDiagramSvg from "@assets/oled_wiring_diagram.svg";
-import i2cDetectionSvg from "@assets/i2c_detection.svg";
-import oledCodeSampleSvg from "@assets/oled_code_sample.svg";
+import oledDisplaySvg from "../assets/oled_display.svg";
+import oledWiringDiagramSvg from "../assets/oled_wiring_diagram.svg";
+import i2cDetectionSvg from "../assets/i2c_detection.svg";
+import oledCodeSampleSvg from "../assets/oled_code_sample.svg";
 
 const OledArticlePage: React.FC = () => {
   return (
