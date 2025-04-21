@@ -16,6 +16,8 @@ import Register from "@/pages/register";
 import Dashboard from "@/pages/dashboard";
 import Checkout from "@/pages/checkout";
 import OLEDArticlePage from "@/pages/oled-article";
+import ArticlesPage from "@/pages/articles";
+import ArticleDetail from "@/pages/article-detail";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 
