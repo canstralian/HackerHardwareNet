@@ -94,7 +94,7 @@ const ArticleDetail = () => {
                 <User size={14} />
                 <span>By {article.authorId ? `Author #${article.authorId}` : 'Anonymous'}</span>
               </div>
-              {article.views > 0 && (
+              {article.views && article.views > 0 && (
                 <div className="flex items-center gap-1">
                   <span>{article.views} views</span>
                 </div>

@@ -32,7 +32,7 @@ const ArticlesPage = () => {
 
   // Get unique categories from articles
   const categories = articles ? 
-    ["all", ...new Set(articles.map(article => article.category))] : 
+    ["all", ...Array.from(new Set(articles.map(article => article.category)))] : 
     ["all"];
 
   // Navigate to article detail

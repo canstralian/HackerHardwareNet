@@ -55,6 +55,9 @@ const Header = () => {
           <Link href="/learning-paths" className={`${location === '/learning-paths' ? 'text-[#00FF00]' : 'text-white'} hover:text-[#00FF00] transition-colors font-medium`}>
             Learning Paths
           </Link>
+          <Link href="/articles" className={`${location === '/articles' ? 'text-[#00FF00]' : 'text-white'} hover:text-[#00FF00] transition-colors font-medium`}>
+            Articles
+          </Link>
           <Link href="/hardware-library" className={`${location === '/hardware-library' ? 'text-[#00FF00]' : 'text-white'} hover:text-[#00FF00] transition-colors font-medium`}>
             Hardware Library
           </Link>
@@ -119,6 +122,9 @@ const Header = () => {
             </Link>
             <Link href="/learning-paths" className={`${location === '/learning-paths' ? 'text-[#00FF00]' : 'text-white'} py-2 border-b border-[#1A1A1A]/50`}>
               Learning Paths
+            </Link>
+            <Link href="/articles" className={`${location === '/articles' ? 'text-[#00FF00]' : 'text-white'} py-2 border-b border-[#1A1A1A]/50`}>
+              Articles
             </Link>
             <Link href="/hardware-library" className={`${location === '/hardware-library' ? 'text-[#00FF00]' : 'text-white'} py-2 border-b border-[#1A1A1A]/50`}>
               Hardware Library

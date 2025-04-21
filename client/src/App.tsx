@@ -40,6 +40,8 @@ function Router() {
           <Route path="/compatibility-checker" component={CompatibilityChecker} />
           <Route path="/tutorial/:id" component={Tutorial} />
           <Route path="/oled-article" component={OLEDArticlePage} />
+          <Route path="/articles" component={ArticlesPage} />
+          <Route path="/article/:id" component={ArticleDetail} />
           <Route component={NotFound} />
         </Switch>
       </div>
