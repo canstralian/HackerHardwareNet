@@ -94,11 +94,9 @@ const ArticleDetail = () => {
                 <User size={14} />
                 <span>By {article.authorId ? `Author #${article.authorId}` : 'Anonymous'}</span>
               </div>
-              {article.views && article.views > 0 && (
-                <div className="flex items-center gap-1">
-                  <span>{article.views} views</span>
-                </div>
-              )}
+              <div className="flex items-center gap-1">
+                <span>{article.views || 0} views</span>
+              </div>
             </div>
             <div className="flex flex-wrap gap-2 mb-6">
               {article.tags.map((tag, index) => (
@@ -121,19 +119,75 @@ const ArticleDetail = () => {
             {/* <div dangerouslySetInnerHTML={{ __html: article.content }} /> */}
           </div>
 
-          {/* Article sidebar - could contain e-learning product links */}
-          <div className="mb-12 p-6 border border-primary/20 rounded-lg bg-black/30">
-            <h3 className="text-xl font-bold mb-4">Want to dive deeper?</h3>
-            <p className="mb-4">
-              Check out our hands-on learning materials to build your practical skills in the topics covered by this article.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Button asChild>
-                <Link href="/learning-paths">Browse Courses</Link>
-              </Button>
-              <Button variant="outline" asChild>
-                <Link href="/hardware-library">Hardware Library</Link>
-              </Button>
+          {/* Related Products Section */}
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold mb-4">Hands-On Learning Resources</h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Course Card Example */}
+              <Card className="overflow-hidden border border-gray-800 hover:border-primary/50 transition-colors">
+                <div className="bg-gradient-to-r from-primary/20 to-primary/5 h-2"></div>
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-primary/20 p-2 rounded-full">
+                      <div className="w-8 h-8 flex items-center justify-center text-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+                        </svg>
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold">Wireless Security Course</h3>
+                      <p className="text-muted-foreground text-sm">4 modules • Beginner friendly</p>
+                    </div>
+                  </div>
+                  <p className="mb-4 text-sm">Learn how to secure wireless networks and detect vulnerabilities using practical exercises with Raspberry Pi.</p>
+                  <Button asChild className="w-full">
+                    <Link href="/learning-paths">Enroll Now</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+              
+              {/* Hardware Kit Card Example */}
+              <Card className="overflow-hidden border border-gray-800 hover:border-primary/50 transition-colors">
+                <div className="bg-gradient-to-r from-primary/20 to-primary/5 h-2"></div>
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-primary/20 p-2 rounded-full">
+                      <div className="w-8 h-8 flex items-center justify-center text-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M6 19v-3"></path><path d="M10 19v-3"></path><path d="M14 19v-3"></path><path d="M18 19v-3"></path>
+                          <path d="M8 11V9"></path><path d="M16 11V9"></path><path d="M12 11V9"></path><path d="M2 9v10h20V9"></path>
+                          <path d="M21 9V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3"></path>
+                        </svg>
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold">Hardware Hacking Kit</h3>
+                      <p className="text-muted-foreground text-sm">All-in-one kit • Includes tutorials</p>
+                    </div>
+                  </div>
+                  <p className="mb-4 text-sm">Get all the hardware components needed to follow along with our security tutorials, including Orange Pi Zero 2W.</p>
+                  <Button asChild variant="outline" className="w-full">
+                    <Link href="/hardware-library">Shop Now</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+            
+            {/* Browse More Section */}
+            <div className="mt-6 p-4 border border-primary/20 rounded-lg bg-black/30 flex justify-between items-center">
+              <div>
+                <h3 className="font-bold">Discover our complete catalog</h3>
+                <p className="text-sm text-muted-foreground">Courses, tools, and hardware kits for all skill levels</p>
+              </div>
+              <div className="flex gap-3">
+                <Button variant="outline" size="sm" asChild>
+                  <Link href="/learning-paths">Learning Paths</Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link href="/hardware-library">Browse Hardware</Link>
+                </Button>
+              </div>
             </div>
           </div>
 

@@ -42,19 +42,55 @@ const ArticlesPage = () => {
 
   return (
     <div className="container py-8">
+      {/* Cyberpunk-inspired header section */}
+      <div className="relative overflow-hidden rounded-lg mb-10 border border-[#00FF00]/30 bg-gradient-to-r from-black to-gray-900">
+        <div className="absolute inset-0 bg-black opacity-60"></div>
+        <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
+        
+        {/* Glowing border effect */}
+        <div className="absolute inset-0 border border-[#00FF00]/50 rounded-lg opacity-50"></div>
+        <div className="absolute -inset-0.5 bg-[#00FF00]/5 blur-md rounded-lg"></div>
+        
+        {/* Digital noise pattern (optional) */}
+        <div className="absolute inset-0 bg-noise-pattern opacity-5 mix-blend-overlay"></div>
+        
+        <div className="relative z-10 p-8 md:p-12">
+          <div className="max-w-3xl">
+            <div className="inline-block px-2 py-1 text-xs tracking-wider text-[#00FF00] border border-[#00FF00]/30 mb-4 bg-black/50 uppercase">
+              knowledge base
+            </div>
+            <h1 className="text-3xl md:text-5xl font-mono font-bold mb-4 text-white">
+              <span className="text-[#00FF00]">Articles</span> & Tutorials
+            </h1>
+            <p className="text-gray-300 md:text-lg mb-6 max-w-2xl">
+              Explore in-depth guides, technical breakdowns, and tutorials on cybersecurity, 
+              hardware hacking, and ethical exploration using single board computers.
+            </p>
+            
+            <div className="flex flex-wrap gap-4">
+              <Button asChild className="bg-[#00FF00] text-black hover:bg-[#00FF00]/90">
+                <Link href="/learning-paths">Explore Learning Paths</Link>
+              </Button>
+              <Button variant="outline" className="border-[#00FF00]/50 text-[#00FF00] hover:bg-[#00FF00]/10" asChild>
+                <Link href="#categories">Browse Categories</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
-          <h1 className="text-4xl font-bold mb-2">Articles & Tutorials</h1>
-          <p className="text-gray-400 max-w-2xl">
-            Explore in-depth articles, step-by-step guides, and tutorials on cybersecurity, 
-            hardware hacking, and ethical exploration using single board computers.
+          <h2 className="text-2xl font-bold mb-2">Latest Articles</h2>
+          <p className="text-gray-400">
+            Find the latest insights and tutorials from our cybersecurity experts
           </p>
         </div>
         <div className="relative w-full md:w-auto">
           <Input
             type="text"
             placeholder="Search articles..."
-            className="pl-10 w-full md:w-72"
+            className="pl-10 w-full md:w-72 border-[#00FF00]/30 focus:border-[#00FF00] focus:ring-[#00FF00]/20"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
