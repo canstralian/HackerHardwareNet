@@ -16,7 +16,7 @@ const ArticlesPage = () => {
   // Fetch all articles
   const { data: articles, isLoading } = useQuery<Article[]>({
     queryKey: ['/api/articles'],
-    onSuccess: (data) => {
+    onSuccess: (data: Article[]) => {
       console.log('Loaded articles:', data);
     },
   });

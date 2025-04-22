@@ -200,6 +200,7 @@ export const insertArticleSchema = createInsertSchema(articles).pick({
   category: true,
   imageUrl: true,
   authorId: true,
+  publishedAt: true,
   readTime: true,
   tags: true,
   relatedArticleIds: true,
