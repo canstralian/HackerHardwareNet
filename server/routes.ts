@@ -30,7 +30,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
 
   // Mount payment routes with authentication middleware
-  app.use('/api', isAuthenticated, paymentRoutes);
+  // Using a more specific path to avoid blocking all API routes
+  app.use('/api/payments', isAuthenticated, paymentRoutes);
 
   // Setup email processing
   // In a real application, this would be a scheduled job or separate worker
