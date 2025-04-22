@@ -1278,6 +1278,31 @@ private initializeDemoData() {
     };
     this.createUser(adminUser);
     
+    // Load sample articles from JSON file
+    try {
+      const fs = require('fs');
+      const path = require('path');
+      const articleDataPath = path.join(__dirname, 'data', 'sample-articles.json');
+      
+      if (fs.existsSync(articleDataPath)) {
+        const articlesData = JSON.parse(fs.readFileSync(articleDataPath, 'utf8'));
+        
+        // Add articles to the articles map
+        articlesData.forEach((article: Article) => {
+          this.articles.set(article.id, article);
+          // Update the current article ID to be greater than any existing ID
+          if (article.id >= this.currentArticleId) {
+            this.currentArticleId = article.id + 1;
+          }
+        });
+        console.log(`Loaded ${articlesData.length} sample articles`);
+      } else {
+        console.log('Sample articles file not found at:', articleDataPath);
+      }
+    } catch (error) {
+      console.error('Error loading sample articles:', error);
+    }
+    
     // Add some demo achievements
     this.createAchievement({
       name: "Getting Started",
