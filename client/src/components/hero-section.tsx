@@ -37,7 +37,7 @@ const TypewriterEffect = () => {
 
 const HeroSection = () => {
   return (
-    <section className="bg-[#1A1A1A] rounded-lg p-4 sm:p-6 lg:p-10 mb-6 sm:mb-10 border border-[#00FF00]/20 relative overflow-hidden">
+    <section className="relative bg-gradient-to-br from-[#1A1A1A] to-[#141414] rounded-lg p-4 sm:p-6 lg:p-10 mb-6 sm:mb-10 border border-[#00FF00]/20 overflow-hidden backdrop-blur-sm">
       <div className="absolute top-0 right-0 left-0 h-1 bg-gradient-to-r from-[#00FF00] via-[#00C8FF] to-[#FF3E3E]"></div>
       <div className="flex flex-col lg:flex-row lg:items-center">
         <div className="lg:w-2/3">

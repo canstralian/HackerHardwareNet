@@ -2,79 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --primary: #00FF00;
+  --secondary: #00C8FF;
+  --danger: #FF3E3E;
+  --background: #0D0D0D;
+  --card: #1A1A1A;
+  --text: #FFFFFF;
+  --text-secondary: #A0A0A0;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
 @layer base {
-  :root {
-    --background: 240 14% 5%;
-    --foreground: 0 0% 100%;
-    --card: 240 14% 10%;
-    --card-foreground: 0 0% 100%;
-    --popover: 240 14% 10%;
-    --popover-foreground: 0 0% 100%;
-    --primary: 120 100% 50%;
-    --primary-foreground: 240 14% 5%;
-    --secondary: 240 10% 10%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 240 10% 15%;
-    --muted-foreground: 240 5% 65%;
-    --accent: 240 10% 20%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 100% 62%;
-    --destructive-foreground: 240 14% 5%;
-    --border: 120 100% 20% / 30%;
-    --input: 240 10% 20%;
-    --ring: 120 100% 50%;
-    --chart-1: 120 100% 50%;
-    --chart-2: 197 100% 50%;
-    --chart-3: 0 100% 62%;
-    --chart-4: 320 100% 50%;
-    --chart-5: 60 100% 50%;
-    --sidebar-background: 240 14% 10%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 120 100% 50%;
-    --sidebar-primary-foreground: 240 14% 5%;
-    --sidebar-accent: 240 10% 20%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 120 100% 20% / 30%;
-    --sidebar-ring: 120 100% 50%;
-    --radius: 0.5rem;
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-mono font-bold;
   }
 
+  h1 { @apply text-3xl lg:text-4xl mb-6; }
+  h2 { @apply text-2xl lg:text-3xl mb-4; }
+  h3 { @apply text-xl lg:text-2xl mb-3; }
   * {
     @apply border-border;
   }
-
   body {
-    @apply bg-background text-foreground;
     font-family: 'IBM Plex Sans', sans-serif;
   }
-
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Space Mono', monospace;
     font-weight: 700;
   }
-
   code, pre {
     font-family: 'Fira Code', monospace;
   }
-
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
-
   ::-webkit-scrollbar-track {
     background: hsl(240 14% 5%);
   }
-
   ::-webkit-scrollbar-thumb {
     background: hsl(120 100% 50%);
     border-radius: 4px;
   }
-
   ::-webkit-scrollbar-thumb:hover {
     background: hsl(120 100% 40%);
   }
-
   @keyframes cursor-blink {
     0% { opacity: 0; }
     50% { opacity: 1; }
@@ -85,7 +63,6 @@
     animation: cursor-blink 1.2s infinite;
     color: hsl(120 100% 50%);
   }
-
   .code-block {
     background-color: hsl(240 14% 10%);
     border-left: 3px solid hsl(120 100% 50%);
@@ -93,7 +70,6 @@
     border-radius: 0.25rem;
     overflow-x: auto;
   }
-
   .terminal-header {
     background-color: hsl(240 14% 10%);
     border-top-left-radius: 0.5rem;
@@ -101,7 +77,6 @@
     padding: 0.5rem 1rem;
     border-bottom: 1px solid #333;
   }
-
   .terminal-body {
     background-color: hsl(240 14% 5%);
     border: 1px solid #333;
@@ -111,61 +86,65 @@
     padding: 1rem;
     font-family: 'Fira Code', monospace;
   }
-
   .nav-link {
     transition: all 0.2s ease;
   }
-
   @media (max-width: 640px) {
     .container {
       padding: 1rem;
     }
-
     .nav-link {
       padding: 0.75rem 0;
     }
-
-    /* Ensure buttons are not too small */
     button {
       padding: 0.75rem;
       font-size: 0.875rem;
     }
-
     .hero-section {
       text-align: center;
     }
-
-    /* Adjust other necessary elements as needed */
   }
-
   .nav-link:hover {
     background-color: rgba(0, 255, 0, 0.1);
     border-left-color: hsl(120 100% 50%) !important;
   }
-
   .card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     padding: 1rem;
     font-size: 1rem;
   }
-
   .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0, 255, 0, 0.1);
   }
-
   @media (max-width: 640px) {
     .card {
       padding: 0.5rem;
-      font-size: 0.875rem; /* Smaller font size for mobile */
+      font-size: 0.875rem;
     }
-
-    h1, h2, h3, h4, h5, h6 { /* Adjust headings for mobile */
+    h1, h2, h3, h4, h5, h6 {
       font-size: 1.25rem;
     }
-
     .nav-link {
       padding: 0.5rem 0;
     }
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-[#1A1A1A] rounded-lg p-6 border border-[#00FF00]/20 transition-all duration-300 hover:border-[#00FF00]/40;
+  }
+
+  .button-primary {
+    @apply bg-[#00FF00] text-[#0D0D0D] px-5 py-2 rounded-md font-bold hover:bg-[#00FF00]/90 transition-colors;
+  }
+
+  .button-secondary {
+    @apply border border-[#00FF00]/50 text-[#00FF00] px-5 py-2 rounded-md font-bold hover:bg-[#00FF00]/10 transition-colors;
+  }
+
+  .input {
+    @apply bg-[#262626] border border-[#404040] rounded-md px-4 py-2 text-white focus:border-[#00FF00] outline-none;
   }
 }

@@ -24,7 +24,7 @@ const LearningPathCard = ({
   color 
 }: LearningPathProps) => {
   return (
-    <div className="card bg-[#1A1A1A] rounded-lg overflow-hidden border border-[#00FF00]/20">
+    <div className="card group hover:scale-[1.02] cursor-pointer">
       <div className="h-1" style={{ backgroundColor: color }}></div>
       <div className="p-6">
         <div className="flex items-center mb-4">
