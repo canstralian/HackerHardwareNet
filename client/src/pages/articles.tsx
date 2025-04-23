@@ -27,9 +27,9 @@ const ArticlesPage = () => {
       article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       article.preview.toLowerCase().includes(searchQuery.toLowerCase()) ||
       article.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    
+
     const matchesCategory = activeTab === "all" || article.category === activeTab;
-    
+
     return matchesSearch && matchesCategory;
   });
 
@@ -49,14 +49,14 @@ const ArticlesPage = () => {
       <div className="relative overflow-hidden rounded-lg mb-10 border border-[#00FF00]/30 bg-gradient-to-r from-black to-gray-900">
         <div className="absolute inset-0 bg-black opacity-60"></div>
         <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-        
+
         {/* Glowing border effect */}
         <div className="absolute inset-0 border border-[#00FF00]/50 rounded-lg opacity-50"></div>
         <div className="absolute -inset-0.5 bg-[#00FF00]/5 blur-md rounded-lg"></div>
-        
+
         {/* Digital noise pattern (optional) */}
         <div className="absolute inset-0 bg-noise-pattern opacity-5 mix-blend-overlay"></div>
-        
+
         <div className="relative z-10 p-8 md:p-12">
           <div className="max-w-3xl">
             <div className="inline-block px-2 py-1 text-xs tracking-wider text-[#00FF00] border border-[#00FF00]/30 mb-4 bg-black/50 uppercase">
@@ -69,7 +69,7 @@ const ArticlesPage = () => {
               Explore in-depth guides, technical breakdowns, and tutorials on cybersecurity, 
               hardware hacking, and ethical exploration using single board computers.
             </p>
-            
+
             <div className="flex flex-wrap gap-4">
               <Button asChild className="bg-[#00FF00] text-black hover:bg-[#00FF00]/90">
                 <Link href="/learning-paths">Explore Learning Paths</Link>
@@ -81,7 +81,7 @@ const ArticlesPage = () => {
           </div>
         </div>
       </div>
-      
+
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
           <h2 className="text-2xl font-bold mb-2">Latest Articles</h2>
@@ -138,7 +138,7 @@ const ArticlesPage = () => {
               <p className="text-gray-400">Try adjusting your search or filters</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {filteredArticles?.map(article => (
                 <Card 
                   key={article.id} 
@@ -154,10 +154,10 @@ const ArticlesPage = () => {
                       />
                     </div>
                   )}
-                  <CardContent className="p-6">
+                  <CardContent className="p-4 sm:p-6">
                     <h2 className="text-xl font-bold mb-2 line-clamp-2">{article.title}</h2>
                     <p className="text-gray-400 mb-4 line-clamp-3">{article.preview}</p>
-                    
+
                     <div className="flex flex-wrap gap-2 mb-4">
                       {article.tags.slice(0, 3).map((tag, index) => (
                         <span 
