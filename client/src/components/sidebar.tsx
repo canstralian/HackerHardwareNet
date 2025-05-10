@@ -28,8 +28,11 @@ const Sidebar = () => {
                     className={`
                       nav-link flex items-center w-full px-3 py-2.5 rounded-md text-white 
                       border-l-2 transition-all duration-200
-                      ${location.includes(platform.id) ? 'border-[#00FF00] bg-[#00FF00]/10 text-[#00FF00]' : 'border-transparent'} 
-                      hover:bg-[#00FF00]/10 hover:border-[#00FF00] focus:outline-none focus:ring-2 focus:ring-[#00FF00]/30
+                      ${location.includes(platform.id) 
+                        ? 'border-[#00FF00] bg-[#00FF00]/10 text-[#00FF00] font-medium shadow-[0_0_8px_rgba(0,255,0,0.15)]' 
+                        : 'border-transparent'} 
+                      hover:bg-[#00FF00]/10 hover:border-[#00FF00] hover:shadow-[0_0_8px_rgba(0,255,0,0.15)] hover:translate-x-0.5
+                      focus:outline-none focus:ring-2 focus:ring-[#00FF00]/30
                     `}
                     aria-current={location.includes(platform.id) ? 'page' : undefined}
                   >
@@ -55,8 +58,11 @@ const Sidebar = () => {
                     className={`
                       nav-link flex items-center w-full px-3 py-2.5 rounded-md text-white 
                       border-l-2 transition-all duration-200
-                      ${location.includes(tool.id) ? 'border-[#00FF00] bg-[#00FF00]/10 text-[#00FF00]' : 'border-transparent'} 
-                      hover:bg-[#00FF00]/10 hover:border-[#00FF00] focus:outline-none focus:ring-2 focus:ring-[#00FF00]/30
+                      ${location.includes(tool.id) 
+                        ? 'border-[#00FF00] bg-[#00FF00]/10 text-[#00FF00] font-medium shadow-[0_0_8px_rgba(0,255,0,0.15)]' 
+                        : 'border-transparent'} 
+                      hover:bg-[#00FF00]/10 hover:border-[#00FF00] hover:shadow-[0_0_8px_rgba(0,255,0,0.15)] hover:translate-x-0.5
+                      focus:outline-none focus:ring-2 focus:ring-[#00FF00]/30
                     `}
                     aria-current={location.includes(tool.id) ? 'page' : undefined}
                   >
@@ -82,8 +88,11 @@ const Sidebar = () => {
                     className={`
                       nav-link flex items-center w-full px-3 py-2.5 rounded-md text-white 
                       border-l-2 transition-all duration-200
-                      ${location.includes(resource.id) ? 'border-[#00FF00] bg-[#00FF00]/10 text-[#00FF00]' : 'border-transparent'} 
-                      hover:bg-[#00FF00]/10 hover:border-[#00FF00] focus:outline-none focus:ring-2 focus:ring-[#00FF00]/30
+                      ${location.includes(resource.id) 
+                        ? 'border-[#00FF00] bg-[#00FF00]/10 text-[#00FF00] font-medium shadow-[0_0_8px_rgba(0,255,0,0.15)]' 
+                        : 'border-transparent'} 
+                      hover:bg-[#00FF00]/10 hover:border-[#00FF00] hover:shadow-[0_0_8px_rgba(0,255,0,0.15)] hover:translate-x-0.5
+                      focus:outline-none focus:ring-2 focus:ring-[#00FF00]/30
                     `}
                     aria-current={location.includes(resource.id) ? 'page' : undefined}
                   >
@@ -108,8 +117,11 @@ const Sidebar = () => {
                   className={`
                     nav-link flex items-center w-full px-3 py-2.5 rounded-md text-white 
                     border-l-2 transition-all duration-200
-                    ${location.includes('compatibility-checker') ? 'border-[#00FF00] bg-[#00FF00]/10 text-[#00FF00]' : 'border-transparent'} 
-                    hover:bg-[#00FF00]/10 hover:border-[#00FF00] focus:outline-none focus:ring-2 focus:ring-[#00FF00]/30
+                    ${location.includes('compatibility-checker') 
+                      ? 'border-[#00FF00] bg-[#00FF00]/10 text-[#00FF00] font-medium shadow-[0_0_8px_rgba(0,255,0,0.15)]' 
+                      : 'border-transparent'} 
+                    hover:bg-[#00FF00]/10 hover:border-[#00FF00] hover:shadow-[0_0_8px_rgba(0,255,0,0.15)] hover:translate-x-0.5
+                    focus:outline-none focus:ring-2 focus:ring-[#00FF00]/30
                   `}
                   aria-current={location.includes('compatibility-checker') ? 'page' : undefined}
                 >
