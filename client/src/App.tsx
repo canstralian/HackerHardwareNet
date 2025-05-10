@@ -20,6 +20,7 @@ import ArticlesPage from "@/pages/articles";
 import ArticleDetail from "@/pages/article-detail";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import ChatWidget from "@/components/ChatWidget";
 
 function Router() {
   return (
@@ -54,6 +55,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router />
+      <ChatWidget />
       <Toaster />
     </QueryClientProvider>
   );
