@@ -182,9 +182,9 @@ const Home = () => {
           </section>
         {/* Articles Section */}
           <section className="mb-12">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Latest Articles</h2>
-              <Link href="/resources" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+              <h2 className="text-xl sm:text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Latest Articles</h2>
+              <Link href="/resources" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200 w-full sm:w-auto justify-center sm:justify-start">
                 View All 
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
                   <path d="m9 18 6-6-6-6"/>
