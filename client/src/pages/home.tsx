@@ -29,7 +29,12 @@ const Home = () => {
           <section className="mb-12">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Learning Paths</h2>
-              <Link href="/learning-paths" className="text-[#00FF00] text-sm hover:underline">View All <i className="fas fa-arrow-right ml-1"></i></Link>
+              <Link href="/learning-paths" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200">
+                View All 
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                  <path d="m9 18 6-6-6-6"/>
+                </svg>
+              </Link>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {LEARNING_PATHS.map((path) => (
@@ -53,7 +58,12 @@ const Home = () => {
           <section className="mb-12">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Popular Hardware</h2>
-              <Link href="/hardware-library" className="text-[#00FF00] text-sm hover:underline">View All <i className="fas fa-arrow-right ml-1"></i></Link>
+              <Link href="/hardware-library" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200">
+                View All 
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                  <path d="m9 18 6-6-6-6"/>
+                </svg>
+              </Link>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {HARDWARE_ITEMS.map((item) => (
@@ -75,7 +85,12 @@ const Home = () => {
           <section className="mb-12">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Featured Tutorial</h2>
-              <Link href="/tutorials" className="text-[#00FF00] text-sm hover:underline">More Tutorials <i className="fas fa-arrow-right ml-1"></i></Link>
+              <Link href="/tutorials" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200">
+                More Tutorials 
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                  <path d="m9 18 6-6-6-6"/>
+                </svg>
+              </Link>
             </div>
             
             <TutorialFeature 
@@ -97,7 +112,12 @@ const Home = () => {
           <section className="mb-12">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Security Tools</h2>
-              <Link href="/tools" className="text-[#00FF00] text-sm hover:underline">View All <i className="fas fa-arrow-right ml-1"></i></Link>
+              <Link href="/tools" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200">
+                View All 
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                  <path d="m9 18 6-6-6-6"/>
+                </svg>
+              </Link>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -121,7 +141,12 @@ const Home = () => {
           <section className="mb-12">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Hardware Compatibility</h2>
-              <Link href="/hardware-compatibility" className="text-[#00FF00] text-sm hover:underline">Full Compatibility Matrix <i className="fas fa-arrow-right ml-1"></i></Link>
+              <Link href="/hardware-compatibility" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200">
+                Full Compatibility Matrix
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                  <path d="m9 18 6-6-6-6"/>
+                </svg>
+              </Link>
             </div>
             
             <HardwareCompatibility compatibilityData={HARDWARE_COMPATIBILITY} />
@@ -131,7 +156,12 @@ const Home = () => {
           <section>
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Community Projects</h2>
-              <Link href="/projects" className="text-[#00FF00] text-sm hover:underline">View All <i className="fas fa-arrow-right ml-1"></i></Link>
+              <Link href="/projects" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200">
+                View All 
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                  <path d="m9 18 6-6-6-6"/>
+                </svg>
+              </Link>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -154,7 +184,12 @@ const Home = () => {
           <section className="mb-12">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Latest Articles</h2>
-              <Link href="/resources" className="text-[#00FF00] text-sm hover:underline">View All <i className="fas fa-arrow-right ml-1"></i></Link>
+              <Link href="/resources" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200">
+                View All 
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                  <path d="m9 18 6-6-6-6"/>
+                </svg>
+              </Link>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
