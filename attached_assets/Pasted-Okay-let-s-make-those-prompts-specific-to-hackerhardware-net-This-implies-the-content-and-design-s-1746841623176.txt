@@ -1,0 +1,29 @@
+Okay, let's make those prompts specific to hackerhardware.net. This implies the content and design should resonate with an audience interested in hacker hardware, which might include DIY electronics, computer modding, security hardware, tutorials, projects, etc.
+Here are the revised prompts:
+Option 1: Prompt for a Project Brief or Requirements Outline for hackerhardware.net
+(Use this if you want an AI to help structure the project requirements for this specific site)
+Develop a project brief or requirements outline for the website hackerhardware.net based on the following key objectives and design principles:
+
+1.  **Design Principle:** The website must implement a mobile-first, responsive design approach.
+2.  **Strategic Goal (Social Media):** The website should be designed to facilitate strengthening the social media presence of hackerhardware.net, including features or content elements that encourage engagement and the sharing of updates, tutorials, and behind-the-scenes content relevant to hacker hardware.
+3.  **Branding Element:** The design should effectively incorporate and highlight a key tagline for hackerhardware.net that encapsulates the brand's essence and value proposition within the context of hacker hardware.
+
+Structure the output clearly, detailing how design choices can support these points for hackerhardware.net.
+
+Option 2: Prompt for Generating Ideas for Website Sections/Features for hackerhardware.net
+(Use this if you want an AI to brainstorm specific parts of the site hackerhardware.net)
+Brainstorm website sections and features for the hackerhardware.net website. The site must be mobile-first and responsive, and the features should help achieve the following goals:
+
+-   Strengthen the social media presence of hackerhardware.net by making it easy for users to engage with and share content like updates, tutorials, and behind-the-scenes information related to hacker hardware.
+-   Prominently display a new brand tagline for hackerhardware.net that conveys its essence and value proposition.
+
+Suggest specific design elements or content types for relevant pages (e.g., a projects section, a tutorials blog, social sharing buttons integrated into content pages) tailored for a hacker hardware audience.
+
+Option 3: Prompt for Guiding a Designer/Developer for hackerhardware.net (High-Level)
+(Use this if you are giving instructions or creating a high-level prompt for a human or AI designer/developer working on hackerhardware.net)
+Design and develop the hackerhardware.net website. It must be mobile-first and responsive with a focus on:
+
+-   Integrating features to boost the social media engagement and content sharing (updates, tutorials, behind-the-scenes) relevant to hacker hardware.
+-   Featuring the brand's tagline prominently to reinforce the hackerhardware.net identity.
+
+Choose the prompt that best fits what you need to generate or communicate about the hackerhardware.net project.
