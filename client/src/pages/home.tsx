@@ -18,18 +18,18 @@ import {
 
 const Home = () => {
   return (
-    <div className="flex flex-1">
+    <div className="flex flex-1 flex-col lg:flex-row">
       <Sidebar />
-      <main className="flex-1 overflow-y-auto pb-12">
-        <div className="container mx-auto px-4 py-8">
+      <main className="flex-1 overflow-y-auto pb-16 lg:pb-12"> {/* Extra padding at the bottom for mobile nav */}
+        <div className="container mx-auto px-4 py-4 sm:py-8">
           {/* Hero Section */}
           <HeroSection />
 
           {/* Learning Paths Section */}
           <section className="mb-12">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Learning Paths</h2>
-              <Link href="/learning-paths" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+              <h2 className="text-xl sm:text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Learning Paths</h2>
+              <Link href="/learning-paths" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200 w-full sm:w-auto justify-center sm:justify-start">
                 View All 
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
                   <path d="m9 18 6-6-6-6"/>
@@ -56,9 +56,9 @@ const Home = () => {
 
           {/* Popular Hardware Section */}
           <section className="mb-12">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Popular Hardware</h2>
-              <Link href="/hardware-library" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+              <h2 className="text-xl sm:text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Popular Hardware</h2>
+              <Link href="/hardware-library" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200 w-full sm:w-auto justify-center sm:justify-start">
                 View All 
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
                   <path d="m9 18 6-6-6-6"/>
@@ -83,9 +83,9 @@ const Home = () => {
 
           {/* Featured Tutorial */}
           <section className="mb-12">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Featured Tutorial</h2>
-              <Link href="/tutorials" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+              <h2 className="text-xl sm:text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Featured Tutorial</h2>
+              <Link href="/tutorials" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200 w-full sm:w-auto justify-center sm:justify-start">
                 More Tutorials 
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
                   <path d="m9 18 6-6-6-6"/>
@@ -110,9 +110,9 @@ const Home = () => {
 
           {/* Documentation and Tools */}
           <section className="mb-12">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Security Tools</h2>
-              <Link href="/tools" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+              <h2 className="text-xl sm:text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Security Tools</h2>
+              <Link href="/tools" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200 w-full sm:w-auto justify-center sm:justify-start">
                 View All 
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
                   <path d="m9 18 6-6-6-6"/>
@@ -139,9 +139,9 @@ const Home = () => {
 
           {/* Hardware Compatibility */}
           <section className="mb-12">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Hardware Compatibility</h2>
-              <Link href="/hardware-compatibility" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+              <h2 className="text-xl sm:text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Hardware Compatibility</h2>
+              <Link href="/hardware-compatibility" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200 w-full sm:w-auto justify-center sm:justify-start">
                 Full Compatibility Matrix
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
                   <path d="m9 18 6-6-6-6"/>
@@ -154,9 +154,9 @@ const Home = () => {
 
           {/* Community Section */}
           <section>
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Community Projects</h2>
-              <Link href="/projects" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+              <h2 className="text-xl sm:text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Community Projects</h2>
+              <Link href="/projects" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200 w-full sm:w-auto justify-center sm:justify-start">
                 View All 
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
                   <path d="m9 18 6-6-6-6"/>
