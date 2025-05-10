@@ -14,5 +14,16 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+    (function() {
+      window.widget_chat_config = {
+        user_id: "13c94313-83e0-41de-b3ae-2f3abec5acc5" // User ID inserted here
+      };
+      var script = document.createElement('script');
+      script.src = 'https://www.agionic.com/widget/widget.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+    </script>
   </body>
 </html>
