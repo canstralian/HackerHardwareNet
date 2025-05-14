@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Allow crawling of all content
+Disallow: /admin/
+Disallow: /login
+Disallow: /register
+Disallow: /profile
+
+# Sitemap location
+Sitemap: https://hackerhardware.net/sitemap.xml
