@@ -183,7 +183,10 @@ export default function ChallengeDetailPage() {
     mutationFn: (content: string) => {
       return apiRequest(`/api/challenges/${challengeId}/comments`, {
         method: "POST",
-        data: { content },
+        body: JSON.stringify({ content }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
     },
     onSuccess: () => {
@@ -208,7 +211,10 @@ export default function ChallengeDetailPage() {
     mutationFn: (data: { status: string; notes?: string; bookmarked?: boolean }) => {
       return apiRequest(`/api/challenges/${challengeId}/progress`, {
         method: "POST",
-        data,
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
     },
     onSuccess: () => {

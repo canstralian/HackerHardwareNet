@@ -2,6 +2,7 @@ import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
+import { AuthProvider } from "@/hooks/use-auth";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import LearningPaths from "@/pages/learning-paths";
@@ -20,6 +21,8 @@ import ArticlesPage from "@/pages/articles";
 import ArticleDetail from "@/pages/article-detail";
 import PrivacyPolicy from "@/pages/privacy-policy";
 import TermsOfService from "@/pages/terms-of-service";
+import Challenges from "@/pages/challenges";
+import ChallengeDetail from "@/pages/challenge-detail";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import ChatWidget from "@/components/ChatWidget";
@@ -45,6 +48,8 @@ function Router() {
           <Route path="/oled-article" component={OLEDArticlePage} />
           <Route path="/articles" component={ArticlesPage} />
           <Route path="/article/:id" component={ArticleDetail} />
+          <Route path="/challenges" component={Challenges} />
+          <Route path="/challenges/:id" component={ChallengeDetail} />
           <Route path="/privacy-policy" component={PrivacyPolicy} />
           <Route path="/terms-of-service" component={TermsOfService} />
           <Route component={NotFound} />
@@ -58,9 +63,11 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router />
-      <ChatWidget />
-      <Toaster />
+      <AuthProvider>
+        <Router />
+        <ChatWidget />
+        <Toaster />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
