@@ -591,3 +591,123 @@ export type Subscription = typeof subscriptions.$inferSelect;
 
 export type InsertEmailNotification = z.infer<typeof insertEmailNotificationSchema>;
 export type EmailNotification = typeof emailNotifications.$inferSelect;
+
+// Community Security Challenges model
+export const securityChallenges = pgTable("security_challenges", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  scenario: text("scenario").notNull(), // Detailed security scenario description
+  difficulty: text("difficulty").notNull(), // beginner, intermediate, advanced, expert
+  category: text("category").notNull(), // hardware, network, web, IOT, etc.
+  authorId: integer("author_id").references(() => users.id).notNull(),
+  image: text("image_url"),
+  hardwareIds: jsonb("hardware_ids").$type<number[]>(),
+  tools: jsonb("tools").$type<string[]>(), // Required or suggested tools for the challenge
+  points: integer("points").default(10),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+  tags: jsonb("tags").$type<string[]>().notNull(),
+  status: text("status").notNull().default("pending"), // pending, approved, rejected
+  isActive: boolean("is_active").default(true),
+  views: integer("views").default(0),
+  likes: integer("likes").default(0),
+  attempts: integer("attempts").default(0),
+  solutions: integer("solutions").default(0),
+});
+
+// Challenge Solutions model
+export const challengeSolutions = pgTable("challenge_solutions", {
+  id: serial("id").primaryKey(),
+  challengeId: integer("challenge_id").references(() => securityChallenges.id).notNull(),
+  authorId: integer("author_id").references(() => users.id).notNull(),
+  content: text("content").notNull(), // The solution write-up
+  approach: text("approach").notNull(), // The approach taken to solve the challenge
+  toolsUsed: jsonb("tools_used").$type<string[]>().notNull(), // Tools used to solve the challenge
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+  isApproved: boolean("is_approved").default(false),
+  rating: integer("rating").default(0),
+  codeSnippets: jsonb("code_snippets").$type<Record<string, string>>(), // Any code snippets included in the solution
+  attachments: jsonb("attachments").$type<string[]>(), // URLs to any attached files
+});
+
+// Challenge Comments model
+export const challengeComments = pgTable("challenge_comments", {
+  id: serial("id").primaryKey(),
+  challengeId: integer("challenge_id").references(() => securityChallenges.id).notNull(),
+  authorId: integer("author_id").references(() => users.id).notNull(),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// User Challenge Progress model
+export const userChallengeProgress = pgTable("user_challenge_progress", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  challengeId: integer("challenge_id").references(() => securityChallenges.id).notNull(),
+  status: text("status").notNull().default("started"), // started, in-progress, completed, abandoned
+  startedAt: timestamp("started_at").defaultNow(),
+  completedAt: timestamp("completed_at"),
+  attempts: integer("attempts").default(1),
+  notes: text("notes"), // User's private notes about the challenge
+  bookmarked: boolean("bookmarked").default(false),
+});
+
+// Insert schemas for challenge-related tables
+export const insertSecurityChallengeSchema = createInsertSchema(securityChallenges).pick({
+  title: true,
+  description: true,
+  scenario: true,
+  difficulty: true,
+  category: true,
+  authorId: true,
+  image: true,
+  hardwareIds: true,
+  tools: true,
+  points: true,
+  tags: true,
+  status: true,
+  isActive: true,
+});
+
+export const insertChallengeSolutionSchema = createInsertSchema(challengeSolutions).pick({
+  challengeId: true,
+  authorId: true,
+  content: true,
+  approach: true,
+  toolsUsed: true,
+  isApproved: true,
+  codeSnippets: true,
+  attachments: true,
+});
+
+export const insertChallengeCommentSchema = createInsertSchema(challengeComments).pick({
+  challengeId: true,
+  authorId: true,
+  content: true,
+});
+
+export const insertUserChallengeProgressSchema = createInsertSchema(userChallengeProgress).pick({
+  userId: true,
+  challengeId: true,
+  status: true,
+  completedAt: true,
+  attempts: true,
+  notes: true,
+  bookmarked: true,
+});
+
+// Types for challenge-related models
+export type InsertSecurityChallenge = z.infer<typeof insertSecurityChallengeSchema>;
+export type SecurityChallenge = typeof securityChallenges.$inferSelect;
+
+export type InsertChallengeSolution = z.infer<typeof insertChallengeSolutionSchema>;
+export type ChallengeSolution = typeof challengeSolutions.$inferSelect;
+
+export type InsertChallengeComment = z.infer<typeof insertChallengeCommentSchema>;
+export type ChallengeComment = typeof challengeComments.$inferSelect;
+
+export type InsertUserChallengeProgress = z.infer<typeof insertUserChallengeProgressSchema>;
+export type UserChallengeProgress = typeof userChallengeProgress.$inferSelect;
