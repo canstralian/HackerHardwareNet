@@ -223,6 +223,10 @@ export class MemStorage implements IStorage {
   private payments: Map<number, Payment>;
   private subscriptions: Map<number, Subscription>;
   private emailNotifications: Map<number, EmailNotification>;
+  private securityChallenges: Map<number, SecurityChallenge>;
+  private challengeSolutions: Map<number, ChallengeSolution>;
+  private challengeComments: Map<number, ChallengeComment>;
+  private userChallengeProgress: Map<number, UserChallengeProgress>;
   
   private currentUserId: number;
   private currentHardwareId: number;
@@ -270,6 +274,10 @@ export class MemStorage implements IStorage {
     this.payments = new Map();
     this.subscriptions = new Map();
     this.emailNotifications = new Map();
+    this.securityChallenges = new Map();
+    this.challengeSolutions = new Map();
+    this.challengeComments = new Map();
+    this.userChallengeProgress = new Map();
     
     this.currentUserId = 1;
     this.currentHardwareId = 1;
@@ -293,6 +301,10 @@ export class MemStorage implements IStorage {
     this.currentPaymentId = 1;
     this.currentSubscriptionId = 1;
     this.currentEmailNotificationId = 1;
+    this.currentSecurityChallengeId = 1;
+    this.currentChallengeSolutionId = 1;
+    this.currentChallengeCommentId = 1;
+    this.currentUserChallengeProgressId = 1;
     
     // Initialize with some demo data
     this.initializeDemoData();
