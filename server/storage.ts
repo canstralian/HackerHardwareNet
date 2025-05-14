@@ -20,7 +20,11 @@ import {
   paymentMethods, type PaymentMethod, type InsertPaymentMethod,
   payments, type Payment, type InsertPayment,
   subscriptions, type Subscription, type InsertSubscription,
-  emailNotifications, type EmailNotification, type InsertEmailNotification
+  emailNotifications, type EmailNotification, type InsertEmailNotification,
+  securityChallenges, type SecurityChallenge, type InsertSecurityChallenge,
+  challengeSolutions, type ChallengeSolution, type InsertChallengeSolution,
+  challengeComments, type ChallengeComment, type InsertChallengeComment,
+  userChallengeProgress, type UserChallengeProgress, type InsertUserChallengeProgress
 } from "@shared/schema";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { eq } from "drizzle-orm";
@@ -62,6 +66,34 @@ export interface IStorage {
   getProjectsByAuthor(authorId: number): Promise<Project[]>;
   createProject(project: InsertProject): Promise<Project>;
   updateProjectStars(id: number, stars: number): Promise<Project | undefined>;
+  
+  // Security Challenge CRUD
+  getSecurityChallenge(id: number): Promise<SecurityChallenge | undefined>;
+  getAllSecurityChallenges(): Promise<SecurityChallenge[]>;
+  getSecurityChallengesByCategory(category: string): Promise<SecurityChallenge[]>;
+  getSecurityChallengesByDifficulty(difficulty: string): Promise<SecurityChallenge[]>;
+  getSecurityChallengesByAuthor(authorId: number): Promise<SecurityChallenge[]>;
+  getPopularSecurityChallenges(limit?: number): Promise<SecurityChallenge[]>;
+  createSecurityChallenge(challenge: InsertSecurityChallenge): Promise<SecurityChallenge>;
+  updateSecurityChallenge(id: number, challengeData: Partial<InsertSecurityChallenge>): Promise<SecurityChallenge | undefined>;
+  updateChallengeStats(id: number, stats: { views?: number, likes?: number, attempts?: number, solutions?: number }): Promise<SecurityChallenge | undefined>;
+  
+  // Challenge Solution CRUD
+  getChallengeSolution(id: number): Promise<ChallengeSolution | undefined>;
+  getChallengeSolutionsByChallenge(challengeId: number): Promise<ChallengeSolution[]>;
+  getChallengeSolutionsByAuthor(authorId: number): Promise<ChallengeSolution[]>;
+  createChallengeSolution(solution: InsertChallengeSolution): Promise<ChallengeSolution>;
+  
+  // Challenge Comment CRUD
+  getChallengeComment(id: number): Promise<ChallengeComment | undefined>;
+  getChallengeCommentsByChallenge(challengeId: number): Promise<ChallengeComment[]>;
+  createChallengeComment(comment: InsertChallengeComment): Promise<ChallengeComment>;
+  
+  // User Challenge Progress CRUD
+  getUserChallengeProgress(userId: number, challengeId: number): Promise<UserChallengeProgress | undefined>;
+  getUserChallengeProgressByUser(userId: number): Promise<UserChallengeProgress[]>;
+  createUserChallengeProgress(progress: InsertUserChallengeProgress): Promise<UserChallengeProgress>;
+  updateUserChallengeProgress(id: number, progressData: Partial<InsertUserChallengeProgress>): Promise<UserChallengeProgress | undefined>;
   
   // Forum CRUD
   getForumPost(id: number): Promise<ForumPost | undefined>;
@@ -1872,6 +1904,198 @@ export class PostgresStorage implements IStorage {
     }
     
     return newAchievements;
+  }
+  
+  // Security Challenge CRUD
+  async getSecurityChallenge(id: number): Promise<SecurityChallenge | undefined> {
+    const [challenge] = await this.db
+      .select()
+      .from(securityChallenges)
+      .where(eq(securityChallenges.id, id));
+    return challenge || undefined;
+  }
+
+  async getAllSecurityChallenges(): Promise<SecurityChallenge[]> {
+    return await this.db
+      .select()
+      .from(securityChallenges)
+      .orderBy(securityChallenges.createdAt);
+  }
+
+  async getSecurityChallengesByCategory(category: string): Promise<SecurityChallenge[]> {
+    return await this.db
+      .select()
+      .from(securityChallenges)
+      .where(eq(securityChallenges.category, category))
+      .orderBy(securityChallenges.createdAt);
+  }
+
+  async getSecurityChallengesByDifficulty(difficulty: string): Promise<SecurityChallenge[]> {
+    return await this.db
+      .select()
+      .from(securityChallenges)
+      .where(eq(securityChallenges.difficulty, difficulty))
+      .orderBy(securityChallenges.createdAt);
+  }
+
+  async getSecurityChallengesByAuthor(authorId: number): Promise<SecurityChallenge[]> {
+    return await this.db
+      .select()
+      .from(securityChallenges)
+      .where(eq(securityChallenges.authorId, authorId))
+      .orderBy(securityChallenges.createdAt);
+  }
+
+  async getPopularSecurityChallenges(limit: number = 10): Promise<SecurityChallenge[]> {
+    return await this.db
+      .select()
+      .from(securityChallenges)
+      .orderBy(securityChallenges.views, 'desc')
+      .limit(limit);
+  }
+
+  async createSecurityChallenge(challenge: InsertSecurityChallenge): Promise<SecurityChallenge> {
+    const [newChallenge] = await this.db
+      .insert(securityChallenges)
+      .values(challenge)
+      .returning();
+    return newChallenge;
+  }
+
+  async updateSecurityChallenge(id: number, challengeData: Partial<InsertSecurityChallenge>): Promise<SecurityChallenge | undefined> {
+    const [updatedChallenge] = await this.db
+      .update(securityChallenges)
+      .set(challengeData)
+      .where(eq(securityChallenges.id, id))
+      .returning();
+    return updatedChallenge || undefined;
+  }
+
+  async updateChallengeStats(
+    id: number, 
+    stats: { views?: number, likes?: number, attempts?: number, solutions?: number }
+  ): Promise<SecurityChallenge | undefined> {
+    const challenge = await this.getSecurityChallenge(id);
+    if (!challenge) return undefined;
+    
+    const updateData: Partial<SecurityChallenge> = {};
+    
+    if (stats.views !== undefined) {
+      updateData.views = challenge.views ? challenge.views + stats.views : stats.views;
+    }
+    
+    if (stats.likes !== undefined) {
+      updateData.likes = challenge.likes ? challenge.likes + stats.likes : stats.likes;
+    }
+    
+    if (stats.attempts !== undefined) {
+      updateData.attempts = challenge.attempts ? challenge.attempts + stats.attempts : stats.attempts;
+    }
+    
+    if (stats.solutions !== undefined) {
+      updateData.solutions = challenge.solutions ? challenge.solutions + stats.solutions : stats.solutions;
+    }
+    
+    const [updatedChallenge] = await this.db
+      .update(securityChallenges)
+      .set(updateData)
+      .where(eq(securityChallenges.id, id))
+      .returning();
+      
+    return updatedChallenge || undefined;
+  }
+
+  // Challenge Solution CRUD
+  async getChallengeSolution(id: number): Promise<ChallengeSolution | undefined> {
+    const [solution] = await this.db
+      .select()
+      .from(challengeSolutions)
+      .where(eq(challengeSolutions.id, id));
+    return solution || undefined;
+  }
+
+  async getChallengeSolutionsByChallenge(challengeId: number): Promise<ChallengeSolution[]> {
+    return await this.db
+      .select()
+      .from(challengeSolutions)
+      .where(eq(challengeSolutions.challengeId, challengeId))
+      .orderBy(challengeSolutions.votes, 'desc');
+  }
+
+  async getChallengeSolutionsByAuthor(authorId: number): Promise<ChallengeSolution[]> {
+    return await this.db
+      .select()
+      .from(challengeSolutions)
+      .where(eq(challengeSolutions.authorId, authorId))
+      .orderBy(challengeSolutions.createdAt);
+  }
+
+  async createChallengeSolution(solution: InsertChallengeSolution): Promise<ChallengeSolution> {
+    const [newSolution] = await this.db
+      .insert(challengeSolutions)
+      .values(solution)
+      .returning();
+    return newSolution;
+  }
+
+  // Challenge Comment CRUD
+  async getChallengeComment(id: number): Promise<ChallengeComment | undefined> {
+    const [comment] = await this.db
+      .select()
+      .from(challengeComments)
+      .where(eq(challengeComments.id, id));
+    return comment || undefined;
+  }
+
+  async getChallengeCommentsByChallenge(challengeId: number): Promise<ChallengeComment[]> {
+    return await this.db
+      .select()
+      .from(challengeComments)
+      .where(eq(challengeComments.challengeId, challengeId))
+      .orderBy(challengeComments.createdAt);
+  }
+
+  async createChallengeComment(comment: InsertChallengeComment): Promise<ChallengeComment> {
+    const [newComment] = await this.db
+      .insert(challengeComments)
+      .values(comment)
+      .returning();
+    return newComment;
+  }
+
+  // User Challenge Progress CRUD
+  async getUserChallengeProgress(userId: number, challengeId: number): Promise<UserChallengeProgress | undefined> {
+    const [progress] = await this.db
+      .select()
+      .from(userChallengeProgress)
+      .where(eq(userChallengeProgress.userId, userId))
+      .where(eq(userChallengeProgress.challengeId, challengeId));
+    return progress || undefined;
+  }
+
+  async getUserChallengeProgressByUser(userId: number): Promise<UserChallengeProgress[]> {
+    return await this.db
+      .select()
+      .from(userChallengeProgress)
+      .where(eq(userChallengeProgress.userId, userId))
+      .orderBy(userChallengeProgress.lastAttemptedAt, 'desc');
+  }
+
+  async createUserChallengeProgress(progress: InsertUserChallengeProgress): Promise<UserChallengeProgress> {
+    const [newProgress] = await this.db
+      .insert(userChallengeProgress)
+      .values(progress)
+      .returning();
+    return newProgress;
+  }
+
+  async updateUserChallengeProgress(id: number, progressData: Partial<InsertUserChallengeProgress>): Promise<UserChallengeProgress | undefined> {
+    const [updatedProgress] = await this.db
+      .update(userChallengeProgress)
+      .set(progressData)
+      .where(eq(userChallengeProgress.id, id))
+      .returning();
+    return updatedProgress || undefined;
   }
 }
 

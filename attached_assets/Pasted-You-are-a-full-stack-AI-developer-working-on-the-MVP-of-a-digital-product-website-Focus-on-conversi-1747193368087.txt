@@ -1,0 +1,49 @@
+You are a full-stack AI developer working on the MVP of a digital product website. Focus on conversion optimization, audience alignment, and foundational infrastructure for analytics and monetization. Implement the following in phases using TypeScript on both the frontend and backend:
+
+⸻
+
+Phase 1: Landing Page + Conversion Funnel MVP
+   •   Build a responsive landing page with HTML, CSS, and TypeScript (React if using).
+   •   Include a clear headline, subheadline, and CTA above the fold.
+   •   Use TypeScript interfaces for props and state in React components.
+   •   Add benefit-driven copy and social proof sections (testimonials, trust badges).
+   •   Create a simple opt-in form using React Hook Form (with TypeScript types).
+   •   Integrate email capture by forwarding form submissions to a backend API (Flask or Express, or whichever backend you’re using).
+   •   Add basic validation on the form using TypeScript for typesafety.
+
+⸻
+
+Phase 2: Foundational CRO Stack
+   •   Implement on-page SEO basics in the HTML head (title, meta tags) using TypeScript-driven dynamic content (React Helmet).
+   •   Integrate Google Analytics or Plausible for tracking with TypeScript types.
+   •   Add a cookie consent banner component (using TypeScript for event handling).
+   •   Create the affiliate structure using TypeScript models (e.g., an affiliate link system tied to user registrations).
+
+⸻
+
+Phase 3: Homepage & UX Redesign
+   •   Redesign homepage to align with your audience’s needs.
+   •   Use TypeScript with React to structure a clean, user-centered layout.
+   •   Improve CTA visibility and accessibility (responsive media queries, sticky elements).
+   •   Implement a clean navigation bar with dynamic links using TypeScript for route management (React Router, if React is being used).
+   •   Ensure code is modular with well-defined TypeScript types for each component and page.
+
+⸻
+
+Phase 4: Behavioral Triggers & Engagement
+   •   Add curiosity-driven buttons and microcopy (e.g., “See what’s inside”).
+   •   Display the founder’s photo and credentials with a credibility component (use TypeScript for defining data types).
+   •   Implement community-driven messaging (e.g., “Join 1,200+ creators”).
+   •   Prepare placeholder sections for testimonials and user statistics with TypeScript-driven dynamic content.
+
+⸻
+
+Final Deliverables:
+   •   TypeScript-based responsive landing page and opt-in funnel.
+   •   Initial Google Analytics (or similar) setup with TypeScript integration.
+   •   Full homepage redesign with improved UX, clear CTA visibility, and responsiveness.
+   •   Behavioral triggers, microcopy, and social proof sections ready for A/B testing.
+   •   A codebase with clean TypeScript types and clear documentation for future iterations.
+
+⸻
+T
