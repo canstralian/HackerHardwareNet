@@ -1924,50 +1924,82 @@ export class PostgresStorage implements IStorage {
   
   // Security Challenge CRUD
   async getSecurityChallenge(id: number): Promise<SecurityChallenge | undefined> {
-    const [challenge] = await this.db
-      .select()
-      .from(securityChallenges)
-      .where(eq(securityChallenges.id, id));
-    return challenge || undefined;
+    try {
+      const [challenge] = await this.db
+        .select()
+        .from(securityChallenges)
+        .where(eq(securityChallenges.id, id));
+      return challenge || undefined;
+    } catch (error) {
+      console.error('Error in getSecurityChallenge:', error);
+      return undefined;
+    }
   }
 
   async getAllSecurityChallenges(): Promise<SecurityChallenge[]> {
-    return await this.db
-      .select()
-      .from(securityChallenges)
-      .orderBy(securityChallenges.createdAt);
+    try {
+      return await this.db
+        .select()
+        .from(securityChallenges)
+        .orderBy(securityChallenges.createdAt);
+    } catch (error) {
+      console.error('Error in getAllSecurityChallenges:', error);
+      // Return empty array if there's an error
+      return [];
+    }
   }
 
   async getSecurityChallengesByCategory(category: string): Promise<SecurityChallenge[]> {
-    return await this.db
-      .select()
-      .from(securityChallenges)
-      .where(eq(securityChallenges.category, category))
-      .orderBy(securityChallenges.createdAt);
+    try {
+      return await this.db
+        .select()
+        .from(securityChallenges)
+        .where(eq(securityChallenges.category, category))
+        .orderBy(securityChallenges.createdAt);
+    } catch (error) {
+      console.error('Error in getSecurityChallengesByCategory:', error);
+      return [];
+    }
   }
 
   async getSecurityChallengesByDifficulty(difficulty: string): Promise<SecurityChallenge[]> {
-    return await this.db
-      .select()
-      .from(securityChallenges)
-      .where(eq(securityChallenges.difficulty, difficulty))
-      .orderBy(securityChallenges.createdAt);
+    try {
+      return await this.db
+        .select()
+        .from(securityChallenges)
+        .where(eq(securityChallenges.difficulty, difficulty))
+        .orderBy(securityChallenges.createdAt);
+    } catch (error) {
+      console.error('Error in getSecurityChallengesByDifficulty:', error);
+      return [];
+    }
   }
 
   async getSecurityChallengesByAuthor(authorId: number): Promise<SecurityChallenge[]> {
-    return await this.db
-      .select()
-      .from(securityChallenges)
-      .where(eq(securityChallenges.authorId, authorId))
-      .orderBy(securityChallenges.createdAt);
+    try {
+      return await this.db
+        .select()
+        .from(securityChallenges)
+        .where(eq(securityChallenges.authorId, authorId))
+        .orderBy(securityChallenges.createdAt);
+    } catch (error) {
+      console.error('Error in getSecurityChallengesByAuthor:', error);
+      return [];
+    }
   }
 
   async getPopularSecurityChallenges(limit: number = 10): Promise<SecurityChallenge[]> {
-    return await this.db
-      .select()
-      .from(securityChallenges)
-      .orderBy(securityChallenges.views, 'desc')
-      .limit(limit);
+    try {
+      return await this.db
+        .select()
+        .from(securityChallenges)
+        .orderBy(securityChallenges.views, 'desc')
+        .limit(limit);
+    } catch (error) {
+      console.error('Error in getPopularSecurityChallenges:', error);
+      // Return empty array if there's an error
+      return [];
+    }
   }
 
   async createSecurityChallenge(challenge: InsertSecurityChallenge): Promise<SecurityChallenge> {

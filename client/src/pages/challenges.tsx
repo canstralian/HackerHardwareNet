@@ -37,8 +37,8 @@ type SecurityChallenge = {
 
 export default function ChallengesPage() {
   const [activeTab, setActiveTab] = useState("all");
-  const [difficultyFilter, setDifficultyFilter] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("");
+  const [difficultyFilter, setDifficultyFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
   // Fetch all challenges
@@ -67,10 +67,10 @@ export default function ChallengesPage() {
         );
 
       const matchesDifficulty =
-        difficultyFilter === "" || challenge.difficulty === difficultyFilter;
+        difficultyFilter === "all" || challenge.difficulty === difficultyFilter;
 
       const matchesCategory =
-        categoryFilter === "" || challenge.category === categoryFilter;
+        categoryFilter === "all" || challenge.category === categoryFilter;
 
       return matchesSearch && matchesDifficulty && matchesCategory;
     });
@@ -121,7 +121,7 @@ export default function ChallengesPage() {
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Categories</SelectItem>
+              <SelectItem value="all">All Categories</SelectItem>
               <SelectItem value="hardware">Hardware</SelectItem>
               <SelectItem value="network">Network</SelectItem>
               <SelectItem value="web">Web</SelectItem>
@@ -142,7 +142,7 @@ export default function ChallengesPage() {
               <SelectValue placeholder="Difficulty" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Difficulties</SelectItem>
+              <SelectItem value="all">All Difficulties</SelectItem>
               <SelectItem value="beginner">Beginner</SelectItem>
               <SelectItem value="intermediate">Intermediate</SelectItem>
               <SelectItem value="advanced">Advanced</SelectItem>
