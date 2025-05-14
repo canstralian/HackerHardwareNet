@@ -3,7 +3,7 @@ import { Link, useLocation } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import SearchBar from '@/components/search-bar';
 import { Button } from '@/components/ui/button';
-import { BookOpen, Cpu, LogIn, LogOut, Menu, Wrench, User, Zap, Award, Home as HomeIcon } from 'lucide-react';
+import { BookOpen, Cpu, LogIn, LogOut, Menu, Wrench, User, Zap, Award, Home as HomeIcon, Flag } from 'lucide-react';
 
 // Define authentication status type
 interface AuthStatus {
@@ -53,6 +53,7 @@ const Header = () => {
     { icon: <BookOpen size={18} />, label: 'Articles', href: '/articles' },
     { icon: <Cpu size={18} />, label: 'Hardware Library', href: '/hardware-library' },
     { icon: <Wrench size={18} />, label: 'Tools', href: '/tools' },
+    { icon: <Flag size={18} />, label: 'Challenges', href: '/challenges' },
     { icon: <Award size={18} />, label: 'Achievements', href: '/achievements' },
   ];
 
