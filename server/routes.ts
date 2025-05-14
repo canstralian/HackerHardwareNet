@@ -19,7 +19,8 @@ import {
   insertSecurityChallengeSchema,
   insertChallengeSolutionSchema,
   insertChallengeCommentSchema,
-  insertUserChallengeProgressSchema
+  insertUserChallengeProgressSchema,
+  type User
 } from "@shared/schema";
 import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
@@ -896,6 +897,301 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     }
     res.json({ isAuthenticated: false });
+  });
+
+  // Security Challenge routes
+  app.get('/api/challenges', async (req: Request, res: Response) => {
+    try {
+      const challenges = await storage.getAllSecurityChallenges();
+      res.json(challenges);
+    } catch (error) {
+      console.error('Failed to fetch security challenges:', error);
+      res.status(500).json({ error: 'Failed to fetch security challenges' });
+    }
+  });
+
+  app.get('/api/challenges/popular', async (req: Request, res: Response) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+      const challenges = await storage.getPopularSecurityChallenges(limit);
+      res.json(challenges);
+    } catch (error) {
+      console.error('Failed to fetch popular challenges:', error);
+      res.status(500).json({ error: 'Failed to fetch popular challenges' });
+    }
+  });
+
+  app.get('/api/challenges/category/:category', async (req: Request, res: Response) => {
+    try {
+      const category = req.params.category;
+      const challenges = await storage.getSecurityChallengesByCategory(category);
+      res.json(challenges);
+    } catch (error) {
+      console.error('Failed to fetch challenges by category:', error);
+      res.status(500).json({ error: 'Failed to fetch challenges by category' });
+    }
+  });
+
+  app.get('/api/challenges/difficulty/:difficulty', async (req: Request, res: Response) => {
+    try {
+      const difficulty = req.params.difficulty;
+      const challenges = await storage.getSecurityChallengesByDifficulty(difficulty);
+      res.json(challenges);
+    } catch (error) {
+      console.error('Failed to fetch challenges by difficulty:', error);
+      res.status(500).json({ error: 'Failed to fetch challenges by difficulty' });
+    }
+  });
+
+  app.get('/api/challenges/author/:authorId', async (req: Request, res: Response) => {
+    try {
+      const authorId = parseInt(req.params.authorId);
+      if (isNaN(authorId)) {
+        return res.status(400).json({ error: 'Invalid author ID' });
+      }
+      const challenges = await storage.getSecurityChallengesByAuthor(authorId);
+      res.json(challenges);
+    } catch (error) {
+      console.error('Failed to fetch challenges by author:', error);
+      res.status(500).json({ error: 'Failed to fetch challenges by author' });
+    }
+  });
+
+  app.get('/api/challenges/:id', async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid challenge ID' });
+      }
+      const challenge = await storage.getSecurityChallenge(id);
+      if (!challenge) {
+        return res.status(404).json({ error: 'Security challenge not found' });
+      }
+      
+      // Increment view count
+      await storage.updateChallengeStats(id, { views: 1 });
+      
+      res.json(challenge);
+    } catch (error) {
+      console.error(`Failed to fetch challenge with ID ${req.params.id}:`, error);
+      res.status(500).json({ error: 'Failed to fetch challenge' });
+    }
+  });
+
+  app.post('/api/challenges', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const userData = req.user as User;
+      const challengeData = insertSecurityChallengeSchema.parse({
+        ...req.body,
+        authorId: userData.id
+      });
+      
+      const challenge = await storage.createSecurityChallenge(challengeData);
+      res.status(201).json(challenge);
+    } catch (error) {
+      console.error('Failed to create security challenge:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: fromZodError(error).message });
+      }
+      res.status(500).json({ error: 'Failed to create security challenge' });
+    }
+  });
+
+  app.patch('/api/challenges/:id', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid challenge ID' });
+      }
+
+      const userData = req.user as User;
+      const challenge = await storage.getSecurityChallenge(id);
+      
+      if (!challenge) {
+        return res.status(404).json({ error: 'Security challenge not found' });
+      }
+      
+      // Only the author or an admin can update the challenge
+      if (challenge.authorId !== userData.id && !userData.isAdmin) {
+        return res.status(403).json({ error: 'Unauthorized to update this challenge' });
+      }
+      
+      const challengeData = insertSecurityChallengeSchema.partial().parse(req.body);
+      const updatedChallenge = await storage.updateSecurityChallenge(id, challengeData);
+      
+      res.json(updatedChallenge);
+    } catch (error) {
+      console.error('Failed to update security challenge:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: fromZodError(error).message });
+      }
+      res.status(500).json({ error: 'Failed to update security challenge' });
+    }
+  });
+
+  app.post('/api/challenges/:id/like', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid challenge ID' });
+      }
+      
+      const challenge = await storage.getSecurityChallenge(id);
+      if (!challenge) {
+        return res.status(404).json({ error: 'Security challenge not found' });
+      }
+      
+      const updatedChallenge = await storage.updateChallengeStats(id, { likes: 1 });
+      res.json(updatedChallenge);
+    } catch (error) {
+      console.error('Failed to like challenge:', error);
+      res.status(500).json({ error: 'Failed to like challenge' });
+    }
+  });
+
+  // Challenge Solutions routes
+  app.get('/api/challenges/:id/solutions', async (req: Request, res: Response) => {
+    try {
+      const challengeId = parseInt(req.params.id);
+      if (isNaN(challengeId)) {
+        return res.status(400).json({ error: 'Invalid challenge ID' });
+      }
+      const solutions = await storage.getChallengeSolutionsByChallenge(challengeId);
+      res.json(solutions);
+    } catch (error) {
+      console.error('Failed to fetch challenge solutions:', error);
+      res.status(500).json({ error: 'Failed to fetch challenge solutions' });
+    }
+  });
+
+  app.post('/api/challenges/:id/solutions', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const challengeId = parseInt(req.params.id);
+      if (isNaN(challengeId)) {
+        return res.status(400).json({ error: 'Invalid challenge ID' });
+      }
+      
+      const userData = req.user as User;
+      const solutionData = insertChallengeSolutionSchema.parse({
+        ...req.body,
+        challengeId,
+        authorId: userData.id
+      });
+      
+      const solution = await storage.createChallengeSolution(solutionData);
+      res.status(201).json(solution);
+    } catch (error) {
+      console.error('Failed to create challenge solution:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: fromZodError(error).message });
+      }
+      res.status(500).json({ error: 'Failed to create challenge solution' });
+    }
+  });
+
+  // Challenge Comments routes
+  app.get('/api/challenges/:id/comments', async (req: Request, res: Response) => {
+    try {
+      const challengeId = parseInt(req.params.id);
+      if (isNaN(challengeId)) {
+        return res.status(400).json({ error: 'Invalid challenge ID' });
+      }
+      const comments = await storage.getChallengeCommentsByChallenge(challengeId);
+      res.json(comments);
+    } catch (error) {
+      console.error('Failed to fetch challenge comments:', error);
+      res.status(500).json({ error: 'Failed to fetch challenge comments' });
+    }
+  });
+
+  app.post('/api/challenges/:id/comments', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const challengeId = parseInt(req.params.id);
+      if (isNaN(challengeId)) {
+        return res.status(400).json({ error: 'Invalid challenge ID' });
+      }
+      
+      const userData = req.user as User;
+      const commentData = insertChallengeCommentSchema.parse({
+        ...req.body,
+        challengeId,
+        authorId: userData.id
+      });
+      
+      const comment = await storage.createChallengeComment(commentData);
+      res.status(201).json(comment);
+    } catch (error) {
+      console.error('Failed to create challenge comment:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: fromZodError(error).message });
+      }
+      res.status(500).json({ error: 'Failed to create challenge comment' });
+    }
+  });
+
+  // User Challenge Progress routes
+  app.get('/api/users/:userId/challenges', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      if (isNaN(userId)) {
+        return res.status(400).json({ error: 'Invalid user ID' });
+      }
+      
+      // Only allow users to access their own progress or admins to access any user's progress
+      const userData = req.user as User;
+      if (userData.id !== userId && !userData.isAdmin) {
+        return res.status(403).json({ error: 'Unauthorized to access this user\'s challenge progress' });
+      }
+      
+      const progressList = await storage.getUserChallengeProgressByUser(userId);
+      res.json(progressList);
+    } catch (error) {
+      console.error('Failed to fetch user challenge progress:', error);
+      res.status(500).json({ error: 'Failed to fetch user challenge progress' });
+    }
+  });
+
+  app.post('/api/challenges/:id/progress', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const challengeId = parseInt(req.params.id);
+      if (isNaN(challengeId)) {
+        return res.status(400).json({ error: 'Invalid challenge ID' });
+      }
+      
+      const userData = req.user as User;
+      
+      // Check if progress already exists
+      const existingProgress = await storage.getUserChallengeProgress(userData.id, challengeId);
+      
+      if (existingProgress) {
+        const updateData = {
+          status: req.body.status,
+          attempts: existingProgress.attempts ? existingProgress.attempts + 1 : 1,
+          notes: req.body.notes,
+          completedAt: req.body.status === 'completed' ? new Date() : null,
+          bookmarked: req.body.bookmarked
+        };
+        
+        const updatedProgress = await storage.updateUserChallengeProgress(existingProgress.id, updateData);
+        return res.json(updatedProgress);
+      }
+      
+      // Create new progress
+      const progressData = insertUserChallengeProgressSchema.parse({
+        ...req.body,
+        challengeId,
+        userId: userData.id
+      });
+      
+      const progress = await storage.createUserChallengeProgress(progressData);
+      res.status(201).json(progress);
+    } catch (error) {
+      console.error('Failed to create/update challenge progress:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: fromZodError(error).message });
+      }
+      res.status(500).json({ error: 'Failed to create/update challenge progress' });
+    }
   });
 
   return httpServer;
