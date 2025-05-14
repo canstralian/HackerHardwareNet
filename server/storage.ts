@@ -250,6 +250,10 @@ export class MemStorage implements IStorage {
   private currentPaymentId: number;
   private currentSubscriptionId: number;
   private currentEmailNotificationId: number;
+  private currentSecurityChallengeId: number;
+  private currentChallengeSolutionId: number;
+  private currentChallengeCommentId: number;
+  private currentUserChallengeProgressId: number;
 
   constructor() {
     this.users = new Map();
@@ -2108,6 +2112,213 @@ export class PostgresStorage implements IStorage {
       .where(eq(userChallengeProgress.id, id))
       .returning();
     return updatedProgress || undefined;
+  }
+
+  // Security Challenge CRUD
+  async getSecurityChallenge(id: number): Promise<SecurityChallenge | undefined> {
+    return this.securityChallenges.get(id);
+  }
+
+  async getAllSecurityChallenges(): Promise<SecurityChallenge[]> {
+    return Array.from(this.securityChallenges.values());
+  }
+
+  async getSecurityChallengesByCategory(category: string): Promise<SecurityChallenge[]> {
+    return Array.from(this.securityChallenges.values()).filter(
+      challenge => challenge.category === category
+    );
+  }
+
+  async getSecurityChallengesByDifficulty(difficulty: string): Promise<SecurityChallenge[]> {
+    return Array.from(this.securityChallenges.values()).filter(
+      challenge => challenge.difficulty === difficulty
+    );
+  }
+
+  async getSecurityChallengesByAuthor(authorId: number): Promise<SecurityChallenge[]> {
+    return Array.from(this.securityChallenges.values()).filter(
+      challenge => challenge.authorId === authorId
+    );
+  }
+
+  async getPopularSecurityChallenges(limit: number = 10): Promise<SecurityChallenge[]> {
+    return Array.from(this.securityChallenges.values())
+      .sort((a, b) => (b.views || 0) - (a.views || 0))
+      .slice(0, limit);
+  }
+
+  async createSecurityChallenge(challenge: InsertSecurityChallenge): Promise<SecurityChallenge> {
+    const id = this.currentSecurityChallengeId++;
+    const now = new Date();
+    
+    const newChallenge: SecurityChallenge = {
+      id,
+      ...challenge,
+      createdAt: now,
+      updatedAt: now,
+      views: 0,
+      likes: 0,
+      attempts: 0,
+      solutions: 0
+    };
+    
+    this.securityChallenges.set(id, newChallenge);
+    return newChallenge;
+  }
+
+  async updateSecurityChallenge(id: number, challengeData: Partial<InsertSecurityChallenge>): Promise<SecurityChallenge | undefined> {
+    const challenge = this.securityChallenges.get(id);
+    if (!challenge) return undefined;
+    
+    const updatedChallenge: SecurityChallenge = {
+      ...challenge,
+      ...challengeData,
+      updatedAt: new Date()
+    };
+    
+    this.securityChallenges.set(id, updatedChallenge);
+    return updatedChallenge;
+  }
+
+  async updateChallengeStats(
+    id: number,
+    stats: { views?: number, likes?: number, attempts?: number, solutions?: number }
+  ): Promise<SecurityChallenge | undefined> {
+    const challenge = this.securityChallenges.get(id);
+    if (!challenge) return undefined;
+    
+    const updatedChallenge: SecurityChallenge = {
+      ...challenge,
+      views: stats.views !== undefined ? (challenge.views || 0) + stats.views : challenge.views,
+      likes: stats.likes !== undefined ? (challenge.likes || 0) + stats.likes : challenge.likes,
+      attempts: stats.attempts !== undefined ? (challenge.attempts || 0) + stats.attempts : challenge.attempts,
+      solutions: stats.solutions !== undefined ? (challenge.solutions || 0) + stats.solutions : challenge.solutions,
+      updatedAt: new Date()
+    };
+    
+    this.securityChallenges.set(id, updatedChallenge);
+    return updatedChallenge;
+  }
+
+  // Challenge Solution CRUD
+  async getChallengeSolution(id: number): Promise<ChallengeSolution | undefined> {
+    return this.challengeSolutions.get(id);
+  }
+
+  async getChallengeSolutionsByChallenge(challengeId: number): Promise<ChallengeSolution[]> {
+    return Array.from(this.challengeSolutions.values())
+      .filter(solution => solution.challengeId === challengeId)
+      .sort((a, b) => (b.votes || 0) - (a.votes || 0));
+  }
+
+  async getChallengeSolutionsByAuthor(authorId: number): Promise<ChallengeSolution[]> {
+    return Array.from(this.challengeSolutions.values())
+      .filter(solution => solution.authorId === authorId);
+  }
+
+  async createChallengeSolution(solution: InsertChallengeSolution): Promise<ChallengeSolution> {
+    const id = this.currentChallengeSolutionId++;
+    const now = new Date();
+    
+    const newSolution: ChallengeSolution = {
+      id,
+      ...solution,
+      createdAt: now,
+      votes: 0
+    };
+    
+    this.challengeSolutions.set(id, newSolution);
+    
+    // Update the challenge solutions count
+    const challenge = this.securityChallenges.get(solution.challengeId);
+    if (challenge) {
+      this.updateChallengeStats(challenge.id, { solutions: 1 });
+    }
+    
+    return newSolution;
+  }
+
+  // Challenge Comment CRUD
+  async getChallengeComment(id: number): Promise<ChallengeComment | undefined> {
+    return this.challengeComments.get(id);
+  }
+
+  async getChallengeCommentsByChallenge(challengeId: number): Promise<ChallengeComment[]> {
+    return Array.from(this.challengeComments.values())
+      .filter(comment => comment.challengeId === challengeId)
+      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  }
+
+  async createChallengeComment(comment: InsertChallengeComment): Promise<ChallengeComment> {
+    const id = this.currentChallengeCommentId++;
+    const now = new Date();
+    
+    const newComment: ChallengeComment = {
+      id,
+      ...comment,
+      createdAt: now
+    };
+    
+    this.challengeComments.set(id, newComment);
+    return newComment;
+  }
+
+  // User Challenge Progress CRUD
+  async getUserChallengeProgress(userId: number, challengeId: number): Promise<UserChallengeProgress | undefined> {
+    return Array.from(this.userChallengeProgress.values())
+      .find(progress => progress.userId === userId && progress.challengeId === challengeId);
+  }
+
+  async getUserChallengeProgressByUser(userId: number): Promise<UserChallengeProgress[]> {
+    return Array.from(this.userChallengeProgress.values())
+      .filter(progress => progress.userId === userId)
+      .sort((a, b) => {
+        if (!a.lastAttemptedAt) return 1;
+        if (!b.lastAttemptedAt) return -1;
+        return new Date(b.lastAttemptedAt).getTime() - new Date(a.lastAttemptedAt).getTime();
+      });
+  }
+
+  async createUserChallengeProgress(progress: InsertUserChallengeProgress): Promise<UserChallengeProgress> {
+    const id = this.currentUserChallengeProgressId++;
+    const now = new Date();
+    
+    const newProgress: UserChallengeProgress = {
+      id,
+      ...progress,
+      startedAt: now,
+      lastAttemptedAt: now,
+      completedAt: null
+    };
+    
+    this.userChallengeProgress.set(id, newProgress);
+    
+    // Update the challenge attempts count
+    const challenge = this.securityChallenges.get(progress.challengeId);
+    if (challenge) {
+      this.updateChallengeStats(challenge.id, { attempts: 1 });
+    }
+    
+    return newProgress;
+  }
+
+  async updateUserChallengeProgress(id: number, progressData: Partial<InsertUserChallengeProgress>): Promise<UserChallengeProgress | undefined> {
+    const progress = this.userChallengeProgress.get(id);
+    if (!progress) return undefined;
+    
+    const updatedProgress: UserChallengeProgress = {
+      ...progress,
+      ...progressData,
+      lastAttemptedAt: new Date()
+    };
+    
+    // If the progress is 100%, set the completedAt date
+    if (progressData.progress === 100 && !progress.completedAt) {
+      updatedProgress.completedAt = new Date();
+    }
+    
+    this.userChallengeProgress.set(id, updatedProgress);
+    return updatedProgress;
   }
 }
 
