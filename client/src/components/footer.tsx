@@ -113,6 +113,13 @@ const Footer = () => {
               <li><Link href="#" className="text-gray-400 hover:text-[#00FF00] transition-colors flex items-center gap-1"><i className="fas fa-chevron-right text-xs text-[#00FF00]"></i> Report Bugs</Link></li>
               <li><Link href="#" className="text-gray-400 hover:text-[#00FF00] transition-colors flex items-center gap-1"><i className="fas fa-chevron-right text-xs text-[#00FF00]"></i> Code of Conduct</Link></li>
             </ul>
+            
+            <h3 className="text-lg font-bold mt-6 mb-4">Legal</h3>
+            <ul className="space-y-2">
+              <li><Link href="/terms-of-service" className="text-gray-400 hover:text-[#00FF00] transition-colors flex items-center gap-1"><i className="fas fa-chevron-right text-xs text-[#00FF00]"></i> Terms of Service</Link></li>
+              <li><Link href="/privacy-policy" className="text-gray-400 hover:text-[#00FF00] transition-colors flex items-center gap-1"><i className="fas fa-chevron-right text-xs text-[#00FF00]"></i> Privacy Policy</Link></li>
+              <li><a href="/sitemap.xml" target="_blank" className="text-gray-400 hover:text-[#00FF00] transition-colors flex items-center gap-1"><i className="fas fa-chevron-right text-xs text-[#00FF00]"></i> Sitemap</a></li>
+            </ul>
           </div>
           
           <div>
@@ -144,10 +151,9 @@ const Footer = () => {
         <div className="border-t border-[#00FF00]/20 mt-8 pt-6 text-center text-gray-400 text-xs sm:text-sm">
           <p>&copy; {new Date().getFullYear()} hackerhardware.net. All content for educational purposes only.</p>
           <p className="mt-2 flex flex-wrap justify-center gap-x-4 gap-y-1">
-            <Link href="#" className="hover:text-[#00FF00] transition-colors">Terms</Link>
-            <Link href="#" className="hover:text-[#00FF00] transition-colors">Privacy</Link>
-            <Link href="#" className="hover:text-[#00FF00] transition-colors">Cookies</Link>
-            <Link href="#" className="hover:text-[#00FF00] transition-colors">Legal</Link>
+            <Link href="/terms-of-service" className="hover:text-[#00FF00] transition-colors">Terms of Service</Link>
+            <Link href="/privacy-policy" className="hover:text-[#00FF00] transition-colors">Privacy Policy</Link>
+            <a href="/sitemap.xml" target="_blank" className="hover:text-[#00FF00] transition-colors">Sitemap</a>
           </p>
         </div>
       </div>

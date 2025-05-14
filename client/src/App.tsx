@@ -18,6 +18,8 @@ import Checkout from "@/pages/checkout";
 import OLEDArticlePage from "@/pages/oled-article";
 import ArticlesPage from "@/pages/articles";
 import ArticleDetail from "@/pages/article-detail";
+import PrivacyPolicy from "@/pages/privacy-policy";
+import TermsOfService from "@/pages/terms-of-service";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import ChatWidget from "@/components/ChatWidget";
@@ -43,6 +45,8 @@ function Router() {
           <Route path="/oled-article" component={OLEDArticlePage} />
           <Route path="/articles" component={ArticlesPage} />
           <Route path="/article/:id" component={ArticleDetail} />
+          <Route path="/privacy-policy" component={PrivacyPolicy} />
+          <Route path="/terms-of-service" component={TermsOfService} />
           <Route component={NotFound} />
         </Switch>
       </div>
