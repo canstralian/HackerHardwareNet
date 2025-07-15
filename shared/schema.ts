@@ -711,3 +711,167 @@ export type ChallengeComment = typeof challengeComments.$inferSelect;
 
 export type InsertUserChallengeProgress = z.infer<typeof insertUserChallengeProgressSchema>;
 export type UserChallengeProgress = typeof userChallengeProgress.$inferSelect;
+
+// MCP (Model Context Protocol) Simulator Schema
+export const mcpServers = pgTable("mcp_servers", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  description: text("description").notNull(),
+  url: text("url").notNull(),
+  version: text("version").notNull().default("1.0.0"),
+  status: text("status").notNull().default("inactive"), // active, inactive, error
+  capabilities: jsonb("capabilities").$type<string[]>().notNull(),
+  config: jsonb("config").$type<Record<string, any>>(),
+  lastPing: timestamp("last_ping"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const mcpResources = pgTable("mcp_resources", {
+  id: serial("id").primaryKey(),
+  serverId: integer("server_id").references(() => mcpServers.id).notNull(),
+  uri: text("uri").notNull(),
+  name: text("name").notNull(),
+  description: text("description"),
+  mimeType: text("mime_type"),
+  content: text("content"),
+  metadata: jsonb("metadata").$type<Record<string, any>>(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const mcpTools = pgTable("mcp_tools", {
+  id: serial("id").primaryKey(),
+  serverId: integer("server_id").references(() => mcpServers.id).notNull(),
+  name: text("name").notNull(),
+  description: text("description"),
+  schema: jsonb("schema").$type<Record<string, any>>().notNull(),
+  examples: jsonb("examples").$type<Record<string, any>[]>(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const mcpContextExtractions = pgTable("mcp_context_extractions", {
+  id: serial("id").primaryKey(),
+  projectId: text("project_id").notNull(),
+  fileName: text("file_name").notNull(),
+  filePath: text("file_path").notNull(),
+  content: text("content").notNull(),
+  extractedContext: jsonb("extracted_context").$type<Record<string, any>>().notNull(),
+  dependencies: jsonb("dependencies").$type<string[]>(),
+  functionSignatures: jsonb("function_signatures").$type<Record<string, any>[]>(),
+  imports: jsonb("imports").$type<string[]>(),
+  exports: jsonb("exports").$type<string[]>(),
+  codeHash: text("code_hash").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const mcpGithubPRs = pgTable("mcp_github_prs", {
+  id: serial("id").primaryKey(),
+  prNumber: integer("pr_number").notNull(),
+  title: text("title").notNull(),
+  description: text("description"),
+  repoUrl: text("repo_url").notNull(),
+  status: text("status").notNull().default("pending"), // pending, approved, merged, closed
+  mcpData: jsonb("mcp_data").$type<Record<string, any>>(),
+  extractedContext: jsonb("extracted_context").$type<Record<string, any>>(),
+  botComments: jsonb("bot_comments").$type<Record<string, any>[]>(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const mcpWorkflows = pgTable("mcp_workflows", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  trigger: text("trigger").notNull(), // manual, schedule, webhook
+  steps: jsonb("steps").$type<Record<string, any>[]>().notNull(),
+  status: text("status").notNull().default("inactive"), // active, inactive, running, completed, failed
+  lastRun: timestamp("last_run"),
+  nextRun: timestamp("next_run"),
+  runCount: integer("run_count").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Insert schemas for MCP tables
+export const insertMcpServerSchema = createInsertSchema(mcpServers).pick({
+  name: true,
+  description: true,
+  url: true,
+  version: true,
+  status: true,
+  capabilities: true,
+  config: true,
+});
+
+export const insertMcpResourceSchema = createInsertSchema(mcpResources).pick({
+  serverId: true,
+  uri: true,
+  name: true,
+  description: true,
+  mimeType: true,
+  content: true,
+  metadata: true,
+});
+
+export const insertMcpToolSchema = createInsertSchema(mcpTools).pick({
+  serverId: true,
+  name: true,
+  description: true,
+  schema: true,
+  examples: true,
+});
+
+export const insertMcpContextExtractionSchema = createInsertSchema(mcpContextExtractions).pick({
+  projectId: true,
+  fileName: true,
+  filePath: true,
+  content: true,
+  extractedContext: true,
+  dependencies: true,
+  functionSignatures: true,
+  imports: true,
+  exports: true,
+  codeHash: true,
+});
+
+export const insertMcpGithubPRSchema = createInsertSchema(mcpGithubPRs).pick({
+  prNumber: true,
+  title: true,
+  description: true,
+  repoUrl: true,
+  status: true,
+  mcpData: true,
+  extractedContext: true,
+  botComments: true,
+});
+
+export const insertMcpWorkflowSchema = createInsertSchema(mcpWorkflows).pick({
+  name: true,
+  description: true,
+  trigger: true,
+  steps: true,
+  status: true,
+  nextRun: true,
+});
+
+// Types for MCP models
+export type InsertMcpServer = z.infer<typeof insertMcpServerSchema>;
+export type McpServer = typeof mcpServers.$inferSelect;
+
+export type InsertMcpResource = z.infer<typeof insertMcpResourceSchema>;
+export type McpResource = typeof mcpResources.$inferSelect;
+
+export type InsertMcpTool = z.infer<typeof insertMcpToolSchema>;
+export type McpTool = typeof mcpTools.$inferSelect;
+
+export type InsertMcpContextExtraction = z.infer<typeof insertMcpContextExtractionSchema>;
+export type McpContextExtraction = typeof mcpContextExtractions.$inferSelect;
+
+export type InsertMcpGithubPR = z.infer<typeof insertMcpGithubPRSchema>;
+export type McpGithubPR = typeof mcpGithubPRs.$inferSelect;
+
+export type InsertMcpWorkflow = z.infer<typeof insertMcpWorkflowSchema>;
+export type McpWorkflow = typeof mcpWorkflows.$inferSelect;

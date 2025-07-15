@@ -26,6 +26,15 @@ import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
 import paymentRoutes from "./payment-routes";
 import { EmailService } from "./email-service";
+import { McpService } from "./mcp-service";
+import { 
+  insertMcpServerSchema,
+  insertMcpResourceSchema,
+  insertMcpToolSchema,
+  insertMcpContextExtractionSchema,
+  insertMcpGithubPRSchema,
+  insertMcpWorkflowSchema
+} from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Middleware to parse JSON
@@ -1191,6 +1200,311 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: fromZodError(error).message });
       }
       res.status(500).json({ error: 'Failed to create/update challenge progress' });
+    }
+  });
+
+  // ===== MCP Simulator Routes =====
+  
+  // MCP Server routes
+  app.get('/api/mcp/servers', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const servers = await McpService.getServers();
+      res.json(servers);
+    } catch (error) {
+      console.error('Failed to fetch MCP servers:', error);
+      res.status(500).json({ error: 'Failed to fetch MCP servers' });
+    }
+  });
+
+  app.get('/api/mcp/servers/:id', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid server ID' });
+      }
+      const server = await McpService.getServer(id);
+      if (!server) {
+        return res.status(404).json({ error: 'MCP server not found' });
+      }
+      res.json(server);
+    } catch (error) {
+      console.error('Failed to fetch MCP server:', error);
+      res.status(500).json({ error: 'Failed to fetch MCP server' });
+    }
+  });
+
+  app.post('/api/mcp/servers', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const serverData = insertMcpServerSchema.parse(req.body);
+      const server = await McpService.createServer(serverData);
+      res.status(201).json(server);
+    } catch (error) {
+      console.error('Failed to create MCP server:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: fromZodError(error).message });
+      }
+      res.status(500).json({ error: 'Failed to create MCP server' });
+    }
+  });
+
+  app.patch('/api/mcp/servers/:id/status', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid server ID' });
+      }
+      const { status } = req.body;
+      await McpService.updateServerStatus(id, status);
+      res.json({ message: 'Server status updated successfully' });
+    } catch (error) {
+      console.error('Failed to update server status:', error);
+      res.status(500).json({ error: 'Failed to update server status' });
+    }
+  });
+
+  app.delete('/api/mcp/servers/:id', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid server ID' });
+      }
+      await McpService.deleteServer(id);
+      res.json({ message: 'Server deleted successfully' });
+    } catch (error) {
+      console.error('Failed to delete server:', error);
+      res.status(500).json({ error: 'Failed to delete server' });
+    }
+  });
+
+  // MCP Resource routes
+  app.get('/api/mcp/resources', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const serverId = req.query.serverId ? parseInt(req.query.serverId as string) : undefined;
+      const resources = await McpService.getResources(serverId);
+      res.json(resources);
+    } catch (error) {
+      console.error('Failed to fetch MCP resources:', error);
+      res.status(500).json({ error: 'Failed to fetch MCP resources' });
+    }
+  });
+
+  app.post('/api/mcp/resources', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const resourceData = insertMcpResourceSchema.parse(req.body);
+      const resource = await McpService.createResource(resourceData);
+      res.status(201).json(resource);
+    } catch (error) {
+      console.error('Failed to create MCP resource:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: fromZodError(error).message });
+      }
+      res.status(500).json({ error: 'Failed to create MCP resource' });
+    }
+  });
+
+  app.patch('/api/mcp/resources/:id', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid resource ID' });
+      }
+      await McpService.updateResource(id, req.body);
+      res.json({ message: 'Resource updated successfully' });
+    } catch (error) {
+      console.error('Failed to update resource:', error);
+      res.status(500).json({ error: 'Failed to update resource' });
+    }
+  });
+
+  app.delete('/api/mcp/resources/:id', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid resource ID' });
+      }
+      await McpService.deleteResource(id);
+      res.json({ message: 'Resource deleted successfully' });
+    } catch (error) {
+      console.error('Failed to delete resource:', error);
+      res.status(500).json({ error: 'Failed to delete resource' });
+    }
+  });
+
+  // MCP Tool routes
+  app.get('/api/mcp/tools', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const serverId = req.query.serverId ? parseInt(req.query.serverId as string) : undefined;
+      const tools = await McpService.getTools(serverId);
+      res.json(tools);
+    } catch (error) {
+      console.error('Failed to fetch MCP tools:', error);
+      res.status(500).json({ error: 'Failed to fetch MCP tools' });
+    }
+  });
+
+  app.post('/api/mcp/tools', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const toolData = insertMcpToolSchema.parse(req.body);
+      const tool = await McpService.createTool(toolData);
+      res.status(201).json(tool);
+    } catch (error) {
+      console.error('Failed to create MCP tool:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: fromZodError(error).message });
+      }
+      res.status(500).json({ error: 'Failed to create MCP tool' });
+    }
+  });
+
+  // Context extraction routes (Ghostwriter-style)
+  app.post('/api/mcp/extract-context', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const { projectId, fileName, filePath, content } = req.body;
+      
+      if (!projectId || !fileName || !filePath || !content) {
+        return res.status(400).json({ error: 'Missing required fields: projectId, fileName, filePath, content' });
+      }
+
+      const extraction = await McpService.extractContext(projectId, fileName, filePath, content);
+      res.status(201).json(extraction);
+    } catch (error) {
+      console.error('Failed to extract context:', error);
+      res.status(500).json({ error: 'Failed to extract context' });
+    }
+  });
+
+  app.get('/api/mcp/context-extractions', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const projectId = req.query.projectId as string;
+      const extractions = await McpService.getContextExtractions(projectId);
+      res.json(extractions);
+    } catch (error) {
+      console.error('Failed to fetch context extractions:', error);
+      res.status(500).json({ error: 'Failed to fetch context extractions' });
+    }
+  });
+
+  app.get('/api/mcp/context-extractions/:id', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid extraction ID' });
+      }
+      const extraction = await McpService.getContextExtraction(id);
+      if (!extraction) {
+        return res.status(404).json({ error: 'Context extraction not found' });
+      }
+      res.json(extraction);
+    } catch (error) {
+      console.error('Failed to fetch context extraction:', error);
+      res.status(500).json({ error: 'Failed to fetch context extraction' });
+    }
+  });
+
+  // GitHub PR bot routes
+  app.get('/api/mcp/github-prs', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const prs = await McpService.getGithubPRs();
+      res.json(prs);
+    } catch (error) {
+      console.error('Failed to fetch GitHub PRs:', error);
+      res.status(500).json({ error: 'Failed to fetch GitHub PRs' });
+    }
+  });
+
+  app.post('/api/mcp/github-prs', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const prData = insertMcpGithubPRSchema.parse(req.body);
+      const pr = await McpService.createGithubPR(prData);
+      res.status(201).json(pr);
+    } catch (error) {
+      console.error('Failed to create GitHub PR:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: fromZodError(error).message });
+      }
+      res.status(500).json({ error: 'Failed to create GitHub PR' });
+    }
+  });
+
+  app.patch('/api/mcp/github-prs/:id', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid PR ID' });
+      }
+      await McpService.updateGithubPR(id, req.body);
+      res.json({ message: 'GitHub PR updated successfully' });
+    } catch (error) {
+      console.error('Failed to update GitHub PR:', error);
+      res.status(500).json({ error: 'Failed to update GitHub PR' });
+    }
+  });
+
+  app.post('/api/mcp/github-prs/:id/comment', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid PR ID' });
+      }
+      const { comment } = req.body;
+      await McpService.addBotComment(id, comment);
+      res.json({ message: 'Bot comment added successfully' });
+    } catch (error) {
+      console.error('Failed to add bot comment:', error);
+      res.status(500).json({ error: 'Failed to add bot comment' });
+    }
+  });
+
+  // Workflow routes
+  app.get('/api/mcp/workflows', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const workflows = await McpService.getWorkflows();
+      res.json(workflows);
+    } catch (error) {
+      console.error('Failed to fetch workflows:', error);
+      res.status(500).json({ error: 'Failed to fetch workflows' });
+    }
+  });
+
+  app.post('/api/mcp/workflows', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const workflowData = insertMcpWorkflowSchema.parse(req.body);
+      const workflow = await McpService.createWorkflow(workflowData);
+      res.status(201).json(workflow);
+    } catch (error) {
+      console.error('Failed to create workflow:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: fromZodError(error).message });
+      }
+      res.status(500).json({ error: 'Failed to create workflow' });
+    }
+  });
+
+  app.post('/api/mcp/workflows/:id/run', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid workflow ID' });
+      }
+      await McpService.runWorkflow(id);
+      res.json({ message: 'Workflow execution started' });
+    } catch (error) {
+      console.error('Failed to run workflow:', error);
+      res.status(500).json({ error: 'Failed to run workflow' });
+    }
+  });
+
+  app.patch('/api/mcp/workflows/:id', isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid workflow ID' });
+      }
+      await McpService.updateWorkflow(id, req.body);
+      res.json({ message: 'Workflow updated successfully' });
+    } catch (error) {
+      console.error('Failed to update workflow:', error);
+      res.status(500).json({ error: 'Failed to update workflow' });
     }
   });
 
