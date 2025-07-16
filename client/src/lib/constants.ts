@@ -7,34 +7,6 @@ export const COLORS = {
   infoBlue: '#00C8FF',
 };
 
-// Platform Categories
-export const HARDWARE_PLATFORMS = [
-  { 
-    id: 'raspberry-pi', 
-    name: 'Raspberry Pi', 
-    icon: 'fa-raspberry-pi',
-    description: 'Single-board computers perfect for network security testing and monitoring.'
-  },
-  { 
-    id: 'arduino', 
-    name: 'Arduino', 
-    icon: 'fa-microchip',
-    description: 'Microcontroller boards ideal for USB attack platforms and keystroke injection.'
-  },
-  { 
-    id: 'esp32', 
-    name: 'ESP32/8266', 
-    icon: 'fa-wifi',
-    description: 'WiFi-capable microcontrollers for wireless deauthentication and Bluetooth attacks.'
-  },
-  { 
-    id: 'sdr', 
-    name: 'SDR Platforms', 
-    icon: 'fa-broadcast-tower',
-    description: 'Software-defined radio for signal analysis and wireless protocol investigation.'
-  }
-];
-
 // Security Tools Categories
 export const SECURITY_TOOLS = [
   {
@@ -120,43 +92,95 @@ export const LEARNING_PATHS = [
   }
 ];
 
-// Popular Hardware
+// Hardware items for the library
 export const HARDWARE_ITEMS = [
   {
     id: 'raspberry-pi-4',
     name: 'Raspberry Pi 4',
-    description: 'Powerful single-board computer perfect for network security testing and monitoring.',
-    image: 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80',
-    tags: ['Networking', 'Linux', 'WiFi'],
-    tagColor: '#00FF00',
+    description: 'Powerful single-board computer for advanced cybersecurity projects',
+    image: '/api/placeholder/300/200',
+    tags: ['WiFi', 'Bluetooth', 'GPIO'],
+    tagColor: '#E74C3C',
     detailLink: '/hardware/raspberry-pi-4'
   },
   {
-    id: 'arduino-nano',
-    name: 'Arduino Nano',
-    description: 'Compact microcontroller ideal for USB attack platforms and keystroke injection.',
-    image: 'https://images.unsplash.com/photo-1553406830-ef2513450d76?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80',
-    tags: ['USB', 'Social Engineering'],
-    tagColor: '#00C8FF',
-    detailLink: '/hardware/arduino-nano'
+    id: 'arduino-uno',
+    name: 'Arduino Uno',
+    description: 'Perfect for hardware hacking and IoT security testing',
+    image: '/api/placeholder/300/200',
+    tags: ['GPIO', 'Serial', 'I2C'],
+    tagColor: '#3498DB',
+    detailLink: '/hardware/arduino-uno'
   },
   {
     id: 'esp32',
     name: 'ESP32',
-    description: 'WiFi-capable microcontroller for wireless deauthentication and Bluetooth attacks.',
-    image: 'https://images.unsplash.com/photo-1649859398021-afbfe80e83b9?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80',
-    tags: ['WiFi', 'Bluetooth'],
-    tagColor: '#00FF00',
+    description: 'WiFi and Bluetooth enabled microcontroller for wireless security',
+    image: '/api/placeholder/300/200',
+    tags: ['WiFi', 'Bluetooth', 'Low Power'],
+    tagColor: '#9B59B6',
     detailLink: '/hardware/esp32'
   },
   {
-    id: 'rtl-sdr',
-    name: 'RTL-SDR',
-    description: 'Software-defined radio for signal analysis and wireless protocol investigation.',
-    image: 'https://images.unsplash.com/photo-1574144113084-b6f450cc5e0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80',
-    tags: ['Radio', 'Signal Analysis'],
-    tagColor: '#FF3E3E',
-    detailLink: '/hardware/rtl-sdr'
+    id: 'orange-pi-zero',
+    name: 'Orange Pi Zero',
+    description: 'Compact and affordable alternative to Raspberry Pi',
+    image: '/api/placeholder/300/200',
+    tags: ['WiFi', 'GPIO', 'Compact'],
+    tagColor: '#F39C12',
+    detailLink: '/hardware/orange-pi-zero'
+  }
+];
+
+// Hardware platforms
+export const HARDWARE_PLATFORMS = [
+  {
+    id: 'single-board',
+    name: 'Single Board Computers',
+    description: 'Full-featured computers on a single circuit board, perfect for running complete operating systems and complex security tools.',
+    icon: 'fa-microchip'
+  },
+  {
+    id: 'microcontrollers',
+    name: 'Microcontrollers',
+    description: 'Lightweight, programmable devices ideal for IoT security testing and hardware-level exploits.',
+    icon: 'fa-cpu'
+  }
+];
+
+// Hardware compatibility matrix
+export const HARDWARE_COMPATIBILITY = [
+  {
+    hardware: 'Raspberry Pi 4',
+    networkAttack: true,
+    rfidCloning: true,
+    keylogger: true,
+    sdr: true,
+    wifiHacking: true
+  },
+  {
+    hardware: 'Arduino Uno',
+    networkAttack: false,
+    rfidCloning: true,
+    keylogger: true,
+    sdr: false,
+    wifiHacking: false
+  },
+  {
+    hardware: 'ESP32',
+    networkAttack: true,
+    rfidCloning: false,
+    keylogger: false,
+    sdr: false,
+    wifiHacking: true
+  },
+  {
+    hardware: 'Orange Pi Zero',
+    networkAttack: true,
+    rfidCloning: true,
+    keylogger: true,
+    sdr: true,
+    wifiHacking: true
   }
 ];
 
@@ -181,50 +205,6 @@ export const SECURITY_TOOL_ITEMS = [
     tagColor: '#00C8FF',
     command: 'sudo kismet -c wlan0\n# Access dashboard at http://localhost:2501',
     docLink: '/tools/kismet'
-  }
-];
-
-// Hardware Compatibility Matrix
-export const HARDWARE_COMPATIBILITY = [
-  {
-    hardware: 'Raspberry Pi 4',
-    networkAttack: true,
-    rfidCloning: true,
-    keylogger: true,
-    sdr: true,
-    wifiHacking: true
-  },
-  {
-    hardware: 'Arduino Nano',
-    networkAttack: false,
-    rfidCloning: true,
-    keylogger: true,
-    sdr: false,
-    wifiHacking: false
-  },
-  {
-    hardware: 'ESP32',
-    networkAttack: true,
-    rfidCloning: false,
-    keylogger: true,
-    sdr: false,
-    wifiHacking: true
-  },
-  {
-    hardware: 'RTL-SDR',
-    networkAttack: false,
-    rfidCloning: false,
-    keylogger: false,
-    sdr: true,
-    wifiHacking: true
-  },
-  {
-    hardware: 'Pi Zero W',
-    networkAttack: true,
-    rfidCloning: true,
-    keylogger: true,
-    sdr: false,
-    wifiHacking: true
   }
 ];
 
