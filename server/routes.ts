@@ -49,11 +49,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Setup email processing
   // In a real application, this would be a scheduled job or separate worker
+  // Temporarily disabled due to database connection issues
+  /*
   setInterval(() => {
     EmailService.processEmailQueue().catch(err => {
       console.error('Error processing email queue:', err);
     });
   }, 60000); // Process every minute
+  */
 
   // ===== User Routes =====
   app.post('/api/users', async (req: Request, res: Response) => {

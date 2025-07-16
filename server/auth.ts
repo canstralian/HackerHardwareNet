@@ -3,16 +3,15 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import bcrypt from 'bcrypt';
 import session from 'express-session';
 import pgSession from 'connect-pg-simple';
+import MemoryStore from 'memorystore';
 import { Express } from 'express';
 import { storage } from './storage';
 import { User } from '@shared/schema';
-import pg from 'pg';
+import { pool } from './db';
 
 // Initialize PostgreSQL session store
 const PgStore = pgSession(session);
-const pgPool = new pg.Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+const memoryStore = MemoryStore(session);
 
 // Configure passport to use local strategy
 passport.use(
@@ -63,10 +62,14 @@ export function configureAuth(app: Express): void {
   // Session configuration
   app.use(
     session({
-      store: new PgStore({
-        pool: pgPool,
-        tableName: 'user_sessions', // Table to store sessions
-      }),
+      store: process.env.NODE_ENV === 'production' && process.env.DATABASE_URL && false
+        ? new PgStore({
+            pool: pool,
+            tableName: 'user_sessions', // Table to store sessions
+          })
+        : new memoryStore({
+            checkPeriod: 86400000, // prune expired entries every 24h
+          }),
       secret: process.env.SESSION_SECRET || 'cybersecurity-education-platform-secret',
       resave: false,
       saveUninitialized: false,

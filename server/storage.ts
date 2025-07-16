@@ -26,9 +26,10 @@ import {
   challengeComments, type ChallengeComment, type InsertChallengeComment,
   userChallengeProgress, type UserChallengeProgress, type InsertUserChallengeProgress
 } from "@shared/schema";
-import { drizzle } from "drizzle-orm/node-postgres";
+import { drizzle } from "drizzle-orm/neon-serverless";
 import { eq } from "drizzle-orm";
-import pg from "pg";
+import { Pool, neonConfig } from '@neondatabase/serverless';
+import ws from "ws";
 
 export interface IStorage {
   // User CRUD
@@ -311,7 +312,7 @@ export class MemStorage implements IStorage {
     this.currentUserChallengeProgressId = 1;
     
     // Initialize with some demo data
-    this.initializeDemoData();
+    this.initializeDemoData().catch(console.error);
   }
   
   // User methods
@@ -1317,7 +1318,7 @@ async checkAndAwardAchievements(userId: number): Promise<UserAchievement[]> {
   return newAchievements;
 }
 
-private initializeDemoData() {
+private async initializeDemoData() {
     // Add demo user
     const adminUser: InsertUser = {
       username: 'admin',
@@ -1328,8 +1329,11 @@ private initializeDemoData() {
     
     // Load sample articles from JSON file
     try {
-      const fs = require('fs');
-      const path = require('path');
+      const fs = await import('fs');
+      const path = await import('path');
+      const { fileURLToPath } = await import('url');
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = path.dirname(__filename);
       const articleDataPath = path.join(__dirname, 'data', 'sample-articles.json');
       
       if (fs.existsSync(articleDataPath)) {
@@ -1412,11 +1416,18 @@ private initializeDemoData() {
 
 export class PostgresStorage implements IStorage {
   private db: ReturnType<typeof drizzle>;
+  private pool: Pool;
   
   constructor() {
-    const client = new pg.Client(process.env.DATABASE_URL);
-    client.connect();
-    this.db = drizzle(client);
+    // Configure Neon WebSocket
+    neonConfig.webSocketConstructor = ws;
+    
+    if (!process.env.DATABASE_URL) {
+      throw new Error("DATABASE_URL must be set. Did you forget to provision a database?");
+    }
+    
+    this.pool = new Pool({ connectionString: process.env.DATABASE_URL });
+    this.db = drizzle(this.pool);
   }
   
   // User methods
@@ -2355,6 +2366,7 @@ export class PostgresStorage implements IStorage {
 }
 
 // Use PostgreSQL storage in production, MemStorage for development/testing
-export const storage = process.env.NODE_ENV === 'production' || process.env.DATABASE_URL
+// Temporarily using MemStorage to avoid database connection issues
+export const storage = process.env.NODE_ENV === 'production' && process.env.DATABASE_URL && false
   ? new PostgresStorage()
   : new MemStorage();
