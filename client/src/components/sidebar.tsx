@@ -68,15 +68,18 @@ const Sidebar = () => {
     }
   }, [location]);
 
-  // Floating mobile action buttons
+  // Enhanced mobile navigation with better accessibility
   const MobileNav = () => (
-    <div className="lg:hidden fixed bottom-6 left-0 right-0 z-40 flex justify-center">
+    <nav className="lg:hidden fixed bottom-6 left-0 right-0 z-40 flex justify-center" role="navigation" aria-label="Mobile navigation">
       <div className="bg-[#1A1A1A]/90 backdrop-blur-sm rounded-full shadow-lg border border-[#00FF00]/20 p-1.5 flex gap-2">
         <button
           onClick={toggleMobileCategories}
           className={`${showMobileCategories ? 'bg-[#00FF00]/20 text-[#00FF00]' : 'bg-transparent text-gray-400'} 
-            rounded-full p-2.5 flex items-center justify-center hover:text-[#00FF00] hover:bg-[#00FF00]/10 transition-colors`}
+            rounded-full p-2.5 flex items-center justify-center hover:text-[#00FF00] hover:bg-[#00FF00]/10 transition-colors
+            focus:outline-none focus:ring-2 focus:ring-[#00FF00] focus:ring-offset-2 focus:ring-offset-[#1A1A1A]`}
           aria-label="Browse categories"
+          aria-expanded={showMobileCategories}
+          aria-controls="mobile-categories"
         >
           <Cpu size={20} />
         </button>
@@ -84,20 +87,33 @@ const Sidebar = () => {
         <button
           onClick={toggleMobileSidebar}
           className={`${isMobileSidebarOpen ? 'bg-[#00FF00]/20 text-[#00FF00]' : 'bg-transparent text-gray-400'} 
-            rounded-full p-2.5 flex items-center justify-center hover:text-[#00FF00] hover:bg-[#00FF00]/10 transition-colors`}
-          aria-label="Open menu"
+            rounded-full p-2.5 flex items-center justify-center hover:text-[#00FF00] hover:bg-[#00FF00]/10 transition-colors
+            focus:outline-none focus:ring-2 focus:ring-[#00FF00] focus:ring-offset-2 focus:ring-offset-[#1A1A1A]`}
+          aria-label={isMobileSidebarOpen ? "Close menu" : "Open menu"}
+          aria-expanded={isMobileSidebarOpen}
+          aria-controls="mobile-sidebar"
         >
           {isMobileSidebarOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
         
         <button
-          className="bg-transparent text-gray-400 rounded-full p-2.5 flex items-center justify-center hover:text-[#00FF00] hover:bg-[#00FF00]/10 transition-colors"
-          aria-label="Share content"
+          onClick={() => {
+            if (navigator.share) {
+              navigator.share({
+                title: 'HackerHardware.net',
+                text: 'Check out this cybersecurity hardware platform',
+                url: window.location.href
+              });
+            }
+          }}
+          className="bg-transparent text-gray-400 rounded-full p-2.5 flex items-center justify-center hover:text-[#00FF00] hover:bg-[#00FF00]/10 transition-colors
+            focus:outline-none focus:ring-2 focus:ring-[#00FF00] focus:ring-offset-2 focus:ring-offset-[#1A1A1A]"
+          aria-label="Share current page"
         >
           <Share2 size={20} />
         </button>
       </div>
-    </div>
+    </nav>
   );
 
   // Mobile category menu

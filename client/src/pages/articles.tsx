@@ -42,21 +42,18 @@ const ArticlesPage = () => {
 
   return (
     <div className="container py-4 sm:py-6 lg:py-8 px-4 sm:px-6">
-      {/* Cyberpunk-inspired header section */}
-      <div className="relative overflow-hidden rounded-lg mb-6 sm:mb-8 md:mb-10 border border-[#00FF00]/30 bg-gradient-to-r from-black to-gray-900">
-        <div className="absolute inset-0 bg-black opacity-60"></div>
-        <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
+      {/* Enhanced header section with better accessibility */}
+      <header className="relative overflow-hidden rounded-lg mb-6 sm:mb-8 md:mb-10 border border-[#00FF00]/30 bg-gradient-to-r from-black to-gray-900" role="banner">
+        <div className="absolute inset-0 bg-black opacity-60" aria-hidden="true"></div>
+        <div className="absolute inset-0 bg-grid-pattern opacity-10" aria-hidden="true"></div>
 
         {/* Glowing border effect */}
-        <div className="absolute inset-0 border border-[#00FF00]/50 rounded-lg opacity-50"></div>
-        <div className="absolute -inset-0.5 bg-[#00FF00]/5 blur-md rounded-lg"></div>
-
-        {/* Digital noise pattern (optional) */}
-        <div className="absolute inset-0 bg-noise-pattern opacity-5 mix-blend-overlay"></div>
+        <div className="absolute inset-0 border border-[#00FF00]/50 rounded-lg opacity-50" aria-hidden="true"></div>
+        <div className="absolute -inset-0.5 bg-[#00FF00]/5 blur-md rounded-lg" aria-hidden="true"></div>
 
         <div className="relative z-10 p-4 sm:p-6 md:p-8 lg:p-12">
           <div className="max-w-3xl">
-            <div className="inline-block px-2 py-1 text-xs tracking-wider text-[#00FF00] border border-[#00FF00]/30 mb-3 sm:mb-4 bg-black/50 uppercase">
+            <div className="inline-block px-2 py-1 text-xs tracking-wider text-[#00FF00] border border-[#00FF00]/30 mb-3 sm:mb-4 bg-black/50 uppercase" role="banner">
               knowledge base
             </div>
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-mono font-bold mb-3 sm:mb-4 text-white leading-tight">
@@ -67,17 +64,23 @@ const ArticlesPage = () => {
               hardware hacking, and ethical exploration using single board computers.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <Button asChild className="bg-[#00FF00] text-black hover:bg-[#00FF00]/90 min-h-[44px] text-sm sm:text-base">
-                <Link href="/learning-paths">Explore Learning Paths</Link>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4" role="group" aria-label="Main navigation actions">
+              <Button asChild className="bg-[#00FF00] text-black hover:bg-[#00FF00]/90 min-h-[44px] text-sm sm:text-base focus:ring-2 focus:ring-[#00FF00] focus:ring-offset-2">
+                <Link href="/learning-paths" aria-describedby="learning-paths-desc">
+                  Explore Learning Paths
+                </Link>
               </Button>
-              <Button variant="outline" className="border-[#00FF00]/50 text-[#00FF00] hover:bg-[#00FF00]/10 min-h-[44px] text-sm sm:text-base" asChild>
-                <Link href="#categories">Browse Categories</Link>
+              <Button variant="outline" className="border-[#00FF00]/50 text-[#00FF00] hover:bg-[#00FF00]/10 min-h-[44px] text-sm sm:text-base focus:ring-2 focus:ring-[#00FF00] focus:ring-offset-2" asChild>
+                <Link href="#categories" aria-describedby="categories-desc">
+                  Browse Categories
+                </Link>
               </Button>
             </div>
+            <div id="learning-paths-desc" className="sr-only">Navigate to structured learning paths for cybersecurity education</div>
+            <div id="categories-desc" className="sr-only">Browse articles by topic categories</div>
           </div>
         </div>
-      </div>
+      </header>
 
       <div className="flex flex-col gap-4 mb-6 sm:mb-8">
         <div>
@@ -115,9 +118,9 @@ const ArticlesPage = () => {
 
         <TabsContent value={activeTab} className="mt-0">
           {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" role="status" aria-label="Loading articles">
               {Array(6).fill(0).map((_, index) => (
-                <Card key={index} className="animate-pulse">
+                <Card key={index} className="animate-pulse" aria-hidden="true">
                   <div className="h-48 bg-gray-700 rounded-t-lg"></div>
                   <CardContent className="p-6">
                     <div className="h-6 bg-gray-700 rounded mb-3 w-3/4"></div>
@@ -130,64 +133,105 @@ const ArticlesPage = () => {
                   </CardContent>
                 </Card>
               ))}
+              <div className="sr-only">Loading articles...</div>
             </div>
           ) : filteredArticles?.length === 0 ? (
-            <div className="text-center py-16">
+            <div className="text-center py-16" role="status">
+              <div className="mb-4">
+                <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
               <h3 className="text-xl font-medium mb-2">No articles found</h3>
-              <p className="text-gray-400">Try adjusting your search or filters</p>
+              <p className="text-gray-400 mb-4">Try adjusting your search or filters</p>
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setSearchQuery("");
+                  setActiveTab("all");
+                }}
+                className="border-[#00FF00]/50 text-[#00FF00] hover:bg-[#00FF00]/10"
+              >
+                Clear filters
+              </Button>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {filteredArticles?.map(article => (
                 <Card 
                   key={article.id} 
-                  className="overflow-hidden border border-gray-800 hover:border-primary/50 transition-colors cursor-pointer"
+                  className="overflow-hidden border border-gray-800 hover:border-primary/50 transition-all duration-300 cursor-pointer
+                    focus-within:ring-2 focus-within:ring-[#00FF00] focus-within:ring-offset-2 focus-within:ring-offset-black
+                    hover:shadow-lg hover:shadow-[#00FF00]/10 group"
+                  role="article"
+                  tabIndex={0}
                   onClick={() => handleViewArticle(article.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleViewArticle(article.id);
+                    }
+                  }}
+                  aria-label={`Read article: ${article.title}`}
                 >
                   {article.imageUrl && (
                     <div className="h-40 sm:h-48 overflow-hidden">
                       <img 
                         src={article.imageUrl} 
-                        alt={article.title} 
-                        className="w-full h-full object-cover"
+                        alt={`Cover image for ${article.title}`}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
                       />
                     </div>
                   )}
                   <CardContent className="p-3 sm:p-4 lg:p-6">
-                    <h2 className="text-lg sm:text-xl font-bold mb-2 line-clamp-2 leading-tight">{article.title}</h2>
-                    <p className="text-gray-400 mb-3 sm:mb-4 line-clamp-3 text-sm sm:text-base leading-relaxed">{article.preview}</p>
+                    <h2 className="text-lg sm:text-xl font-bold mb-2 line-clamp-2 leading-tight text-white group-hover:text-[#00FF00] transition-colors">
+                      {article.title}
+                    </h2>
+                    <p className="text-gray-400 mb-3 sm:mb-4 line-clamp-3 text-sm sm:text-base leading-relaxed">
+                      {article.preview}
+                    </p>
 
-                    <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4" role="list" aria-label="Article tags">
                       {article.tags.slice(0, 2).map((tag, index) => (
                         <span 
                           key={index} 
                           className="inline-flex items-center text-xs px-2 py-1 bg-primary/10 text-primary rounded-full"
+                          role="listitem"
                         >
-                          <Tag size={10} className="mr-1" />
+                          <Tag size={10} className="mr-1" aria-hidden="true" />
                           {tag}
                         </span>
                       ))}
                       {article.tags.length > 2 && (
-                        <span className="text-xs px-2 py-1 bg-gray-800 text-gray-400 rounded-full">
-                          +{article.tags.length - 2}
+                        <span className="text-xs px-2 py-1 bg-gray-800 text-gray-400 rounded-full" role="listitem">
+                          +{article.tags.length - 2} more
                         </span>
                       )}
                     </div>
                   </CardContent>
                   <CardFooter className="px-3 sm:px-4 lg:px-6 pb-4 sm:pb-6 pt-0 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
-                    <div className="flex items-center space-x-3 sm:space-x-4 text-xs sm:text-sm text-gray-400">
+                    <div className="flex items-center space-x-3 sm:space-x-4 text-xs sm:text-sm text-gray-400" role="group" aria-label="Article metadata">
                       <div className="flex items-center">
-                        <Calendar size={12} className="mr-1" />
-                        <span className="hidden sm:inline">{new Date(article.publishedAt).toLocaleDateString()}</span>
-                        <span className="sm:hidden">{new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                        <Calendar size={12} className="mr-1" aria-hidden="true" />
+                        <time dateTime={article.publishedAt}>
+                          <span className="hidden sm:inline">{new Date(article.publishedAt).toLocaleDateString()}</span>
+                          <span className="sm:hidden">{new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                        </time>
                       </div>
                       <div className="flex items-center">
-                        <Clock size={12} className="mr-1" />
+                        <Clock size={12} className="mr-1" aria-hidden="true" />
                         <span>{article.readTime}</span>
                       </div>
                     </div>
-                    <Button variant="ghost" size="sm" className="text-primary p-0 self-end sm:self-auto min-h-[44px] sm:min-h-auto">
-                      Read <ChevronRight size={16} />
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-primary p-0 self-end sm:self-auto min-h-[44px] sm:min-h-auto
+                        focus:ring-2 focus:ring-[#00FF00] focus:ring-offset-2 focus:ring-offset-black"
+                      aria-label={`Read ${article.title}`}
+                    >
+                      Read <ChevronRight size={16} className="ml-1" aria-hidden="true" />
                     </Button>
                   </CardFooter>
                 </Card>

@@ -1,10 +1,32 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import passport from 'passport';
+import session from 'express-session';
 
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
+
+// Configure session middleware
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false }
+}));
+
+// Initialize passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Add authentication helper middleware
+app.use((req, res, next) => {
+  if (!req.isAuthenticated) {
+    req.isAuthenticated = () => false;
+  }
+  next();
+});
 
 app.use((req, res, next) => {
   const start = Date.now();
