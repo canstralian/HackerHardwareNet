@@ -59,88 +59,68 @@ const Header = () => {
   ];
 
   return (
-    <header role="banner" className="sticky top-0 z-50 bg-[#1A1A1A] border-b border-[#00FF00]/30 shadow-md">
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <div className="flex items-center space-x-2">
-          <div className="text-[#00FF00] text-2xl" aria-hidden="true">
-            <i className="fas fa-microchip"></i>
+    <header role="banner" className="sticky top-0 z-50 bg-hacker-secondary bg-opacity-90 backdrop-blur-sm border-b border-hacker-accent">
+      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        <div className="flex items-center">
+          <div className="w-10 h-10 rounded-full bg-hacker-accent flex items-center justify-center mr-3">
+            <Cpu className="text-hacker-primary text-xl" />
           </div>
           <Link href="/">
-            <h1 className="text-2xl font-mono font-bold">
-              <span className="text-[#00FF00]">Hackerhardware</span><span className="text-[#00FF00]">.net</span>
+            <h1 className="text-2xl font-bold font-mono tracking-tight">
+              HACKER<span className="text-hacker-accent">HARDWARE</span>
             </h1>
           </Link>
         </div>
 
-        <nav className="hidden md:flex items-center space-x-6" role="navigation" aria-label="Main navigation">
-          {navigationLinks.map((link) => (
+        <nav className="hidden md:flex space-x-8" role="navigation" aria-label="Main navigation">
+          {navigationLinks.slice(0, 5).map((link) => (
             <Link 
               key={link.href}
               href={link.href} 
               className={`
-                flex items-center gap-1.5
-                ${location === link.href ? 'text-[#00FF00]' : 'text-white'} 
-                hover:text-[#00FF00] transition-colors font-medium
-                px-2 py-1.5 rounded
-                hover:bg-[#00FF00]/5 focus:outline-none focus:ring-2 focus:ring-[#00FF00]/30
+                ${location === link.href ? 'text-hacker-accent' : 'text-hacker-text'} 
+                hover:text-hacker-accent transition-colors
               `}
               aria-current={location === link.href ? 'page' : undefined}
             >
-              {link.icon}
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-center space-x-4">
-          <div className="relative hidden md:block">
-            <SearchBar />
+        <div className="flex items-center space-x-5">
+          <div className="hidden md:block relative">
+            <input 
+              type="text" 
+              placeholder="Search hardware..." 
+              className="terminal-input px-4 py-2 rounded-full w-64 bg-hacker-secondary border border-gray-700"
+            />
+            <i className="fas fa-search absolute right-3 top-3 text-gray-400"></i>
           </div>
+          <Link 
+            href="/dashboard" 
+            className="hover:text-hacker-accent transition-colors"
+            aria-label="Go to dashboard"
+          >
+            <User size={20} />
+          </Link>
+          <Link 
+            href="/checkout" 
+            className="hover:text-hacker-accent transition-colors relative"
+            aria-label="View shopping cart"
+          >
+            <i className="fas fa-shopping-cart text-xl"></i>
+            <span className="absolute -top-2 -right-2 bg-hacker-accent text-hacker-primary text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">3</span>
+          </Link>
           <button 
-            className="md:hidden text-white text-xl p-2 hover:bg-[#00FF00]/10 rounded-md transition-colors"
+            className="md:hidden text-xl"
             onClick={toggleMobileMenu}
             aria-label="Toggle mobile menu"
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
           >
-            <Menu size={24} />
+            <i className="fas fa-bars"></i>
           </button>
-          
-          {authLoading ? (
-            // Loading state
-            <div className="w-8 h-8 rounded-full bg-[#1A1A1A] border border-[#00FF00]/30 animate-pulse" aria-label="Loading authentication status"></div>
-          ) : authStatus?.isAuthenticated ? (
-            // Authenticated user
-            <div className="flex items-center gap-3">
-              <Link 
-                href="/dashboard" 
-                className="hidden md:flex items-center space-x-1 text-[#00FF00] hover:bg-[#00FF00]/10 px-4 py-2 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-[#00FF00]/50"
-                aria-label="Go to dashboard"
-              >
-                <User size={18} className="mr-1" />
-                <span>Dashboard</span>
-              </Link>
-            </div>
-          ) : (
-            // Unauthenticated user
-            <div className="flex items-center gap-2">
-              <Link 
-                href="/login" 
-                className="hidden md:flex items-center space-x-1 text-[#00FF00] hover:bg-[#00FF00]/10 px-4 py-2 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-[#00FF00]/50"
-                aria-label="Log in to your account"
-              >
-                <LogIn size={18} className="mr-1" />
-                <span>Login</span>
-              </Link>
-              <Link 
-                href="/register" 
-                className="hidden md:flex items-center bg-[#00FF00] text-black hover:bg-[#00FF00]/90 px-4 py-2 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-[#00FF00]/50"
-                aria-label="Create an account"
-              >
-                <span>Register</span>
-              </Link>
-            </div>
-          )}
         </div>
       </div>
 
@@ -148,13 +128,17 @@ const Header = () => {
       {isMobileMenuOpen && (
         <div 
           id="mobile-menu"
-          className="md:hidden bg-[#1A1A1A] border-t border-[#00FF00]/20 shadow-lg"
+          className="md:hidden bg-hacker-secondary border-t border-hacker-accent shadow-lg"
           role="navigation"
           aria-label="Mobile navigation"
         >
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-3">
             <div className="relative mb-2">
-              <SearchBar />
+              <input 
+                type="text" 
+                placeholder="Search hardware..." 
+                className="terminal-input w-full px-4 py-2 rounded-lg bg-hacker-primary border border-gray-700"
+              />
             </div>
             
             {navigationLinks.map((link) => (
@@ -163,9 +147,9 @@ const Header = () => {
                 href={link.href} 
                 className={`
                   flex items-center gap-2
-                  ${location === link.href ? 'text-[#00FF00] bg-[#00FF00]/10' : 'text-white'} 
+                  ${location === link.href ? 'text-hacker-accent bg-hacker-accent/10' : 'text-hacker-text'} 
                   py-2.5 px-3 rounded-md
-                  border-l-2 ${location === link.href ? 'border-[#00FF00]' : 'border-transparent'}
+                  border-l-2 ${location === link.href ? 'border-hacker-accent' : 'border-transparent'}
                 `}
                 onClick={() => setIsMobileMenuOpen(false)}
                 aria-current={location === link.href ? 'page' : undefined}
@@ -174,37 +158,6 @@ const Header = () => {
                 <span>{link.label}</span>
               </Link>
             ))}
-            
-            {authStatus?.isAuthenticated ? (
-              // Authenticated user
-              <Link 
-                href="/dashboard" 
-                className="flex items-center gap-2 text-[#00FF00] py-2.5 px-3 rounded-md border-l-2 border-transparent mt-2"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <User size={18} />
-                <span>Dashboard</span>
-              </Link>
-            ) : (
-              // Unauthenticated user
-              <div className="flex flex-col gap-2 pt-2 mt-2">
-                <Link 
-                  href="/login" 
-                  className="flex items-center gap-2 text-[#00FF00] py-2.5 px-3 rounded-md border-l-2 border-transparent"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <LogIn size={18} />
-                  <span>Login</span>
-                </Link>
-                <Link 
-                  href="/register" 
-                  className="flex items-center justify-center bg-[#00FF00] text-black hover:bg-[#00FF00]/90 py-2.5 px-3 rounded-md transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <span>Register</span>
-                </Link>
-              </div>
-            )}
           </div>
         </div>
       )}

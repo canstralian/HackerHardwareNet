@@ -68,6 +68,13 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        hacker: {
+          primary: '#0f172a',
+          secondary: '#1e293b',
+          accent: '#00ff9d',
+          text: '#e2e8f0',
+          highlight: '#3b82f6'
+        },
       },
       keyframes: {
         "accordion-down": {
@@ -86,10 +93,24 @@ export default {
             height: "0",
           },
         },
+        typing: {
+          from: { width: "0" },
+          to: { width: "100%" }
+        },
+        "blink-caret": {
+          "from, to": { "border-color": "transparent" },
+          "50%": { "border-color": "#00ff9d" }
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        typing: "typing 3.5s steps(40, end)",
+        "blink-caret": "blink-caret .75s step-end infinite"
+      },
+      fontFamily: {
+        mono: ['IBM Plex Mono', 'monospace'],
+        sans: ['Inter', 'sans-serif']
       },
     },
   },

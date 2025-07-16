@@ -25,115 +25,209 @@ const Home = () => {
           {/* Hero Section */}
           <HeroSection />
 
-          {/* Learning Paths Section */}
-          <section className="mb-12">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
-              <h2 className="text-xl sm:text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Learning Paths</h2>
-              <Link href="/learning-paths" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200 w-full sm:w-auto justify-center sm:justify-start">
-                View All 
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
-                  <path d="m9 18 6-6-6-6"/>
-                </svg>
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {LEARNING_PATHS.map((path) => (
-                <LearningPathCard 
-                  key={path.id}
-                  id={path.id}
-                  title={path.title}
-                  description={path.description}
-                  icon={path.icon}
-                  badge={path.badge}
-                  badgeColor={path.badgeColor}
-                  duration={path.duration}
-                  modules={path.modules}
-                  color={path.color}
-                />
-              ))}
+          {/* Hardware Categories Section */}
+          <section className="py-16 bg-hacker-secondary">
+            <div className="container mx-auto px-4">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold mb-4">Hardware Categories</h2>
+                <p className="max-w-2xl mx-auto text-gray-400">Specialized tools for every aspect of cybersecurity and penetration testing</p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-hacker-primary rounded-xl overflow-hidden border border-gray-800 hover:border-hacker-accent transition-all">
+                  <div className="p-6">
+                    <div className="w-16 h-16 rounded-full bg-hacker-accent bg-opacity-20 flex items-center justify-center mb-6">
+                      <i className="fas fa-laptop-code text-hacker-accent text-2xl"></i>
+                    </div>
+                    <h3 className="text-xl font-bold mb-2">Penetration Testing</h3>
+                    <p className="text-gray-400 mb-4">Tools for network security assessment and vulnerability scanning</p>
+                    <Link href="/hardware-library" className="text-hacker-accent font-medium flex items-center">
+                      Explore <i className="fas fa-arrow-right ml-2 text-sm"></i>
+                    </Link>
+                  </div>
+                </div>
+                
+                <div className="bg-hacker-primary rounded-xl overflow-hidden border border-gray-800 hover:border-hacker-accent transition-all">
+                  <div className="p-6">
+                    <div className="w-16 h-16 rounded-full bg-blue-500 bg-opacity-20 flex items-center justify-center mb-6">
+                      <i className="fas fa-wifi text-blue-500 text-2xl"></i>
+                    </div>
+                    <h3 className="text-xl font-bold mb-2">Wireless Hacking</h3>
+                    <p className="text-gray-400 mb-4">Antennas, adapters, and tools for wireless security testing</p>
+                    <Link href="/hardware-library" className="text-hacker-accent font-medium flex items-center">
+                      Explore <i className="fas fa-arrow-right ml-2 text-sm"></i>
+                    </Link>
+                  </div>
+                </div>
+                
+                <div className="bg-hacker-primary rounded-xl overflow-hidden border border-gray-800 hover:border-hacker-accent transition-all">
+                  <div className="p-6">
+                    <div className="w-16 h-16 rounded-full bg-purple-500 bg-opacity-20 flex items-center justify-center mb-6">
+                      <i className="fas fa-microchip text-purple-500 text-2xl"></i>
+                    </div>
+                    <h3 className="text-xl font-bold mb-2">Embedded Systems</h3>
+                    <p className="text-gray-400 mb-4">Development boards, programmers, and debugging tools</p>
+                    <Link href="/hardware-library" className="text-hacker-accent font-medium flex items-center">
+                      Explore <i className="fas fa-arrow-right ml-2 text-sm"></i>
+                    </Link>
+                  </div>
+                </div>
+                
+                <div className="bg-hacker-primary rounded-xl overflow-hidden border border-gray-800 hover:border-hacker-accent transition-all">
+                  <div className="p-6">
+                    <div className="w-16 h-16 rounded-full bg-green-500 bg-opacity-20 flex items-center justify-center mb-6">
+                      <i className="fas fa-shield-alt text-green-500 text-2xl"></i>
+                    </div>
+                    <h3 className="text-xl font-bold mb-2">Physical Security</h3>
+                    <p className="text-gray-400 mb-4">Lockpicking tools, RFID devices, and access control systems</p>
+                    <Link href="/hardware-library" className="text-hacker-accent font-medium flex items-center">
+                      Explore <i className="fas fa-arrow-right ml-2 text-sm"></i>
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
 
-          {/* Popular Hardware Section */}
-          <section className="mb-12">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
-              <h2 className="text-xl sm:text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Popular Hardware</h2>
-              <Link href="/hardware-library" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200 w-full sm:w-auto justify-center sm:justify-start">
-                View All 
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
-                  <path d="m9 18 6-6-6-6"/>
-                </svg>
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {HARDWARE_ITEMS.map((item) => (
-                <HardwareCard 
-                  key={item.id}
-                  id={item.id}
-                  name={item.name}
-                  description={item.description}
-                  image={item.image}
-                  tags={item.tags}
-                  tagColor={item.tagColor}
-                  detailLink={item.detailLink}
-                />
-              ))}
+          {/* Featured Products Section */}
+          <section className="py-16">
+            <div className="container mx-auto px-4">
+              <div className="flex flex-col md:flex-row justify-between items-center mb-12">
+                <div>
+                  <h2 className="text-3xl font-bold mb-2">Featured Hardware</h2>
+                  <p className="text-gray-400">Top-rated tools by cybersecurity professionals</p>
+                </div>
+                <div className="mt-4 md:mt-0">
+                  <Link href="/hardware-library" className="px-6 py-2 border border-hacker-accent text-hacker-accent rounded-full hover:bg-hacker-accent hover:text-hacker-primary transition-colors">
+                    View All Products
+                  </Link>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {HARDWARE_ITEMS.slice(0, 4).map((item) => (
+                  <div key={item.id} className="product-card bg-hacker-secondary rounded-xl overflow-hidden border border-gray-800 transition-all duration-300">
+                    <div className="relative">
+                      <div className="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                        HOT
+                      </div>
+                      <img src={item.image} alt={item.name} className="w-full h-56 object-cover" />
+                    </div>
+                    <div className="p-5">
+                      <h3 className="font-bold text-lg mb-1">{item.name}</h3>
+                      <p className="text-gray-400 text-sm mb-3">{item.description}</p>
+                      <div className="flex items-center mb-3">
+                        <div className="flex text-amber-400">
+                          <i className="fas fa-star"></i>
+                          <i className="fas fa-star"></i>
+                          <i className="fas fa-star"></i>
+                          <i className="fas fa-star"></i>
+                          <i className="fas fa-star-half-alt"></i>
+                        </div>
+                        <span className="text-sm ml-2">(128)</span>
+                      </div>
+                      <div className="flex justify-between items-center mt-4">
+                        <span className="text-xl font-bold">${item.price}</span>
+                        <button className="bg-hacker-accent text-hacker-primary px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors">
+                          <i className="fas fa-shopping-cart"></i> Add
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </section>
 
-          {/* Featured Tutorial */}
-          <section className="mb-12">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
-              <h2 className="text-xl sm:text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Featured Tutorial</h2>
-              <Link href="/tutorials" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200 w-full sm:w-auto justify-center sm:justify-start">
-                More Tutorials 
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
-                  <path d="m9 18 6-6-6-6"/>
-                </svg>
-              </Link>
+          {/* Newsletter & Blog Section */}
+          <section className="py-16 bg-gradient-to-r from-hacker-primary to-hacker-secondary">
+            <div className="container mx-auto px-4">
+              <div className="max-w-4xl mx-auto text-center">
+                <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
+                <p className="text-gray-400 mb-8">Get the latest cybersecurity news, tutorials, and hardware reviews</p>
+                <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-md mx-auto">
+                  <input 
+                    type="email" 
+                    placeholder="Your email address" 
+                    className="px-4 py-3 rounded-lg bg-hacker-secondary border border-gray-700 flex-1"
+                  />
+                  <button className="px-6 py-3 bg-hacker-accent text-hacker-primary font-bold rounded-lg hover:bg-opacity-90 transition-colors">
+                    Subscribe
+                  </button>
+                </div>
+              </div>
             </div>
-            
-            <TutorialFeature 
-              id={FEATURED_TUTORIAL.id}
-              title={FEATURED_TUTORIAL.title}
-              description={FEATURED_TUTORIAL.description}
-              image={FEATURED_TUTORIAL.image}
-              badge={FEATURED_TUTORIAL.badge}
-              badgeColor={FEATURED_TUTORIAL.badgeColor}
-              updatedDate={FEATURED_TUTORIAL.updatedDate}
-              learningPoints={FEATURED_TUTORIAL.learningPoints}
-              duration={FEATURED_TUTORIAL.duration}
-              level={FEATURED_TUTORIAL.level}
-              platform={FEATURED_TUTORIAL.platform}
-            />
           </section>
 
-          {/* Documentation and Tools */}
-          <section className="mb-12">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
-              <h2 className="text-xl sm:text-2xl font-mono font-bold"><span className="text-[#00FF00]">#</span> Security Tools</h2>
-              <Link href="/tools" className="flex items-center gap-1 text-[#00FF00] text-sm font-semibold px-3 py-1.5 rounded-md border border-[#00FF00]/40 hover:bg-[#00FF00]/10 hover:border-[#00FF00] transition-all duration-200 w-full sm:w-auto justify-center sm:justify-start">
-                View All 
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
-                  <path d="m9 18 6-6-6-6"/>
-                </svg>
-              </Link>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {SECURITY_TOOL_ITEMS.map((tool) => (
-                <ToolCard 
-                  key={tool.id}
-                  id={tool.id}
-                  name={tool.name}
-                  description={tool.description}
-                  icon={tool.icon}
-                  tags={tool.tags}
-                  tagColor={tool.tagColor}
-                  command={tool.command}
-                  docLink={tool.docLink}
-                />
-              ))}
+          {/* Testimonials Section */}
+          <section className="py-16">
+            <div className="container mx-auto px-4">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold mb-4">What Our Users Say</h2>
+                <p className="text-gray-400 max-w-2xl mx-auto">Join thousands of cybersecurity professionals who trust our platform</p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="bg-hacker-secondary rounded-xl p-6 border border-gray-800">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 rounded-full bg-hacker-accent flex items-center justify-center">
+                      <i className="fas fa-user text-hacker-primary"></i>
+                    </div>
+                    <div className="ml-4">
+                      <h4 className="font-bold">Alex Rodriguez</h4>
+                      <p className="text-sm text-gray-400">Penetration Tester</p>
+                    </div>
+                  </div>
+                  <p className="text-gray-300">"The hardware quality is exceptional. Perfect for professional penetration testing work."</p>
+                  <div className="flex text-amber-400 mt-4">
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                  </div>
+                </div>
+                
+                <div className="bg-hacker-secondary rounded-xl p-6 border border-gray-800">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center">
+                      <i className="fas fa-user text-white"></i>
+                    </div>
+                    <div className="ml-4">
+                      <h4 className="font-bold">Sarah Chen</h4>
+                      <p className="text-sm text-gray-400">Security Researcher</p>
+                    </div>
+                  </div>
+                  <p className="text-gray-300">"Great learning platform with detailed tutorials. Helped me advance my cybersecurity skills significantly."</p>
+                  <div className="flex text-amber-400 mt-4">
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                  </div>
+                </div>
+                
+                <div className="bg-hacker-secondary rounded-xl p-6 border border-gray-800">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 rounded-full bg-purple-500 flex items-center justify-center">
+                      <i className="fas fa-user text-white"></i>
+                    </div>
+                    <div className="ml-4">
+                      <h4 className="font-bold">Marcus Johnson</h4>
+                      <p className="text-sm text-gray-400">Ethical Hacker</p>
+                    </div>
+                  </div>
+                  <p className="text-gray-300">"Fast shipping and excellent customer support. The community is very knowledgeable and helpful."</p>
+                  <div className="flex text-amber-400 mt-4">
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
 
