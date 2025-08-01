@@ -24,6 +24,7 @@ import TermsOfService from "@/pages/terms-of-service";
 import Challenges from "@/pages/challenges";
 import ChallengeDetail from "@/pages/challenge-detail";
 import MCP from "@/pages/MCP";
+import MainPhilosophy from "@/pages/main-philosophy";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import ChatWidget from "@/components/ChatWidget";
@@ -54,6 +55,7 @@ function Router() {
           <Route path="/challenges" component={Challenges} />
           <Route path="/challenges/:id" component={ChallengeDetail} />
           <Route path="/mcp" component={MCP} />
+          <Route path="/main" component={MainPhilosophy} />
           <Route path="/privacy-policy" component={PrivacyPolicy} />
           <Route path="/terms-of-service" component={TermsOfService} />
           <Route component={NotFound} />

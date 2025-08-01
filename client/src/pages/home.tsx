@@ -6,6 +6,7 @@ import TutorialFeature from '@/components/tutorial-feature';
 import ToolCard from '@/components/tool-card';
 import HardwareCompatibility from '@/components/hardware-compatibility';
 import ProjectCard from '@/components/project-card';
+import PhilosophySection from '@/components/philosophy-section';
 import { Link } from 'wouter';
 import { 
   LEARNING_PATHS, 
@@ -127,10 +128,16 @@ const Home = () => {
                         <span className="text-sm ml-2">(128)</span>
                       </div>
                       <div className="flex justify-between items-center mt-4">
-                        <span className="text-xl font-bold">${item.price}</span>
-                        <button className="bg-hacker-accent text-hacker-primary px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors">
-                          <i className="fas fa-shopping-cart"></i> Add
-                        </button>
+                        <Link href={item.detailLink} className="text-hacker-accent hover:text-hacker-accent/80 font-medium">
+                          View Details →
+                        </Link>
+                        <div className="flex gap-1">
+                          {item.tags.slice(0, 2).map((tag, tagIndex) => (
+                            <span key={tagIndex} className="text-xs px-2 py-1 bg-opacity-20 rounded" style={{backgroundColor: item.tagColor}}>
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -138,6 +145,9 @@ const Home = () => {
               </div>
             </div>
           </section>
+
+          {/* Philosophy Section */}
+          <PhilosophySection />
 
           {/* Newsletter & Blog Section */}
           <section className="py-16 bg-gradient-to-r from-hacker-primary to-hacker-secondary">

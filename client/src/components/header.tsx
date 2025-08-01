@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
-import SearchBar from '@/components/search-bar';
+// import SearchBar from '@/components/search-bar';
 import { Button } from '@/components/ui/button';
-import { BookOpen, Cpu, LogIn, LogOut, Menu, Wrench, User, Zap, Award, Home as HomeIcon, Flag, Server } from 'lucide-react';
+import { BookOpen, Cpu, LogIn, LogOut, Menu, Wrench, User, Zap, Award, Home as HomeIcon, Flag, Server, Terminal } from 'lucide-react';
 
 // Define authentication status type
 interface AuthStatus {
@@ -49,6 +49,7 @@ const Header = () => {
   // Navigation links with semantic grouping
   const navigationLinks = [
     { icon: <HomeIcon size={18} />, label: 'Home', href: '/' },
+    { icon: <Terminal size={18} />, label: 'main()', href: '/main' },
     { icon: <Zap size={18} />, label: 'Learning Paths', href: '/learning-paths' },
     { icon: <BookOpen size={18} />, label: 'Articles', href: '/articles' },
     { icon: <Cpu size={18} />, label: 'Hardware Library', href: '/hardware-library' },
@@ -73,7 +74,7 @@ const Header = () => {
         </div>
 
         <nav className="hidden md:flex space-x-8" role="navigation" aria-label="Main navigation">
-          {navigationLinks.slice(0, 5).map((link) => (
+          {navigationLinks.slice(0, 6).map((link) => (
             <Link 
               key={link.href}
               href={link.href} 
