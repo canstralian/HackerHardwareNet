@@ -18,7 +18,7 @@ interface AuthStatus {
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [location] = useLocation();
-  
+
   // Fetch authentication status
   const { data: authStatus, isLoading: authLoading } = useQuery<AuthStatus>({
     queryKey: ['/api/auth/status'],
@@ -140,7 +140,7 @@ const Header = () => {
                 className="terminal-input w-full px-4 py-2 rounded-lg bg-hacker-primary border border-gray-700"
               />
             </div>
-            
+
             {navigationLinks.map((link) => (
               <Link 
                 key={link.href}

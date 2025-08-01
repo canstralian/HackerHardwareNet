@@ -27,11 +27,13 @@ import MCP from "@/pages/MCP";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import ChatWidget from "@/components/ChatWidget";
+import { MobileNav } from '@/components/mobile-nav'; // Adding mobile navigation component
 
 function Router() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
+      <MobileNav /> {/* Adding the mobile navigation */}
       <div className="flex flex-1">
         <Switch>
           <Route path="/" component={Home} />

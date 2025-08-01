@@ -19,15 +19,15 @@ const MobileCategoryNavLink = ({
   <Link 
     href={href}
     className={`
-      flex items-center justify-center flex-col gap-1 w-20 py-2.5 rounded-md text-center
-      transition-all duration-200
-      ${isActive ? 'text-[#00FF00] bg-[#00FF00]/10 border border-[#00FF00]/30' : 'text-gray-400 border border-transparent'}
-      hover:text-[#00FF00] hover:bg-[#00FF00]/5
+      flex items-center justify-center flex-col gap-2 min-w-[72px] py-3 px-2 rounded-lg text-center
+      transition-all duration-200 min-h-[60px] active:scale-95
+      ${isActive ? 'text-[#00FF00] bg-[#00FF00]/15 border border-[#00FF00]/40' : 'text-gray-400 border border-transparent'}
+      hover:text-[#00FF00] hover:bg-[#00FF00]/10 active:bg-[#00FF00]/20
     `}
     onClick={onClick}
   >
-    {icon}
-    <span className="text-xs font-medium">{label}</span>
+    <div className="w-5 h-5">{icon}</div>
+    <span className="text-xs font-medium leading-tight">{label}</span>
   </Link>
 );
 
