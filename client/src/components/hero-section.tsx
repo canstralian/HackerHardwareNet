@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Shield, Zap, Settings, Cpu } from "lucide-react";
+import { ArrowRight, Shield, Zap, Settings, Cpu, BookOpen } from "lucide-react";
 
 const TypewriterEffect = () => {
   const typewriterTexts = [
