@@ -58,7 +58,7 @@ export default function RegisterPage() {
     try {
       // Remove confirmPassword before sending to API
       const { confirmPassword, ...registrationData } = data;
-      
+
       const response = await apiRequest("/api/auth/register", {
         method: "POST",
         body: JSON.stringify(registrationData),
@@ -66,15 +66,15 @@ export default function RegisterPage() {
 
       if (response.ok) {
         const result = await response.json();
-        
+
         // Invalidate any user-related queries
         queryClient.invalidateQueries({ queryKey: ['/api/auth/status'] });
-        
+
         toast({
           title: "Registration successful",
           description: "Your account has been created successfully",
         });
-        
+
         // Redirect to dashboard since user is auto-logged in
         navigate("/dashboard");
       } else {
@@ -122,7 +122,7 @@ export default function RegisterPage() {
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="lastName"
@@ -137,7 +137,7 @@ export default function RegisterPage() {
                   )}
                 />
               </div>
-              
+
               <FormField
                 control={form.control}
                 name="username"
@@ -151,7 +151,7 @@ export default function RegisterPage() {
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="email"
@@ -165,7 +165,7 @@ export default function RegisterPage() {
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="password"
@@ -194,7 +194,7 @@ export default function RegisterPage() {
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="confirmPassword"
@@ -223,7 +223,7 @@ export default function RegisterPage() {
                   </FormItem>
                 )}
               />
-              
+
               <div className="flex items-center justify-between pt-2">
                 <Button 
                   variant="link" 

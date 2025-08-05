@@ -36,7 +36,7 @@ const PhilosophySection = () => {
       <div className="absolute inset-0 opacity-10">
         <div className="circuit-bg w-full h-full"></div>
       </div>
-      
+
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 text-hacker-accent mb-4">
@@ -104,12 +104,12 @@ const PhilosophySection = () => {
                       {philosophies[activePhilosophy].code}
                     </code>
                   </div>
-                  
+
                   <h3 className="text-2xl font-bold mb-4">{philosophies[activePhilosophy].title}</h3>
                   <p className="text-gray-300 text-lg leading-relaxed mb-6">
                     {philosophies[activePhilosophy].description}
                   </p>
-                  
+
                   <blockquote className="border-l-4 border-hacker-accent pl-6 italic text-gray-400 bg-gray-900 bg-opacity-50 p-4 rounded-r-lg">
                     "{philosophies[activePhilosophy].quote}"
                   </blockquote>

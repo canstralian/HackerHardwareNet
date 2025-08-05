@@ -1,5 +1,6 @@
 import Sidebar from '@/components/sidebar';
 import HeroSection from '@/components/hero-section';
+import HackboxValueProps from '@/components/hackbox-value-props';
 import LearningPathCard from '@/components/learning-path-card';
 import HardwareCard from '@/components/hardware-card';
 import TutorialFeature from '@/components/tutorial-feature';
@@ -7,6 +8,7 @@ import ToolCard from '@/components/tool-card';
 import HardwareCompatibility from '@/components/hardware-compatibility';
 import ProjectCard from '@/components/project-card';
 import PhilosophySection from '@/components/philosophy-section';
+import PerformanceMonitor from '@/components/performance-monitor';
 import { Link } from 'wouter';
 import { 
   LEARNING_PATHS, 
@@ -26,6 +28,9 @@ const Home = () => {
           {/* Hero Section */}
           <HeroSection />
 
+          {/* Hackbox Value Props Section */}
+          <HackboxValueProps />
+
           {/* Hardware Categories Section */}
           <section className="py-16 bg-hacker-secondary">
             <div className="container mx-auto px-4">
@@ -33,7 +38,7 @@ const Home = () => {
                 <h2 className="text-3xl font-bold mb-4">Hardware Categories</h2>
                 <p className="max-w-2xl mx-auto text-gray-400">Specialized tools for every aspect of cybersecurity and penetration testing</p>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="bg-hacker-primary rounded-xl overflow-hidden border border-gray-800 hover:border-hacker-accent transition-all">
                   <div className="p-6">
@@ -47,7 +52,7 @@ const Home = () => {
                     </Link>
                   </div>
                 </div>
-                
+
                 <div className="bg-hacker-primary rounded-xl overflow-hidden border border-gray-800 hover:border-hacker-accent transition-all">
                   <div className="p-6">
                     <div className="w-16 h-16 rounded-full bg-blue-500 bg-opacity-20 flex items-center justify-center mb-6">
@@ -60,7 +65,7 @@ const Home = () => {
                     </Link>
                   </div>
                 </div>
-                
+
                 <div className="bg-hacker-primary rounded-xl overflow-hidden border border-gray-800 hover:border-hacker-accent transition-all">
                   <div className="p-6">
                     <div className="w-16 h-16 rounded-full bg-purple-500 bg-opacity-20 flex items-center justify-center mb-6">
@@ -73,7 +78,7 @@ const Home = () => {
                     </Link>
                   </div>
                 </div>
-                
+
                 <div className="bg-hacker-primary rounded-xl overflow-hidden border border-gray-800 hover:border-hacker-accent transition-all">
                   <div className="p-6">
                     <div className="w-16 h-16 rounded-full bg-green-500 bg-opacity-20 flex items-center justify-center mb-6">
@@ -104,7 +109,7 @@ const Home = () => {
                   </Link>
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 {HARDWARE_ITEMS.slice(0, 4).map((item) => (
                   <div key={item.id} className="product-card bg-hacker-secondary rounded-xl overflow-hidden border border-gray-800 transition-all duration-300">
@@ -176,7 +181,7 @@ const Home = () => {
                 <h2 className="text-3xl font-bold mb-4">What Our Users Say</h2>
                 <p className="text-gray-400 max-w-2xl mx-auto">Join thousands of cybersecurity professionals who trust our platform</p>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="bg-hacker-secondary rounded-xl p-6 border border-gray-800">
                   <div className="flex items-center mb-4">
@@ -197,7 +202,7 @@ const Home = () => {
                     <i className="fas fa-star"></i>
                   </div>
                 </div>
-                
+
                 <div className="bg-hacker-secondary rounded-xl p-6 border border-gray-800">
                   <div className="flex items-center mb-4">
                     <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center">
@@ -217,7 +222,7 @@ const Home = () => {
                     <i className="fas fa-star"></i>
                   </div>
                 </div>
-                
+
                 <div className="bg-hacker-secondary rounded-xl p-6 border border-gray-800">
                   <div className="flex items-center mb-4">
                     <div className="w-12 h-12 rounded-full bg-purple-500 flex items-center justify-center">
@@ -252,7 +257,7 @@ const Home = () => {
                 </svg>
               </Link>
             </div>
-            
+
             <HardwareCompatibility compatibilityData={HARDWARE_COMPATIBILITY} />
           </section>
 
@@ -267,7 +272,7 @@ const Home = () => {
                 </svg>
               </Link>
             </div>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {COMMUNITY_PROJECTS.map((project) => (
                 <ProjectCard 
@@ -295,7 +300,7 @@ const Home = () => {
                 </svg>
               </Link>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-[#1A1A1A] border border-[#00FF00]/20 rounded-lg p-6">
                 <h3 className="text-xl font-bold mb-2">Getting Started with Raspberry Pi for Cybersecurity</h3>
