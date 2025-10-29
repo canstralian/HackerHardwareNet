@@ -1,7 +1,3 @@
-The code is modified to improve the mobile search experience by using a custom hook to detect mobile devices and adjusting the search bar's appearance and functionality accordingly.
-```
-
-```replit_final_file
 import { useState } from 'react';
 import { Search } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -28,7 +24,7 @@ export function SearchBar({
   };
 
   return (
-    <form onSubmit={handleSearch} className={`relative ${className}`}>
+    <form onSubmit={handleSearch} className={`relative ${className}`}> 
       <div className="relative">
         <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 ${isMobile ? 'w-4 h-4' : 'w-5 h-5'}`} />
         <input
